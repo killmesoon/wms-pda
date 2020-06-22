@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.siirisoft.aim.wms.mapper.supplier.ext.WmsSupplierMapperExt">
+    <resultMap id="supplierExtMap" type="com.siirisoft.aim.wms.entity.supplier.ext.WmsSupplierExt">
+        <result column="supplier_status_dic" property="supplierStatusDic"></result>
+        <result column="supplier_type_dic" property="supplierTypeDic"></result>
+    </resultMap>
+
+    <select id="findWmsSupplierListExt" resultMap="supplierExtMap">
+        SELECT
+        a.*,
+        b.dic_name as supplier_status_dic,
+        c.dic_name as supplier_type_dic
+        FROM
+        wms_supplier a
+        LEFT JOIN wms_dic_list b on a.supplier_status = b.dic_id
+        LEFT JOIN wms_dic_list c on a.supplier_type = c.dic_id
+        ${ew.customSqlSegment}
+    </select>
+</mapper>

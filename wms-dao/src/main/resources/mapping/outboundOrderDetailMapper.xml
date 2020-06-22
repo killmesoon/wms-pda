@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.siirisoft.aim.wms.mapper.outbound.ext.WmsOutboundOrderDetailMapperExt">
+    <resultMap id="BaseMap" type="com.siirisoft.aim.wms.entity.outbound.ext.WmsOutboundOrderDetailExt">
+        <result column="adv_warehouse_name" property="advWarehouseName"></result>
+        <result column="excu_warehouse_name" property="excuWarehouseName"></result>
+        <result column="adv_locator_name" property="advLocatorName"></result>
+        <result column="excu_locator_name" property="excuLocatorName"></result>
+    </resultMap>
+
+    <select id="findOutboundOrderDetail" resultMap="BaseMap">
+        SELECT
+	a.*,
+	b.warehouse_name AS adv_warehouse_name,
+	c.warehouse_name AS excu_warehouse_name,
+	d.locator_name AS adv_locator_name,
+	e.locator_name AS excu_locator_name,
+	f.item_id,
+	g.item_code,
+	g.description AS item_desc
+FROM
+	wms_outbound_order_detail a
+	LEFT JOIN wms_warehouse b ON a.adv_warehouse_id = b.warehouse_id
+	LEFT JOIN wms_warehouse c ON a.excu_warehouse_id = b.warehouse_id
+	LEFT JOIN wms_locator d ON a.adv_locator_id = d.locator_id
+	LEFT JOIN wms_locator e ON a.excu_locator_id = e.locator_id
+	LEFT JOIN wms_outbound_order_line f ON a.line_id = f.line_id
+	LEFT JOIN wms_item g ON f.item_id = g.item_id
+        ${ew.customSqlSegment}
+    </select>
+</mapper>

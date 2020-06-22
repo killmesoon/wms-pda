@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.siirisoft.aim.wms.mapper.locator.ext.WmsLocatorMapperExt">
+    <resultMap id="locatorExtMap" type="com.siirisoft.aim.wms.entity.locator.ext.WmsLocatorExt">
+        <result column="locator_type_dic" property="locatorTypeDic"></result>
+        <result column="warehouse_code" property="warehouseCode"></result>
+        <result column="area_name" property="areaName"></result>
+        <result column="area_code" property="areaCode"></result>
+        <result column="area_type_dic" property="areaTypeDic"></result>
+        <result column="warehouse_short_name" property="warehouseShortName"></result>
+        <result column="layer_number" property="layerNumber"></result>
+
+    </resultMap>
+
+    <sql id="order">
+        ORDER BY  a.locator_code ASC
+    </sql>
+
+    <select id="findLocatorList" resultMap="locatorExtMap">
+        select
+        a.* ,
+        b.warehouse_code,
+        b.short_name as warehouse_short_name,
+        c.area_code,
+        c.area_name,
+				c.area_type,
+        d.dic_name as locator_type_dic,
+				e.dic_name as area_type_dic,
+				max(f.layer_number) as layer_number
+        FROM
+        wms_locator a
+        LEFT JOIN wms_warehouse b on a.warehouse_id = b.warehouse_id
+        LEFT JOIN wms_warehouse_area c  on a.area_id = c.area_id
+        LEFT JOIN wms_dic_list d on a.locator_type = d.dic_id
+				LEFT JOIN wms_dic_list e on c.area_type = e.dic_id
+				LEFT JOIN wms_sgl_item f on a.locator_id = f.locator_id
+				${ew.customSqlSegment}
+        GROUP BY a.locator_id
+        <include refid="order"></include>
+
+
+    </select>
+</mapper>

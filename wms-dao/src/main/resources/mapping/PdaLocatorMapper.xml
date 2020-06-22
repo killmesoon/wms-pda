@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.siirisoft.aim.wms.mapper.locator.ext.pda.WmsPdaLocatorMapperExt">
+    <resultMap id="locatorExtMap" type="com.siirisoft.aim.wms.entity.locator.ext.pda.WmsPdaLocatorExt">
+        <result column="d_sequence_num" property="dSequenceNum"></result>
+        <result column="heat_number" property="heatNumber"></result>
+        <result column="ship_number" property="shipNumber"></result>
+        <result column="section_num" property="sectionNum"></result>
+        <result column="layer_number" property="layerNumber"></result>
+    </resultMap>
+
+    <sql id="order">
+        ORDER BY b.layer_number desc
+    </sql>
+
+    <select id="queryLocatorDetail" resultMap="locatorExtMap">
+        SELECT
+        a.* ,
+        b.d_sequence_num,
+        b.heat_number,
+        b.ship_number,
+        b.section_num,
+        b.layer_number
+        FROM
+        wms_locator a
+        LEFT JOIN wms_sgl_item b on a.locator_id = b.locator_id
+        ${ew.customSqlSegment}
+        <include refid="order"></include>
+    </select>
+</mapper>

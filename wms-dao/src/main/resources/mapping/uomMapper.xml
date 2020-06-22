@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.siirisoft.aim.wms.mapper.uom.ext.WmsUomMapperExt">
+    <resultMap id="uomExtBaseMap" type="com.siirisoft.aim.wms.entity.uom.ext.WmsUomExt">
+        <result column="uom_type_dic" property="uomTypeDic"></result>
+    </resultMap>
+    <select id="findUomList" resultMap="uomExtBaseMap">
+        SELECT
+        a.*,
+        b.dic_name as uom_type_dic
+        FROM
+        wms_uom a
+        LEFT JOIN wms_dic_list b on a.uom_type = b.dic_id
+        ${ew.customSqlSegment}
+    </select>
+</mapper>

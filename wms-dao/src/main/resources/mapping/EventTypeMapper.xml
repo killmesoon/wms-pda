@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.siirisoft.aim.wms.mapper.events.type.ext.WmsObjectEventTypeMapperExt">
+    <resultMap id="EventExtBaseMap" type="com.siirisoft.aim.wms.entity.events.type.ext.WmsObjectEventTypeExt">
+        <result column="calculator_type_dic" property="calculatorTypeDic"></result>
+    </resultMap>
+    <select id="queryWmsObjectEventTypeList" resultMap="EventExtBaseMap">
+        SELECT
+	a.* ,
+	b.dic_name as calculator_type_dic
+FROM
+	wms_object_event_type a
+	LEFT JOIN wms_dic_list b on a.calculator_type = b.dic_id
+        ${ew.customSqlSegment}
+    </select>
+</mapper>

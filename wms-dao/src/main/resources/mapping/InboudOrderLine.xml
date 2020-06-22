@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.siirisoft.aim.wms.mapper.inbound.ext.WmsInboundOrderLineMapperExt">
+
+
+    <resultMap id="BaseResultMap" type="com.siirisoft.aim.wms.entity.inbound.ext.WmsInboundOrderLineExt">
+
+    </resultMap>
+
+
+    <resultMap id="ExtWmsInboundOrderLineMap" type="com.siirisoft.aim.wms.entity.inbound.ext.WmsInboundOrderLineExt"
+               extends="BaseResultMap">
+        <result column="warehouse_name" property="warehouseName"/>
+        <result column="real_source_doc_type" property="realSourceDocType"/>
+        <result column="warehouse_code" property="warehouseCode"></result>
+        <result column="description" property="description"></result>
+        <result column="item_code" property="itemCode"></result>
+    </resultMap>
+    <select id="wmsInboundLineOrderList" resultMap="ExtWmsInboundOrderLineMap">
+        SELECT
+        a.*,
+        b.item_code,
+        b.description,
+        c.dic_name as real_source_doc_type,
+        d.warehouse_name,
+        d.warehouse_code
+        FROM wms_inbound_order_line a
+        LEFT JOIN wms_item b on a.item_id =  b.item_id
+        LEFT JOIN wms_dic_list c on a.source_doc_type = c.dic_id
+        LEFT JOIN wms_warehouse d on a.warehouse_id = d.warehouse_id
+            ${ew.customSqlSegment}
+    </select>
+</mapper>

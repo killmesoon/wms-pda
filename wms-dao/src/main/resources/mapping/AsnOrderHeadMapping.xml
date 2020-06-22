@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.siirisoft.aim.wms.mapper.asn.ext.WmsErpAsnHeadMapperExt">
+    <resultMap id="AsnExtMap" type="com.siirisoft.aim.wms.entity.asn.ext.WmsErpAsnHeadExt">
+        <result column="asn_status_dic" property="asnStatusDic"></result>
+        <result column="asn_type_dic" property="asnTypeDic"></result>
+        <result column="source_doc_type_dic" property="sourceDocTypeDic"></result>
+        <result column="supplier_name" property="supplierName"></result>
+        <result column="supplier_code" property="supplierCode"></result>
+    </resultMap>
+
+    <select id="findWmsErpAsnHeadList" resultMap="AsnExtMap">
+        SELECT
+	a.*,
+	b.dic_name as asn_status_dic,
+	c.dic_name as asn_type_dic,
+	d.dic_name as source_doc_type_dic,
+	e.supplier_name,
+	e.supplier_code
+FROM
+	wms_erp_asn_head a
+	LEFT JOIN wms_dic_list b on a.asn_status = b.dic_id
+	LEFT JOIN wms_dic_list c on a.asn_type = c.dic_id
+	LEFT JOIN wms_dic_list d on a.source_doc_type = d.dic_id
+	LEFT JOIN wms_supplier e on a.supplier_id = e.supplier_id
+        ${ew.customSqlSegment}
+    </select>
+</mapper>

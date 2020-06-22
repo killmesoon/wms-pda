@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.siirisoft.aim.wms.mapper.asn.ext.WmsErpAsnDetailMapperExt">
+    <resultMap id="AsnExtMap" type="com.siirisoft.aim.wms.entity.asn.ext.WmsErpAsnDetailExt">
+        <result column="item_code" property="itemCode"></result>
+        <result column="description" property="description"></result>
+    </resultMap>
+
+    <select id="findWmsErpAsnDetailByHeadId" resultMap="AsnExtMap">
+        SELECT
+	a.*,
+	b.item_code,
+	b.description
+FROM
+	wms_erp_asn_detail a
+	LEFT JOIN wms_item b on a.item_id = b.item_id
+        ${ew.customSqlSegment}
+    </select>
+</mapper>

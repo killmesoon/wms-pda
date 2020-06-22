@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.siirisoft.aim.wms.mapper.item.ext.WmsItemMapperExt">
+
+    <resultMap id="itemExtMap" type="com.siirisoft.aim.wms.entity.item.ext.WmsItemExt">
+        <result column="plant_code" property="plantCode"></result>
+        <result column="item_type_dic" property="itemTypeDic"></result>
+        <result column="primary_uom_dic" property="primaryUomDic"></result>
+        <result column="receive_warehouse" property="receiveWarehouse"></result>
+        <result column="inbound_warehouse" property="inboundWarehouse"></result>
+        <result column="code_type_dic" property="codeTypeDic"></result>
+    </resultMap>
+
+    <select id="findItemAllList" resultMap="itemExtMap">
+                SELECT
+            a.*,
+            b.dic_name AS item_type_dic,
+            c.uom_name as primary_uom_dic,
+            d.warehouse_name AS inbound_warehouse,
+            e.warehouse_name AS receive_warehouse,
+						f.dic_name as code_type_dic
+        FROM
+            wms_item a
+            LEFT JOIN wms_dic_list b ON a.item_type = b.dic_id
+            LEFT JOIN wms_uom c ON a.primary_uom = c.uom_id
+            LEFT JOIN wms_warehouse d ON a.inv_warehouse_code = d.warehouse_id
+            LEFT JOIN wms_warehouse e ON a.rcv_warehouse_code = e.warehouse_id
+						LEFT JOIN wms_dic_list f ON a.code_type = f.dic_id
+            ${ew.customSqlSegment}
+    </select>
+
+</mapper>

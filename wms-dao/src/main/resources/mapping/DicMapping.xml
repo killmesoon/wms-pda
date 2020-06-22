@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.siirisoft.aim.wms.mapper.dic.ext.WmsDicListMapperExt">
+    <resultMap id="DicExtMap" type="com.siirisoft.aim.wms.entity.dic.ext.WmsDicListExt">
+        <result column="dic_type_code" property="dicTypeCode"></result>
+        <result column="dic_type_name" property="dicTypeName"></result>
+    </resultMap>
+
+    <select id="findWmsDicListExtList" resultMap="DicExtMap">
+        SELECT
+        a.* ,
+        b.dic_type_code,
+        b.dic_type_name
+        FROM
+        wms_dic_list a
+        LEFT JOIN wms_dic_type b on a.dic_type_id = b.dic_type_id
+        ${ew.customSqlSegment}
+    </select>
+</mapper>

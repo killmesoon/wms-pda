@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.siirisoft.aim.wms.mapper.erp.ext.WmsErpPoHeadMapperExt">
+
+
+
+    <resultMap id="ExtWmsErpPoHeadMap" type="com.siirisoft.aim.wms.entity.erp.ext.WmsErpPoHeadExt">
+        <result column="po_type_dic" property="poTypeDic"/>
+        <result column="po_status_dic" property="poStatusDic"/>
+        <result column="supplier_code" property="supplierCode" />
+        <result column="supplier_name" property="supplierName"/>
+        <result column="payment_terms_dic" property="paymentTermsDic" />
+        <result column="po_source_type_dic" property="poSourceTypeDic" />
+    </resultMap>
+    <select id="findErpPoHeadOrder" resultMap="ExtWmsErpPoHeadMap">
+        SELECT
+        a.*,
+        b.dic_name as po_type_dic,
+        c.dic_name as po_status_dic,
+        d.supplier_code,
+        d.supplier_name,
+        e.dic_name as payment_terms_dic,
+        f.dic_name as po_source_type_dic
+
+        FROM
+        wms_erp_po_head a
+        LEFT JOIN wms_dic_list b on a.po_type = b.dic_id
+        LEFT JOIN wms_dic_list c on a.po_status = c.dic_id
+        LEFT JOIN wms_supplier d on a.supplier_id = d.supplier_id
+        LEFT JOIN wms_dic_list e on a.payment_terms = e.dic_id
+        LEFT JOIN wms_dic_list f on a.po_source_type = f.dic_id
+            ${ew.customSqlSegment}
+    </select>
+</mapper>

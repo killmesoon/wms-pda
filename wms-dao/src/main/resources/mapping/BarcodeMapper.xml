@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.siirisoft.aim.wms.mapper.barcode.ext.WmsBarcodeMapperExt">
+    <resultMap id="BarcodeExtBaseMap" type="com.siirisoft.aim.wms.entity.barcode.ext.WmsBarcodeExt">
+        <result column="barcode_type_dic" property="barcodeTypeDic"></result>
+        <result column="barcode_status_dic" property="barcodeStatusDic"></result>
+        <result column="supplier_code" property="supplierCode"></result>
+        <result column="supplier_name" property="supplierName"></result>
+    </resultMap>
+    <select id="findBarcodeList" resultMap="BarcodeExtBaseMap">
+        SELECT
+        a.*,
+        b.dic_name as barcode_type_dic,
+        c.dic_name as barcode_status_dic,
+        d.supplier_name,
+        d.supplier_code
+        FROM
+        wms_barcode a
+        LEFT JOIN wms_dic_list b on a.barcode_type = b.dic_id
+        LEFT JOIN wms_dic_list c on a.barcode_status = c.dic_id
+        LEFT JOIN wms_supplier d on a.supplier_id = d.supplier_id
+        ${ew.customSqlSegment}
+    </select>
+</mapper>

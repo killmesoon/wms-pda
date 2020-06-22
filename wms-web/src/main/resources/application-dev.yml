@@ -1,0 +1,18 @@
+server:
+  port: 8080
+#mybatis:
+#  mapper-locations: classpath:/mapping/*.xml
+#  type-aliases-package: com.wms.entity
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+spring:
+  datasource:
+    username: root
+    password: 531022
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/wms?characterEncoding=utf-8&useSSL=false&allowMultiQueries=true
+mybatis-plus:
+  mapper-locations: classpath:/mapping/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  type-aliases-package: com.wms.entity

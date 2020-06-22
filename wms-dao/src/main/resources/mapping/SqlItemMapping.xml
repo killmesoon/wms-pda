@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.siirisoft.aim.wms.mapper.sqlitem.ext.WmsSglItemMapperExt">
+    <resultMap id="SqlItemExtMap" type="com.siirisoft.aim.wms.entity.sqlitem.ext.WmsSglItemExt">
+        <result column="item_code" property="itemCode"></result>
+        <result column="description" property="description"></result>
+        <result column="warehouse_name" property="warehouseName"></result>
+        <result column="warehouse_code" property="warehouseCode"></result>
+        <result column="locator_code" property="locatorName"></result>
+        <result column="locator_name" property="locatorCode"></result>
+        <result column="uom_name" property="uomName"></result>
+    </resultMap>
+
+
+    <select id="findWmsSglItemList" resultMap="SqlItemExtMap">
+        SELECT
+	a.* ,
+	b.item_code,
+	b.description,
+	c.warehouse_name,
+	c.warehouse_code,
+	d.locator_code,
+	d.locator_name,
+	e.uom_name
+FROM
+	wms_sgl_item a
+	LEFT JOIN wms_item b on a.item_id = b.item_id
+	LEFT JOIN wms_warehouse c on a.warehouse_id = c.warehouse_id
+	LEFT JOIN wms_locator d on a.locator_id = d.locator_id
+	LEFT JOIN wms_uom e on a.primary_uom = e.uom_id
+        ${ew.customSqlSegment}
+    </select>
+</mapper>

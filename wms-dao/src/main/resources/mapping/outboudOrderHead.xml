@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.siirisoft.aim.wms.mapper.outbound.ext.WmsOutboundOrderHeadMapperExt">
+
+
+    <resultMap id="BaseResultMap" type="com.siirisoft.aim.wms.entity.outbound.WmsOutboundOrderHead">
+        <result column="created_by" jdbcType="INTEGER" property="createdBy"/>
+        <result column="creation_date" jdbcType="TIMESTAMP" property="creationDate"/>
+        <result column="last_update_by" jdbcType="INTEGER" property="lastUpdateBy"/>
+        <result column="last_update_date" jdbcType="TIMESTAMP" property="lastUpdateDate"/>
+        <result column="head_id" jdbcType="INTEGER" property="headId"/>
+        <result column="plant_id" jdbcType="INTEGER" property="plantId"/>
+        <result column="doc_type" jdbcType="VARCHAR" property="docType"/>
+        <result column="doc_status" jdbcType="VARCHAR" property="docStatus"/>
+        <result column="doc_number" jdbcType="CHAR" property="docNumber"/>
+        <result column="customer_id" jdbcType="INTEGER" property="customerId"/>
+        <result column="source_doc_id" jdbcType="INTEGER" property="sourceDocId"/>
+        <result column="source_doc_type" jdbcType="VARCHAR" property="sourceDocType"/>
+        <result column="source_doc_num" jdbcType="INTEGER" property="sourceDocNum"/>
+        <result column="assignee_id" jdbcType="INTEGER" property="assigneeId"/>
+        <result column="plan_time" jdbcType="TIMESTAMP" property="planTime"/>
+        <result column="print_count" jdbcType="INTEGER" property="printCount"/>
+        <result column="last_print_date" jdbcType="TIMESTAMP" property="lastPrintDate"/>
+        <result column="last_print_user" jdbcType="VARCHAR" property="lastPrintUser"/>
+        <result column="rfid_flag" jdbcType="BIT" property="rfidFlag"/>
+        <result column="erp_flag" jdbcType="BIT" property="erpFlag"/>
+        <result column="note" jdbcType="VARCHAR" property="note"/>
+    </resultMap>
+
+
+    <resultMap id="ExtWmsOutboundOrderHeadMap" type="com.siirisoft.aim.wms.entity.outbound.ext.WmsOutboundOrderHeadExt"
+               extends="BaseResultMap">
+        <result column="real_doc_type" property="realDocType"/>
+        <result column="real_source_doc_type" property="realSourceDocType"/>
+        <result column="real_doc_status" property="realDocStatus"></result>
+    </resultMap>
+    <select id="findOutboundOrderList" resultMap="ExtWmsOutboundOrderHeadMap">
+SELECT
+	a.*,
+	b.dic_name as real_doc_type,
+	c.dic_name as real_source_doc_type,
+	d.dic_name as real_doc_status
+
+FROM
+	wms_outbound_order_head a
+	LEFT JOIN wms_dic_list b ON a.doc_type = b.dic_id
+	LEFT JOIN wms_dic_list c on a.source_doc_type = c.dic_id
+	LEFT JOIN wms_dic_list d on a.doc_status = d.dic_id
+	${ew.customSqlSegment}
+    </select>
+</mapper>

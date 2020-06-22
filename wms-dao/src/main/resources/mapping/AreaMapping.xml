@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.siirisoft.aim.wms.mapper.area.ext.WmsWarehouseAreaMapperExt">
+    <resultMap id="AreaExtMap" type="com.siirisoft.aim.wms.entity.area.ext.WmsWarehouseAreaExt">
+        <result column="area_type_dic" property="areaTypeDic"></result>
+        <result column="warehouse_code" property="warehouseCode"></result>
+        <result column="short_name" property="warehouseShortName"></result>
+    </resultMap>
+
+    <select id="findWarehouseAreaList" resultMap="AreaExtMap">
+        SELECT
+        a.*,
+        b.dic_name as area_type_dic,
+        c.warehouse_code,
+        c.short_name
+        FROM
+        wms_warehouse_area a
+        LEFT JOIN wms_dic_list b on a.area_type = b.dic_id
+        LEFT JOIN wms_warehouse c on a.warehouse_id = c.warehouse_id
+        ${ew.customSqlSegment}
+    </select>
+</mapper>

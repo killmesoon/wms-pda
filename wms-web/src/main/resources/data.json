@@ -1,0 +1,295 @@
+{
+  "code": 200,
+  "data": [
+    {
+      "user": {
+        "number": "SA00000001",
+        "name": "管理员",
+        "loginName": "eepsippr",
+        "phone": "1523652542",
+        "email": "",
+        "authorities": [
+          "ROLE_COMMON",
+          "ROLE_MODULE_DEMO_USER",
+          "ROLE_DEMO_ADMIN"
+        ]
+      },
+      "routers": [
+        {
+          "component": "Layout",
+          "meta": {
+            "code": "",
+            "icon": "",
+            "title": "首页"
+          },
+          "name": "Dashboard",
+          "path": "/",
+          "redirect": "/dashboard",
+          "children": [
+            {
+              "component": "Dashboard/index",
+              "meta": {
+                "code": "",
+                "icon": "",
+                "title": "首页"
+              },
+              "name": "首页",
+              "path": "dashboard"
+            }
+          ]
+        },
+        {
+          "component": "Layout",
+          "meta": {
+            "code": "",
+            "icon": "",
+            "title": "仓储建模"
+          },
+          "name": "Display",
+          "path": "/ware",
+          "redirect": "/ware/warehouse",
+          "children": [
+            {
+              "component": "Display/model/warehouse/index",
+              "meta": {
+                "code": "",
+                "icon": "",
+                "title": "仓库定义"
+              },
+              "name": "仓库定义",
+              "path": "warehouse"
+            },
+            {
+              "component": "Display/model/area/index",
+              "meta": {
+                "code": "",
+                "icon": "",
+                "title": "区域定义"
+              },
+              "name": "区域定义",
+              "path": "area"
+            },
+            {
+              "component": "Display/model/locator/index",
+              "meta": {
+                "code": "",
+                "icon": "",
+                "title": "货位定义"
+              },
+              "name": "货位定义",
+              "path": "locator"
+            }
+          ]
+        },
+        {
+          "component": "Layout",
+          "meta": {
+            "code": "",
+            "icon": "",
+            "title": "数据管理"
+          },
+          "name": "Display",
+          "path": "/data",
+          "redirect": "/data/supplier",
+          "children": [
+            {
+              "component": "Display/data/supplier/index",
+              "meta": {
+                "code": "",
+                "icon": "",
+                "title": "供应商设置"
+              },
+              "name": "供应商设置",
+              "path": "supplier"
+            },
+            {
+              "component": "Display/data/item/index",
+              "meta": {
+                "code": "",
+                "icon": "",
+                "title": "物料主数据"
+              },
+              "name": "物料主数据",
+              "path": "item"
+            },
+            {
+              "component": "Display/data/order/index",
+              "meta": {
+                "code": "",
+                "icon": "",
+                "title": "单据编码设置"
+              },
+              "name": "单据编码设置",
+              "path": "order"
+            },
+            {
+              "component": "Display/data/event/index",
+              "meta": {
+                "code": "",
+                "icon": "",
+                "title": "事件类型设置"
+              },
+              "name": "事件类型设置",
+              "path": "event"
+            },
+            {
+              "component": "Display/data/position/index",
+              "meta": {
+                "code": "",
+                "icon": "",
+                "title": "定置定位设置"
+              },
+              "name": "定置定位设置",
+              "path": "position",
+              "hidden": "true"
+            },
+            {
+              "component": "Display/data/qualityCheck/index",
+              "meta": {
+                "code": "",
+                "icon": "",
+                "title": "物料质检属性"
+              },
+              "name": "物料质检属性",
+              "path": "qc",
+              "hidden": "true"
+            },
+            {
+              "component": "Display/data/uom/index",
+              "meta": {
+                "code": "",
+                "icon": "",
+                "title": "单位设置"
+              },
+              "name": "单位设置",
+              "path": "uom"
+            },
+            {
+              "component": "Display/data/dic/index",
+              "meta": {
+                "code": "",
+                "icon": "",
+                "title": "快码设置"
+              },
+              "name": "快码设置",
+              "path": "dic"
+            }
+          ]
+        },
+        {
+          "component": "Layout",
+          "meta": {
+            "code": "",
+            "icon": "",
+            "title": "条码管理"
+          },
+          "name": "Display",
+          "path": "/barcode",
+          "redirect": "/barcode/barcode-item",
+          "children": [
+            {
+              "component": "Display/barcode/index",
+              "meta": {
+                "code": "",
+                "icon": "",
+                "title": "条码定义"
+              },
+              "name": "条码定义",
+              "path": "barcode-item"
+            }
+          ]
+        },
+        {
+          "component": "Layout",
+          "meta": {
+            "code": "",
+            "icon": "",
+            "title": "入库单管理"
+          },
+          "name": "Display",
+          "path": "/inbound",
+          "redirect": "/inbound/inbound-item",
+          "children": [
+            {
+              "component": "Display/asn/index",
+              "meta": {
+                "code": "",
+                "icon": "",
+                "title": "送货单管理"
+              },
+              "name": "送货单管理",
+              "path": "asnOrder"
+            },
+            {
+              "component": "Display/inbound/inboundHead",
+              "meta": {
+                "code": "",
+                "icon": "",
+                "title": "入库单管理"
+              },
+              "name": "入库单管理",
+              "path": "inbound-item"
+            }
+          ]
+        },
+        {
+          "component": "Layout",
+          "meta": {
+            "code": "",
+            "icon": "",
+            "title": "出库单管理"
+          },
+          "name": "Display",
+          "path": "/outbound",
+          "redirect": "/outbound/outbound-item",
+          "children": [
+            {
+              "component": "Display/outbound/Outbound",
+              "meta": {
+                "code": "",
+                "icon": "",
+                "title": "出库单管理"
+              },
+              "name": "出库单管理",
+              "path": "outbound-item"
+            }
+          ]
+        },
+        {
+          "component": "Layout",
+          "meta": {
+            "code": "",
+            "icon": "",
+            "title": "报表分析"
+          },
+          "name": "Display",
+          "path": "/report",
+          "redirect": "/report/quantity-search",
+          "children": [
+            {
+              "component": "Display/report/index",
+              "meta": {
+                "code": "",
+                "icon": "",
+                "title": "库存现有量查询"
+              },
+              "name": "库存现有量查询",
+              "path": "quantity-search"
+            },
+            {
+              "component": "Display/report/BarcodeReport",
+              "meta": {
+                "code": "",
+                "icon": "",
+                "title": "条码物料查询"
+              },
+              "name": "条码物料查询",
+              "path": "barcode-search"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "message": "操作成功!"
+}
