@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.siirisoft.aim.wms.entity.area.WmsWarehouseArea;
 import com.siirisoft.aim.wms.entity.data.Result;
 
+import com.siirisoft.aim.wms.entity.data.TreeDataWrapper;
+import com.siirisoft.aim.wms.entity.locator.WmsLocator;
 import com.siirisoft.aim.wms.entity.warehouse.WmsWarehouse;
 import com.siirisoft.aim.wms.service.area.IWmsWarehouseAreaService;
 import com.siirisoft.aim.wms.service.locator.IWmsLocatorService;
@@ -15,6 +17,8 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -55,19 +59,40 @@ public class WmsPdaLocatorController {
     @GetMapping("/queryWholePosition")
     public Result queryWholePosition() {
         List<WmsWarehouse> warehouses = iWmsWarehouseService.list();
-
+        List<TreeDataWrapper> resultList = new ArrayList<>();
         for (WmsWarehouse w : warehouses) {
+            TreeDataWrapper warehouseTree = new TreeDataWrapper();
+            warehouseTree.setWarehouseId(w.getWarehouseId());
+            warehouseTree.setCode(w.getWarehouseCode());
+            warehouseTree.setName(w.getWarehouseName());
             QueryWrapper wrapper = new QueryWrapper();
             wrapper.eq("warehouse_id", w.getWarehouseId());
             List<WmsWarehouseArea> list = iWmsWarehouseAreaService.list(wrapper);
-            for (WmsWarehouseArea area: list) {
-                QueryWrapper qw = new QueryWrapper();
-                qw.eq("area_id", area.getAreaId());
-                List locatorList = iWmsLocatorService.list(wrapper);
+            List<TreeDataWrapper> areaList = new ArrayList<>();
+            for (WmsWarehouseArea area : list) {
+                TreeDataWrapper areaTree = new TreeDataWrapper();
+                areaTree.setName(area.getAreaName());
+                areaTree.setAreaId(area.getAreaId());
+                areaTree.setCode(area.getAreaCode());
+                areaTree.setWarehouseId(area.getWarehouseId());
+                areaList.add(areaTree);
+                QueryWrapper locatorWrapper = new QueryWrapper();
+                locatorWrapper.eq("area_id", area.getAreaId());
+                List<WmsLocator> lList = iWmsLocatorService.list(locatorWrapper);
+                List<TreeDataWrapper> locatorList = new ArrayList<>();
+                for (WmsLocator locator: lList) {
+                    TreeDataWrapper locatorTree = new TreeDataWrapper();
+                    locatorTree.setLocatorId(locator.getLocatorId());
+                    locatorTree.setCode(locator.getLocatorCode());
+                    locatorTree.setName(locator.getLocatorName());
+                    locatorList.add(locatorTree);
+                }
+                areaTree.setChildren(locatorList);
             }
+            warehouseTree.setChildren(areaList);
+            resultList.add(warehouseTree);
         }
-
-        return Result.success();
+        return Result.success(resultList);
     }
 
 }
