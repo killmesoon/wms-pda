@@ -15,5 +15,5 @@ import com.siirisoft.aim.wms.entity.outbound.ext.pda.WmsPdaOutboundOrderDetail;
 public interface ABPdaWmsOutboundOrderService {
     IPage queryOutboundOrderDetail(Page page, Wrapper wrapper);
 
-    boolean commitPreparation(WmsPdaOutboundOrderDetail wmsPdaOutboundOrderDetail, WmsPdaLocatorExt wmsPdaLocatorExt);
+    boolean commitPreparation(int targetLocatorId , WmsPdaOutboundOrderDetail wmsPdaOutboundOrderDetail, WmsPdaLocatorExt wmsPdaLocatorExt);
 }

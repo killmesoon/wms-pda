@@ -56,7 +56,7 @@ public class ABPdaWmsOutboundOrderServiceImpl implements ABPdaWmsOutboundOrderSe
     }
 
     @Override
-    public boolean commitPreparation(WmsPdaOutboundOrderDetail wmsPdaOutboundOrderDetail, WmsPdaLocatorExt wmsPdaLocatorExt) {
+    public boolean commitPreparation(int targetLocatorId, WmsPdaOutboundOrderDetail wmsPdaOutboundOrderDetail, WmsPdaLocatorExt wmsPdaLocatorExt) {
         //货位移动操作
         QueryWrapper wrapper = new QueryWrapper();
         wrapper.eq("d_sequence_num", wmsPdaLocatorExt.getDSequenceNum());
@@ -64,12 +64,12 @@ public class ABPdaWmsOutboundOrderServiceImpl implements ABPdaWmsOutboundOrderSe
 
         //获取目标位置最大层号
         QueryWrapper layerWrapper = new QueryWrapper();
-        layerWrapper.eq("locator_id", wmsPdaLocatorExt.getLocatorId());
+        layerWrapper.eq("locator_id", targetLocatorId);
         Integer maxLayerNumber = wmsSglItemMapperExt.findMaxLayerNumber(layerWrapper);
 
         //更新货位号 仓库号 与层号
         sglItem.setLayerNumber(maxLayerNumber);
-        sglItem.setLocatorId(wmsPdaLocatorExt.getLocatorId());
+        sglItem.setLocatorId(targetLocatorId);
         wmsSglItemMapper.update(sglItem, wrapper);
 
         //更新现有量
@@ -84,30 +84,37 @@ public class ABPdaWmsOutboundOrderServiceImpl implements ABPdaWmsOutboundOrderSe
         //删除一条之前的现有量
         QueryWrapper quantityWrapper = new QueryWrapper();
         quantityWrapper.eq("warehouse_id", sglItem.getWarehouseId());
-        quantityWrapper.eq("locator_id",wmsPdaLocatorExt.getLocatorId());
+        quantityWrapper.eq("locator_id", wmsPdaLocatorExt.getLocatorId());
         List<WmsItemOnhandQuantity> list = wmsItemOnhandQuantityMapper.selectList(quantityWrapper);
         if (list.size() > 0) {
             WmsItemOnhandQuantity quantity = list.get(0);
             wmsItemOnhandQuantityMapper.deleteById(quantity.getId());
         }
-
-        //插入明细行
-        QueryWrapper lineDetailWrapper = new QueryWrapper();
-        lineDetailWrapper.eq("line_id", wmsPdaOutboundOrderDetail.getLineId());
-        WmsOutboundOrderDetail detail = new WmsOutboundOrderDetail();
-        detail.setPreQuantity(1);
-        detail.setPreLotCode(sglItem.getDSequenceNum());
-        detail.setPreLocatorCode(wmsPdaLocatorExt.getLocatorCode());
-        wmsOutboundOrderDetailMapper.insert(detail);
-
-
-        //插入事务
         WmsObjectEvents wmsObjectEvents = new WmsObjectEvents();
+        if (targetLocatorId == wmsPdaOutboundOrderDetail.getAdvLocatorId()) {
+            //说明是备料
+            //插入明细行
+            QueryWrapper lineDetailWrapper = new QueryWrapper();
+            lineDetailWrapper.eq("line_id", wmsPdaOutboundOrderDetail.getLineId());
+            WmsOutboundOrderDetail detail = new WmsOutboundOrderDetail();
+            detail.setPreQuantity(1);
+            detail.setPreLotCode(sglItem.getDSequenceNum());
+            detail.setPreLocatorCode(wmsPdaLocatorExt.getLocatorCode());
+            wmsOutboundOrderDetailMapper.insert(detail);
+
+
+            //备料
+            wmsObjectEvents.setEventTypeId(3);
+            wmsObjectEvents.setEventTypeCode("GD_WO_PREPARE");
+        } else {
+            //移库
+            wmsObjectEvents.setEventTypeId(5);
+            wmsObjectEvents.setEventTypeCode("GD_LOCATOR_TRANSFER");
+
+        }
         wmsObjectEvents.setEventTime(new Date());
         wmsObjectEvents.setBarcode(sglItem.getDSequenceNum());
         wmsObjectEvents.setCreationDate(new Date());
-        wmsObjectEvents.setEventTypeId(3);
-        wmsObjectEvents.setEventTypeCode("GD_WO_PREPARE");
         wmsObjectEvents.setItemId(sglItem.getItemId());
         wmsObjectEvents.setWarehouseIdFrom(wmsPdaLocatorExt.getWarehouseId());
         wmsObjectEvents.setWarehouseIdTo(sglItem.getWarehouseId());
@@ -115,6 +122,7 @@ public class ABPdaWmsOutboundOrderServiceImpl implements ABPdaWmsOutboundOrderSe
         wmsObjectEvents.setLocatorIdFrom(wmsPdaLocatorExt.getLocatorId());
         wmsObjectEvents.setLocatorIdTo(sglItem.getLocatorId());
         wmsObjectEventsMapper.insert(wmsObjectEvents);
+
         return true;
     }
 }

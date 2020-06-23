@@ -52,13 +52,13 @@ public class WmsPdaOutboundOrderController {
     }
 
 
-    @PostMapping("/commitPreparation")
+    @PostMapping("/commitPreparation/{targetLocatorId}")
     @ApiOperation(value = "备料执行")
     @ApiImplicitParam(name = "wmsPdaLocatorExt", value = "执行单po")
-    public Result commitPreparation(@RequestBody WmsOutboundCondition wmsOutboundCondition) {
+    public Result commitPreparation(@PathVariable int targetLocatorId, @RequestBody WmsOutboundCondition wmsOutboundCondition) {
 
         //原货位到新货位，货位移动
-        abPdaWmsOutboundOrderService.commitPreparation(wmsOutboundCondition.getWmsPdaOutboundOrderDetail(), wmsOutboundCondition.getWmsPdaLocatorExt());
+        abPdaWmsOutboundOrderService.commitPreparation(targetLocatorId,wmsOutboundCondition.getWmsPdaOutboundOrderDetail(), wmsOutboundCondition.getWmsPdaLocatorExt());
         return Result.success();
     }
 
