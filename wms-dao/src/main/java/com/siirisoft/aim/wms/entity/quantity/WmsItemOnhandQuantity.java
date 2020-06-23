@@ -1,5 +1,7 @@
 package com.siirisoft.aim.wms.entity.quantity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
@@ -24,6 +26,10 @@ import lombok.experimental.Accessors;
 public class WmsItemOnhandQuantity implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    @ApiModelProperty(value = "唯一主键")
+    @TableId(value = "id", type = IdType.AUTO)
+    private Integer id;
 
     @ApiModelProperty(value = "工厂ID")
     private Integer plantId;

@@ -6,8 +6,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.siirisoft.aim.wms.entity.area.WmsWarehouseArea;
 import com.siirisoft.aim.wms.entity.data.Result;
 
+import com.siirisoft.aim.wms.entity.data.ResultCode;
 import com.siirisoft.aim.wms.entity.data.TreeDataWrapper;
 import com.siirisoft.aim.wms.entity.locator.WmsLocator;
+import com.siirisoft.aim.wms.entity.locator.ext.pda.WmsPdaLocatorExt;
 import com.siirisoft.aim.wms.entity.warehouse.WmsWarehouse;
 import com.siirisoft.aim.wms.service.area.IWmsWarehouseAreaService;
 import com.siirisoft.aim.wms.service.locator.IWmsLocatorService;
@@ -95,6 +97,19 @@ public class WmsPdaLocatorController {
             resultList.add(warehouseTree);
         }
         return Result.success(resultList);
+    }
+
+
+
+    @PostMapping("/transformLocator/locatorId")
+    @ApiOperation(value = "货位移动执行")
+    @ApiImplicitParam(name = "locatorId", value = "目标货位id")
+    public Result transformLocator(@PathVariable int locatorId, @RequestBody WmsPdaLocatorExt wmsPdaLocatorExt) {
+        //参数locatorId是要移动去的货位
+        if (wmsLocatorService.transformLocator(locatorId, wmsPdaLocatorExt)) {
+            return Result.success(ResultCode.SUCCESS);
+        }
+        return Result.failure(ResultCode.INTERFACE_INNER_INVOKE_ERROR);
     }
 
 }
