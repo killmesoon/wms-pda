@@ -85,6 +85,8 @@ public class WmsPdaLocatorController {
                     locatorTree.setLocatorId(locator.getLocatorId());
                     locatorTree.setCode(locator.getLocatorCode());
                     locatorTree.setName(locator.getLocatorName());
+                    locatorTree.setWarehouseId(locator.getWarehouseId());
+                    locatorTree.setAreaId(locator.getAreaId());
                     locatorList.add(locatorTree);
                 }
                 areaTree.setChildren(locatorList);
