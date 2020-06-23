@@ -63,24 +63,29 @@ public class WmsPdaLocatorController {
         List<WmsWarehouse> warehouses = iWmsWarehouseService.list();
         List<TreeDataWrapper> resultList = new ArrayList<>();
         for (WmsWarehouse w : warehouses) {
+            QueryWrapper wrapper = new QueryWrapper();
+            wrapper.eq("warehouse_id", w.getWarehouseId());
+            List<WmsWarehouseArea> list = iWmsWarehouseAreaService.list(wrapper);
+            if (list.size() == 0) {
+                continue;
+            }
             TreeDataWrapper warehouseTree = new TreeDataWrapper();
             warehouseTree.setWarehouseId(w.getWarehouseId());
             warehouseTree.setCode(w.getWarehouseCode());
             warehouseTree.setName(w.getWarehouseName());
-            QueryWrapper wrapper = new QueryWrapper();
-            wrapper.eq("warehouse_id", w.getWarehouseId());
-            List<WmsWarehouseArea> list = iWmsWarehouseAreaService.list(wrapper);
             List<TreeDataWrapper> areaList = new ArrayList<>();
             for (WmsWarehouseArea area : list) {
+                QueryWrapper locatorWrapper = new QueryWrapper();
+                locatorWrapper.eq("area_id", area.getAreaId());
+                List<WmsLocator> lList = iWmsLocatorService.list(locatorWrapper);
+                if (lList.size() == 0) {
+                    continue;
+                }
                 TreeDataWrapper areaTree = new TreeDataWrapper();
                 areaTree.setName(area.getAreaName());
                 areaTree.setAreaId(area.getAreaId());
                 areaTree.setCode(area.getAreaCode());
                 areaTree.setWarehouseId(area.getWarehouseId());
-                areaList.add(areaTree);
-                QueryWrapper locatorWrapper = new QueryWrapper();
-                locatorWrapper.eq("area_id", area.getAreaId());
-                List<WmsLocator> lList = iWmsLocatorService.list(locatorWrapper);
                 List<TreeDataWrapper> locatorList = new ArrayList<>();
                 for (WmsLocator locator: lList) {
                     TreeDataWrapper locatorTree = new TreeDataWrapper();
@@ -92,6 +97,10 @@ public class WmsPdaLocatorController {
                     locatorList.add(locatorTree);
                 }
                 areaTree.setChildren(locatorList);
+                areaList.add(areaTree);
+            }
+            if (areaList.size() == 0) {
+                continue;
             }
             warehouseTree.setChildren(areaList);
             resultList.add(warehouseTree);
