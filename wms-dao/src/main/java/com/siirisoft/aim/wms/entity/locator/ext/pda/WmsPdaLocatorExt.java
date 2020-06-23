@@ -27,4 +27,19 @@ public class WmsPdaLocatorExt extends WmsLocator {
 
     @ApiModelProperty(value = "层号")
     private Integer layerNumber;
+
+    @ApiModelProperty(value = "尺寸")
+    private String size;
+
+    @ApiModelProperty(value = "仓库编码")
+    private String warehouseCode;
+
+    @ApiModelProperty(value = "仓库名称")
+    private String warehouseName;
+
+    @ApiModelProperty(value = "区域编码")
+    private String areaCode;
+
+    @ApiModelProperty(value = "区域名称")
+    private String areaName;
 }

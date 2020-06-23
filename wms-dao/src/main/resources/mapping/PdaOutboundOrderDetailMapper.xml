@@ -6,9 +6,12 @@
         <result column="heat_number" property="heatNumber"></result>
         <result column="ship_number" property="shipNumber"></result>
         <result column="section_num" property="sectionNum"></result>
+        <result column="size" property="size"></result>
         <result column="item_id" property="itemId"></result>
         <result column="adv_locator_code" property="advLocatorCode"></result>
         <result column="adv_locator_name" property="advLocatorName"></result>
+        <result column="excu_locator_name" property="excuLocatorCode"></result>
+        <result column="excu_locator_code" property="excuLocatorName"></result>
     </resultMap>
 
     <select id="queryOutboundOrderDetail" resultMap="BaseMap">
@@ -19,13 +22,17 @@
 	b.heat_number,
 	b.ship_number,
 	b.section_num,
+	b.size,
 	d.locator_code as adv_locator_code,
-	d.locator_name as adv_locator_name
+	d.locator_name as adv_locator_name,
+	f.locator_name as excu_locator_name,
+	f.locator_code as excu_locator_code
 FROM
 	wms_outbound_order_detail a
 	LEFT JOIN wms_sgl_item b on a.adv_barcode = b.d_sequence_num
 	LEFT JOIN wms_outbound_order_line c on a.line_id = c.line_id
 	LEFT JOIN wms_locator d on a.adv_locator_id = d.locator_id
+	LEFT JOIN wms_locator f on a.excu_locator_id = f.locator_id
         ${ew.customSqlSegment}
     </select>
 </mapper>

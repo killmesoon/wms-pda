@@ -7,11 +7,18 @@
         <result column="ship_number" property="shipNumber"></result>
         <result column="section_num" property="sectionNum"></result>
         <result column="layer_number" property="layerNumber"></result>
+        <result column="size" property="size"></result>
+        <result column="warehouse_code" property="warehouseCode"></result>
+        <result column="warehouse_name" property="warehouseName"></result>
+        <result column="area_code" property="areaCode"></result>
+        <result column="area_name" property="areaName"></result>
     </resultMap>
 
     <sql id="order">
         ORDER BY b.layer_number desc
     </sql>
+
+
 
     <select id="queryLocatorDetail" resultMap="locatorExtMap">
         SELECT
@@ -20,10 +27,17 @@
         b.heat_number,
         b.ship_number,
         b.section_num,
-        b.layer_number
+        b.layer_number,
+        b.size,
+        c.warehouse_code,
+        c.warehouse_name,
+        d.area_code,
+        d.area_name
         FROM
         wms_locator a
         LEFT JOIN wms_sgl_item b on a.locator_id = b.locator_id
+        LEFT JOIN wms_warehouse c on a.warehouse_id = c.warehouse_id
+        LEFT JOIN wms_warehouse_area d on a.area_id = d.area_id
         ${ew.customSqlSegment}
         <include refid="order"></include>
     </select>
