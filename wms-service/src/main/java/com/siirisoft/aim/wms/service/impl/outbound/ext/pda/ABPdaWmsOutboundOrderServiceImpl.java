@@ -8,19 +8,24 @@ import com.siirisoft.aim.wms.entity.events.WmsObjectEvents;
 import com.siirisoft.aim.wms.entity.locator.ext.WmsLocatorExt;
 import com.siirisoft.aim.wms.entity.locator.ext.pda.WmsPdaLocatorExt;
 import com.siirisoft.aim.wms.entity.outbound.WmsOutboundOrderDetail;
+import com.siirisoft.aim.wms.entity.outbound.WmsOutboundOrderLine;
 import com.siirisoft.aim.wms.entity.outbound.ext.pda.WmsPdaOutboundOrderDetail;
 import com.siirisoft.aim.wms.entity.quantity.WmsItemOnhandQuantity;
 import com.siirisoft.aim.wms.entity.sqlitem.WmsSglItem;
 import com.siirisoft.aim.wms.mapper.events.WmsObjectEventsMapper;
 import com.siirisoft.aim.wms.mapper.outbound.WmsOutboundOrderDetailMapper;
+import com.siirisoft.aim.wms.mapper.outbound.WmsOutboundOrderLineMapper;
 import com.siirisoft.aim.wms.mapper.outbound.ext.pda.WmsPdaOutboundOrderDetailMapper;
 import com.siirisoft.aim.wms.mapper.quantity.WmsItemOnhandQuantityMapper;
 import com.siirisoft.aim.wms.mapper.sqlitem.WmsSglItemMapper;
 import com.siirisoft.aim.wms.mapper.sqlitem.ext.WmsSglItemMapperExt;
+import com.siirisoft.aim.wms.service.outbound.IWmsOutboundOrderDetailService;
 import com.siirisoft.aim.wms.service.outbound.pda.ABPdaWmsOutboundOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -49,6 +54,12 @@ public class ABPdaWmsOutboundOrderServiceImpl implements ABPdaWmsOutboundOrderSe
 
     @Autowired
     private WmsOutboundOrderDetailMapper wmsOutboundOrderDetailMapper;
+
+    @Autowired
+    private WmsOutboundOrderLineMapper wmsOutboundOrderLineMapper;
+
+    @Autowired
+    private IWmsOutboundOrderDetailService wmsOutboundOrderDetailService;
 
     @Override
     public IPage queryOutboundOrderDetail(Page page, Wrapper wrapper) {
@@ -123,6 +134,70 @@ public class ABPdaWmsOutboundOrderServiceImpl implements ABPdaWmsOutboundOrderSe
         wmsObjectEvents.setLocatorIdTo(sglItem.getLocatorId());
         wmsObjectEventsMapper.insert(wmsObjectEvents);
 
+        return true;
+    }
+
+    @Override
+    @Transactional
+    public boolean outboundOrderExc(List<WmsPdaOutboundOrderDetail> detailList) {
+        //出库执行
+        //新增明细列表
+        List<WmsOutboundOrderDetail> dList = new ArrayList<>();
+        for (WmsPdaOutboundOrderDetail detail : detailList) {
+            //出库单更新,行信息更新
+            QueryWrapper lineWrapper = new QueryWrapper();
+            lineWrapper.eq("line_id", detail.getLineId());
+            WmsOutboundOrderLine wmsOutboundOrderLine = wmsOutboundOrderLineMapper.selectOne(lineWrapper);
+            if (wmsOutboundOrderLine.getExecuteQty() != null) {
+                wmsOutboundOrderLine.setExecuteQty(wmsOutboundOrderLine.getExecuteQty() + 1);
+            } else {
+                wmsOutboundOrderLine.setExecuteQty(1);
+            }
+            detail.setExcuLocatorId(detail.getAdvLocatorId());
+            detail.setExcuQuantity(1);
+            detail.setExecBarcode(detail.getDSequenceNum());
+            detail.setExcuLotCode(detail.getShipNumber() + "-" + detail.getSectionNum());
+            detail.setExcuWarehouseId(detail.getAdvWarehouseId());
+            dList.add(detail);
+
+
+            //更新现有量 移除此条
+            QueryWrapper quantityWrapper = new QueryWrapper();
+            quantityWrapper.eq("item_id", detail.getItemId());
+            quantityWrapper.eq("locator_id",detail.getExcuLocatorId());
+            quantityWrapper.eq("warehouse_id", detail.getExcuWarehouseId());
+            List<WmsItemOnhandQuantity> list = wmsItemOnhandQuantityMapper.selectList(quantityWrapper);
+            if (list.size() > 0) {
+                wmsItemOnhandQuantityMapper.deleteById(list.get(0).getId());
+            }
+
+            //更新条码表
+            QueryWrapper itemSglWrapper = new QueryWrapper();
+            WmsSglItem wmsSglItem = new WmsSglItem();
+            itemSglWrapper.eq("d_sequence_num", detail.getDSequenceNum());
+            wmsSglItem.setEnableFlag(false);
+            wmsSglItemMapper.update(wmsSglItem, itemSglWrapper);
+
+
+            //新增事务
+            WmsObjectEvents e = new WmsObjectEvents();
+            e.setEventTypeId(4);
+            e.setEventTime(new Date());
+            e.setEventTypeCode("GD_OUTBOUND");
+            e.setEventQty(1);
+            e.setItemId(detail.getItemId());
+            e.setLotCode(detail.getExcuLotCode());
+            e.setLocatorIdFrom(detail.getAdvLocatorId());
+            e.setLocatorIdTo(detail.getExcuLocatorId());
+            e.setWarehouseIdTo(detail.getExcuWarehouseId());
+            e.setWarehouseIdFrom(detail.getAdvWarehouseId());
+            e.setCreationDate(new Date());
+
+
+        }
+
+        //更新出库明细信息
+        wmsOutboundOrderDetailService.saveOrUpdateBatch(dList);
         return true;
     }
 }

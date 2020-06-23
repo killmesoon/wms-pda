@@ -13,6 +13,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @User DKY
  * @Date 2020/6/22
@@ -59,6 +61,15 @@ public class WmsPdaOutboundOrderController {
 
         //原货位到新货位，货位移动
         abPdaWmsOutboundOrderService.commitPreparation(targetLocatorId,wmsOutboundCondition.getWmsPdaOutboundOrderDetail(), wmsOutboundCondition.getWmsPdaLocatorExt());
+        return Result.success();
+    }
+
+
+    @PostMapping("/outboundOrderExc")
+    @ApiOperation(value = "出库执行")
+    @ApiImplicitParam(name = "wmsPdaOutboundOrderDetail", value = "出库单详情表PO")
+    public Result outboundOrderExc(@RequestBody List<WmsPdaOutboundOrderDetail> detailList) {
+        abPdaWmsOutboundOrderService.outboundOrderExc(detailList);
         return Result.success();
     }
 

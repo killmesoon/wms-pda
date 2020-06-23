@@ -7,6 +7,8 @@ import com.siirisoft.aim.wms.entity.locator.ext.WmsLocatorExt;
 import com.siirisoft.aim.wms.entity.locator.ext.pda.WmsPdaLocatorExt;
 import com.siirisoft.aim.wms.entity.outbound.ext.pda.WmsPdaOutboundOrderDetail;
 
+import java.util.List;
+
 /**
  * @User DKY
  * @Date 2020/6/22
@@ -16,4 +18,6 @@ public interface ABPdaWmsOutboundOrderService {
     IPage queryOutboundOrderDetail(Page page, Wrapper wrapper);
 
     boolean commitPreparation(int targetLocatorId , WmsPdaOutboundOrderDetail wmsPdaOutboundOrderDetail, WmsPdaLocatorExt wmsPdaLocatorExt);
+
+    boolean outboundOrderExc(List<WmsPdaOutboundOrderDetail> detailList);
 }

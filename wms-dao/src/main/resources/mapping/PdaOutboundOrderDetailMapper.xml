@@ -22,9 +22,9 @@
 	d.locator_code as adv_locator_code,
 	d.locator_name as adv_locator_name
 FROM
-	wms_inbound_order_detail a
+	wms_outbound_order_detail a
 	LEFT JOIN wms_sgl_item b on a.adv_barcode = b.d_sequence_num
-	LEFT JOIN wms_inbound_order_line c on a.line_id = c.line_id
+	LEFT JOIN wms_outbound_order_line c on a.line_id = c.line_id
 	LEFT JOIN wms_locator d on a.adv_locator_id = d.locator_id
         ${ew.customSqlSegment}
     </select>
