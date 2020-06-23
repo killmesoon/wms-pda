@@ -4,9 +4,11 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.siirisoft.aim.wms.entity.events.WmsObjectEvents;
 import com.siirisoft.aim.wms.entity.locator.ext.pda.WmsPdaLocatorExt;
 import com.siirisoft.aim.wms.entity.quantity.WmsItemOnhandQuantity;
 import com.siirisoft.aim.wms.entity.sqlitem.WmsSglItem;
+import com.siirisoft.aim.wms.mapper.events.WmsObjectEventsMapper;
 import com.siirisoft.aim.wms.mapper.locator.ext.pda.WmsPdaLocatorMapperExt;
 import com.siirisoft.aim.wms.mapper.quantity.WmsItemOnhandQuantityMapper;
 import com.siirisoft.aim.wms.mapper.sqlitem.WmsSglItemMapper;
@@ -16,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.xml.crypto.Data;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -38,6 +42,9 @@ public class ABPdaWmsLocatorServiceImpl implements ABPdaWmsLocatorService {
 
     @Autowired
     private WmsItemOnhandQuantityMapper wmsItemOnhandQuantityMapper;
+
+    @Autowired
+    private WmsObjectEventsMapper wmsObjectEventsMapper;
 
     @Override
     public IPage queryLocatorDetail(Page page, Wrapper wrapper) {
@@ -81,6 +88,20 @@ public class ABPdaWmsLocatorServiceImpl implements ABPdaWmsLocatorService {
             WmsItemOnhandQuantity quantity = list.get(0);
             wmsItemOnhandQuantityMapper.deleteById(quantity.getId());
         }
+        //插入事务
+        WmsObjectEvents wmsObjectEvents = new WmsObjectEvents();
+        wmsObjectEvents.setEventTime(new Date());
+        wmsObjectEvents.setBarcode(sglItem.getDSequenceNum());
+        wmsObjectEvents.setCreationDate(new Date());
+        wmsObjectEvents.setEventTypeId(5);
+        wmsObjectEvents.setEventTypeCode("GD_LOCATOR_TRANSFER");
+        wmsObjectEvents.setItemId(sglItem.getItemId());
+        wmsObjectEvents.setWarehouseIdFrom(wmsPdaLocatorExt.getWarehouseId());
+        wmsObjectEvents.setWarehouseIdTo(sglItem.getWarehouseId());
+        wmsObjectEvents.setEventQty(1);
+        wmsObjectEvents.setLocatorIdFrom(wmsPdaLocatorExt.getLocatorId());
+        wmsObjectEvents.setLocatorIdTo(sglItem.getLocatorId());
+        wmsObjectEventsMapper.insert(wmsObjectEvents);
         return true;
     }
 }

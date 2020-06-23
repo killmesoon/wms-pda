@@ -42,7 +42,6 @@ public class WmsPdaOutboundOrderController {
 
         //原货位到新货位，货位移动,不涉及现有量变化
 
-
         return Result.success();
     }
 
