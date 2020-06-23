@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.siirisoft.aim.wms.entity.data.Result;
 import com.siirisoft.aim.wms.entity.locator.ext.pda.WmsPdaLocatorExt;
+import com.siirisoft.aim.wms.entity.outbound.ext.pda.WmsOutboundCondition;
 import com.siirisoft.aim.wms.entity.outbound.ext.pda.WmsPdaOutboundOrderDetail;
 import com.siirisoft.aim.wms.service.locator.pda.ABPdaWmsLocatorService;
 import com.siirisoft.aim.wms.service.outbound.pda.ABPdaWmsOutboundOrderService;
@@ -54,11 +55,10 @@ public class WmsPdaOutboundOrderController {
     @PostMapping("/commitPreparation")
     @ApiOperation(value = "备料执行")
     @ApiImplicitParam(name = "wmsPdaLocatorExt", value = "执行单po")
-    public Result commitPreparation(@RequestBody WmsPdaLocatorExt wmsPdaLocatorExt) {
+    public Result commitPreparation(@RequestBody WmsOutboundCondition wmsOutboundCondition) {
 
-        //原货位到新货位，货位移动,不涉及现有量变化
-//        abPdaWmsOutboundOrderService
-
+        //原货位到新货位，货位移动
+        abPdaWmsOutboundOrderService.commitPreparation(wmsOutboundCondition.getWmsPdaOutboundOrderDetail(), wmsOutboundCondition.getWmsPdaLocatorExt());
         return Result.success();
     }
 

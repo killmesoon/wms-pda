@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.siirisoft.aim.wms.entity.locator.ext.WmsLocatorExt;
 import com.siirisoft.aim.wms.entity.locator.ext.pda.WmsPdaLocatorExt;
+import com.siirisoft.aim.wms.entity.outbound.ext.pda.WmsPdaOutboundOrderDetail;
 
 /**
  * @User DKY
@@ -14,5 +15,5 @@ import com.siirisoft.aim.wms.entity.locator.ext.pda.WmsPdaLocatorExt;
 public interface ABPdaWmsOutboundOrderService {
     IPage queryOutboundOrderDetail(Page page, Wrapper wrapper);
 
-    boolean commitPreparation(int locatorId, WmsPdaLocatorExt wmsPdaLocatorExt);
+    boolean commitPreparation(WmsPdaOutboundOrderDetail wmsPdaOutboundOrderDetail, WmsPdaLocatorExt wmsPdaLocatorExt);
 }

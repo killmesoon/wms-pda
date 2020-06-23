@@ -85,5 +85,20 @@ public class WmsOutboundOrderDetail implements Serializable {
     @ApiModelProperty(value = "备注")
     private String note;
 
+    @ApiModelProperty(value = "备料条码")
+    private String preCode;
+
+    @ApiModelProperty(value = "备料仓库")
+    private String preWarehouseCode;
+
+    @ApiModelProperty(value = "备料货位")
+    private String preLocatorCode;
+
+    @ApiModelProperty(value = "备料批次")
+    private String preLotCode;
+
+    @ApiModelProperty(value = "备料数量")
+    private Integer preQuantity;
+
 
 }

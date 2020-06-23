@@ -7,9 +7,12 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.siirisoft.aim.wms.entity.events.WmsObjectEvents;
 import com.siirisoft.aim.wms.entity.locator.ext.WmsLocatorExt;
 import com.siirisoft.aim.wms.entity.locator.ext.pda.WmsPdaLocatorExt;
+import com.siirisoft.aim.wms.entity.outbound.WmsOutboundOrderDetail;
+import com.siirisoft.aim.wms.entity.outbound.ext.pda.WmsPdaOutboundOrderDetail;
 import com.siirisoft.aim.wms.entity.quantity.WmsItemOnhandQuantity;
 import com.siirisoft.aim.wms.entity.sqlitem.WmsSglItem;
 import com.siirisoft.aim.wms.mapper.events.WmsObjectEventsMapper;
+import com.siirisoft.aim.wms.mapper.outbound.WmsOutboundOrderDetailMapper;
 import com.siirisoft.aim.wms.mapper.outbound.ext.pda.WmsPdaOutboundOrderDetailMapper;
 import com.siirisoft.aim.wms.mapper.quantity.WmsItemOnhandQuantityMapper;
 import com.siirisoft.aim.wms.mapper.sqlitem.WmsSglItemMapper;
@@ -44,13 +47,16 @@ public class ABPdaWmsOutboundOrderServiceImpl implements ABPdaWmsOutboundOrderSe
     @Autowired
     private WmsObjectEventsMapper wmsObjectEventsMapper;
 
+    @Autowired
+    private WmsOutboundOrderDetailMapper wmsOutboundOrderDetailMapper;
+
     @Override
     public IPage queryOutboundOrderDetail(Page page, Wrapper wrapper) {
         return wmsPdaOutboundOrderDetailMapper.queryOutboundOrderDetail(page, wrapper);
     }
 
     @Override
-    public boolean commitPreparation(int locatorId, WmsPdaLocatorExt wmsPdaLocatorExt) {
+    public boolean commitPreparation(WmsPdaOutboundOrderDetail wmsPdaOutboundOrderDetail, WmsPdaLocatorExt wmsPdaLocatorExt) {
         //货位移动操作
         QueryWrapper wrapper = new QueryWrapper();
         wrapper.eq("d_sequence_num", wmsPdaLocatorExt.getDSequenceNum());
@@ -58,12 +64,12 @@ public class ABPdaWmsOutboundOrderServiceImpl implements ABPdaWmsOutboundOrderSe
 
         //获取目标位置最大层号
         QueryWrapper layerWrapper = new QueryWrapper();
-        layerWrapper.eq("locator_id", locatorId);
+        layerWrapper.eq("locator_id", wmsPdaLocatorExt.getLocatorId());
         Integer maxLayerNumber = wmsSglItemMapperExt.findMaxLayerNumber(layerWrapper);
 
         //更新货位号 仓库号 与层号
         sglItem.setLayerNumber(maxLayerNumber);
-        sglItem.setLocatorId(locatorId);
+        sglItem.setLocatorId(wmsPdaLocatorExt.getLocatorId());
         wmsSglItemMapper.update(sglItem, wrapper);
 
         //更新现有量
@@ -85,6 +91,15 @@ public class ABPdaWmsOutboundOrderServiceImpl implements ABPdaWmsOutboundOrderSe
             wmsItemOnhandQuantityMapper.deleteById(quantity.getId());
         }
 
+        //插入明细行
+        QueryWrapper lineDetailWrapper = new QueryWrapper();
+        lineDetailWrapper.eq("line_id", wmsPdaOutboundOrderDetail.getLineId());
+        WmsOutboundOrderDetail detail = new WmsOutboundOrderDetail();
+        detail.setPreQuantity(1);
+        detail.setPreLotCode(sglItem.getDSequenceNum());
+        detail.setPreLocatorCode(wmsPdaLocatorExt.getLocatorCode());
+        wmsOutboundOrderDetailMapper.insert(detail);
+
 
         //插入事务
         WmsObjectEvents wmsObjectEvents = new WmsObjectEvents();
@@ -100,10 +115,6 @@ public class ABPdaWmsOutboundOrderServiceImpl implements ABPdaWmsOutboundOrderSe
         wmsObjectEvents.setLocatorIdFrom(wmsPdaLocatorExt.getLocatorId());
         wmsObjectEvents.setLocatorIdTo(sglItem.getLocatorId());
         wmsObjectEventsMapper.insert(wmsObjectEvents);
-
-
-
-
         return true;
     }
 }
