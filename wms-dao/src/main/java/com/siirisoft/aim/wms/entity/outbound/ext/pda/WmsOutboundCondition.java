@@ -12,4 +12,7 @@ import lombok.Data;
 public class WmsOutboundCondition {
     private WmsPdaOutboundOrderDetail wmsPdaOutboundOrderDetail;
     private WmsPdaLocatorExt wmsPdaLocatorExt;
+    private Integer targetLocatorId;
+    private Integer targetWarehouseId;
+    private Integer targetAreaId;
 }

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.siirisoft.aim.wms.entity.locator.ext.WmsLocatorExt;
 import com.siirisoft.aim.wms.entity.locator.ext.pda.WmsPdaLocatorExt;
+import com.siirisoft.aim.wms.entity.outbound.ext.pda.WmsOutboundCondition;
 import com.siirisoft.aim.wms.entity.outbound.ext.pda.WmsPdaOutboundOrderDetail;
 
 import java.util.List;
@@ -17,7 +18,7 @@ import java.util.List;
 public interface ABPdaWmsOutboundOrderService {
     IPage queryOutboundOrderDetail(Page page, Wrapper wrapper);
 
-    boolean commitPreparation(int targetLocatorId , WmsPdaOutboundOrderDetail wmsPdaOutboundOrderDetail, WmsPdaLocatorExt wmsPdaLocatorExt);
+    boolean commitPreparation(WmsOutboundCondition wmsOutboundCondition);
 
     boolean outboundOrderExc(List<WmsPdaOutboundOrderDetail> detailList);
 }

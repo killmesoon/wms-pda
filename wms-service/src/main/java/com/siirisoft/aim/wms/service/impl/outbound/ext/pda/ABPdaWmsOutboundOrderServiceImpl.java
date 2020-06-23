@@ -9,6 +9,7 @@ import com.siirisoft.aim.wms.entity.locator.ext.WmsLocatorExt;
 import com.siirisoft.aim.wms.entity.locator.ext.pda.WmsPdaLocatorExt;
 import com.siirisoft.aim.wms.entity.outbound.WmsOutboundOrderDetail;
 import com.siirisoft.aim.wms.entity.outbound.WmsOutboundOrderLine;
+import com.siirisoft.aim.wms.entity.outbound.ext.pda.WmsOutboundCondition;
 import com.siirisoft.aim.wms.entity.outbound.ext.pda.WmsPdaOutboundOrderDetail;
 import com.siirisoft.aim.wms.entity.quantity.WmsItemOnhandQuantity;
 import com.siirisoft.aim.wms.entity.sqlitem.WmsSglItem;
@@ -67,7 +68,13 @@ public class ABPdaWmsOutboundOrderServiceImpl implements ABPdaWmsOutboundOrderSe
     }
 
     @Override
-    public boolean commitPreparation(int targetLocatorId, WmsPdaOutboundOrderDetail wmsPdaOutboundOrderDetail, WmsPdaLocatorExt wmsPdaLocatorExt) {
+    public boolean commitPreparation(WmsOutboundCondition outboundCondition) {
+        WmsPdaLocatorExt wmsPdaLocatorExt = outboundCondition.getWmsPdaLocatorExt();
+        WmsPdaOutboundOrderDetail wmsPdaOutboundOrderDetail = outboundCondition.getWmsPdaOutboundOrderDetail();
+        Integer targetLocatorId = outboundCondition.getTargetLocatorId();
+        Integer targetAreaId = outboundCondition.getTargetAreaId();
+        Integer targetWarehouseId = outboundCondition.getTargetWarehouseId();
+
         //货位移动操作
         QueryWrapper wrapper = new QueryWrapper();
         wrapper.eq("d_sequence_num", wmsPdaLocatorExt.getDSequenceNum());
@@ -76,11 +83,13 @@ public class ABPdaWmsOutboundOrderServiceImpl implements ABPdaWmsOutboundOrderSe
         //获取目标位置最大层号
         QueryWrapper layerWrapper = new QueryWrapper();
         layerWrapper.eq("locator_id", targetLocatorId);
+        layerWrapper.eq("warehouse_id", targetWarehouseId);
         Integer maxLayerNumber = wmsSglItemMapperExt.findMaxLayerNumber(layerWrapper);
 
         //更新货位号 仓库号 与层号
         sglItem.setLayerNumber(maxLayerNumber);
         sglItem.setLocatorId(targetLocatorId);
+        sglItem.setWarehouseId(targetWarehouseId);
         wmsSglItemMapper.update(sglItem, wrapper);
 
         //更新现有量
