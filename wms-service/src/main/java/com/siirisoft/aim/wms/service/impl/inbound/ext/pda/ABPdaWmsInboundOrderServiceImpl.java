@@ -5,9 +5,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.siirisoft.aim.wms.entity.events.WmsObjectEvents;
 import com.siirisoft.aim.wms.entity.inbound.ext.pda.WmsPdaInboundOrderDetail;
 import com.siirisoft.aim.wms.entity.quantity.WmsItemOnhandQuantity;
 import com.siirisoft.aim.wms.entity.sqlitem.WmsSglItem;
+import com.siirisoft.aim.wms.mapper.events.WmsObjectEventsMapper;
 import com.siirisoft.aim.wms.mapper.inbound.WmsInboundOrderDetailMapper;
 import com.siirisoft.aim.wms.mapper.inbound.WmsInboundOrderLineMapper;
 import com.siirisoft.aim.wms.mapper.inbound.ext.pda.WmsPdaInboundOrderDetailMapper;
@@ -18,6 +20,8 @@ import com.siirisoft.aim.wms.service.inbound.pda.ABPdaWmsInboundOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
 
 /**
  * @User DKY
@@ -45,6 +49,9 @@ public class ABPdaWmsInboundOrderServiceImpl implements ABPdaWmsInboundOrderServ
     @Autowired
     private WmsInboundOrderDetailMapper wmsInboundOrderDetailMapper;
 
+    @Autowired
+    private WmsObjectEventsMapper wmsObjectEventsMapper;
+
 
     @Override
     public IPage queryInboundOrderDetail(Page page, Wrapper wrapper) {
@@ -64,7 +71,7 @@ public class ABPdaWmsInboundOrderServiceImpl implements ABPdaWmsInboundOrderServ
         wmsSglItem.setLocatorId(wmsPdaInboundOrderDetail.getExcuLocatorId());
         wmsSglItem.setLayerNumber(maxLayerNumber);
         UpdateWrapper updateWrapper = new UpdateWrapper();
-        updateWrapper.eq("dSequenceNum", wmsPdaInboundOrderDetail.getDSequenceNum());
+        updateWrapper.eq("d_sequence_num", wmsPdaInboundOrderDetail.getDSequenceNum());
         wmsSglItemMapper.update(wmsSglItem, updateWrapper);
 
         //现有量更新，一笔增一笔减, 由于单张钢板入库，每次增减数量为1 原有货位 -1 目标货位  + 1
@@ -73,7 +80,6 @@ public class ABPdaWmsInboundOrderServiceImpl implements ABPdaWmsInboundOrderServ
         //更新现有量
         QueryWrapper quantityWrapper = new QueryWrapper();
         quantityWrapper.eq("item_id", sglItem.getItemId());
-        quantityWrapper.eq("d_sequence_num", sglItem.getDSequenceNum());
         quantityWrapper.eq("lot_number", sglItem.getLotNumber());
         quantityWrapper.eq("locator_id", wmsPdaInboundOrderDetail.getAdvLocatorId());
         wmsItemOnhandQuantityMapper.delete(quantityWrapper);
@@ -96,8 +102,16 @@ public class ABPdaWmsInboundOrderServiceImpl implements ABPdaWmsInboundOrderServ
         lineWrapper.eq("line_id", wmsPdaInboundOrderDetail.getLineId());
         wmsInboundOrderLineMapper.updateInboundLineInfo(lineWrapper);
 
-
-
+        //插入事务
+        WmsObjectEvents wmsObjectEvents = new WmsObjectEvents();
+        wmsObjectEvents.setLocatorIdTo(sglItem.getLocatorId());
+        wmsObjectEvents.setLocatorIdFrom(wmsPdaInboundOrderDetail.getAdvLocatorId());
+        wmsObjectEvents.setEventTime(new Date());
+        wmsObjectEvents.setEventQty(1);
+        wmsObjectEvents.setItemId(sglItem.getItemId());
+        wmsObjectEvents.setEventTypeId(2);
+        wmsObjectEvents.setEventTypeCode("GD_ASN_INSTOCK");
+        wmsObjectEventsMapper.insert(wmsObjectEvents);
         return true;
     }
 }

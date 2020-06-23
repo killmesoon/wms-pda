@@ -2,8 +2,10 @@ package com.siirisoft.aim.wms.service.impl.asn.pda;
 import com.siirisoft.aim.wms.entity.asn.WmsErpAsnDetail;
 import com.siirisoft.aim.wms.entity.asn.WmsErpAsnLine;
 import com.siirisoft.aim.wms.entity.asn.ext.WmsErpAsnDetailExt;
+import com.siirisoft.aim.wms.entity.events.WmsObjectEvents;
 import com.siirisoft.aim.wms.entity.quantity.WmsItemOnhandQuantity;
 import com.siirisoft.aim.wms.entity.sqlitem.WmsSglItem;
+import com.siirisoft.aim.wms.mapper.events.WmsObjectEventsMapper;
 import com.siirisoft.aim.wms.service.asn.IWmsErpAsnDetailService;
 import com.siirisoft.aim.wms.service.asn.IWmsErpAsnLineService;
 import com.siirisoft.aim.wms.service.asn.pda.ABPdaWmsAsnOrderService;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -35,6 +38,9 @@ public class ABPdaWmsAsnOrderServiceImpl implements ABPdaWmsAsnOrderService {
 
     @Autowired
     private IWmsErpAsnLineService iWmsErpAsnLineService;
+
+    @Autowired
+    private WmsObjectEventsMapper wmsObjectEventsMapper;
 
 
     @Override
@@ -108,6 +114,15 @@ public class ABPdaWmsAsnOrderServiceImpl implements ABPdaWmsAsnOrderService {
                 //更新行的收货数量
                 lineUpdateFlag = iWmsErpAsnLineService.saveOrUpdate(line);
             }
+
+            //插入事件
+            WmsObjectEvents wmsObjectEvents = new WmsObjectEvents();
+            wmsObjectEvents.setItemId(asn.getItemId());
+            wmsObjectEvents.setEventQty(1);
+            wmsObjectEvents.setEventTime(new Date());
+            wmsObjectEvents.setEventTypeId(1);
+            wmsObjectEvents.setEventTypeCode("GD_PO_RCV");
+
         }
         detailFlag = iWmsErpAsnDetailService.saveOrUpdateBatch(updateList);
         sglItemFlag = iWmsSglItemService.saveBatch(sglList);
