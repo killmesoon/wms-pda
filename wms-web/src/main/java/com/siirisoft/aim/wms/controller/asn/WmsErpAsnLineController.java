@@ -24,7 +24,7 @@ import java.util.List;
  * @since 2020-06-08
  */
 @RestController
-@RequestMapping("/api/wms/asnLine/wms-erp-asn-line")
+@RequestMapping("/web-api/wms/asnLine/wms-erp-asn-line")
 public class WmsErpAsnLineController {
 
     @Autowired

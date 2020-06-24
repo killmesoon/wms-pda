@@ -16,15 +16,15 @@
       },
       "routers": [
         {
-          "component": "Layout",
-          "meta": {
-            "code": "",
-            "icon": "",
-            "title": "首页"
-          },
-          "name": "Dashboard",
-          "path": "/",
-          "redirect": "/dashboard",
+            "component": "Layout",
+            "meta": {
+              "code": "",
+              "icon": "",
+              "title": "首页"
+            },
+            "name": "Dashboard",
+            "path": "/",
+            "redirect": "/dashboard",
           "children": [
             {
               "component": "Dashboard/index",
@@ -173,28 +173,15 @@
               },
               "name": "快码设置",
               "path": "dic"
-            }
-          ]
-        },
-        {
-          "component": "Layout",
-          "meta": {
-            "code": "",
-            "icon": "",
-            "title": "条码管理"
-          },
-          "name": "Display",
-          "path": "/barcode",
-          "redirect": "/barcode/barcode-item",
-          "children": [
+            },
             {
               "component": "Display/barcode/index",
               "meta": {
                 "code": "",
                 "icon": "",
-                "title": "条码定义"
+                "title": "条码管理"
               },
-              "name": "条码定义",
+              "name": "条码管理",
               "path": "barcode-item"
             }
           ]
@@ -204,10 +191,10 @@
           "meta": {
             "code": "",
             "icon": "",
-            "title": "入库单管理"
+            "title": "单据管理"
           },
           "name": "Display",
-          "path": "/inbound",
+          "path": "/order-manage",
           "redirect": "/inbound/inbound-item",
           "children": [
             {
@@ -229,20 +216,7 @@
               },
               "name": "入库单管理",
               "path": "inbound-item"
-            }
-          ]
-        },
-        {
-          "component": "Layout",
-          "meta": {
-            "code": "",
-            "icon": "",
-            "title": "出库单管理"
-          },
-          "name": "Display",
-          "path": "/outbound",
-          "redirect": "/outbound/outbound-item",
-          "children": [
+            },
             {
               "component": "Display/outbound/Outbound",
               "meta": {
@@ -255,6 +229,7 @@
             }
           ]
         },
+
         {
           "component": "Layout",
           "meta": {

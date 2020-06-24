@@ -23,7 +23,7 @@ import java.util.List;
  * @since 2020-06-17
  */
 @RestController
-@RequestMapping("/api/wms/eventsType/wms-object-event-type")
+@RequestMapping("/web-api/wms/eventsType/wms-object-event-type")
 public class WmsObjectEventTypeController {
 
 

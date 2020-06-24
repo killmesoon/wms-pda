@@ -24,7 +24,7 @@ public class DataParseUtils {
      */
     public static JSONObject readJson() {
         String jsonStr = "";
-        String fileName = "D:\\wms-svn\\wms\\wms-web\\src\\main\\resources\\data.json";
+        String fileName = "D:\\wms-pda\\wms-web\\src\\main\\resources\\data.json";
         try {
             File file = new File(fileName);
             if (file.exists()) {

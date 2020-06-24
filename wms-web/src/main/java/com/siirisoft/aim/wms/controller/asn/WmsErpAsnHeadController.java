@@ -26,7 +26,7 @@ import java.util.List;
  * @since 2020-06-08
  */
 @RestController
-@RequestMapping("/api/wms/asnHead/wms-erp-asn-head")
+@RequestMapping("/web-api/wms/asnHead/wms-erp-asn-head")
 public class WmsErpAsnHeadController {
 
     @Autowired
@@ -112,5 +112,11 @@ public class WmsErpAsnHeadController {
         return Result.success(false);
     }
 
+
+    @PostMapping("/asnOrderCheck")
+    public Result asnOrderCheck(@RequestBody List<WmsErpAsnHead> list) {
+        abWmsAsnOrderService.asnOrderCheck(list);
+        return Result.success();
+    }
 
 }

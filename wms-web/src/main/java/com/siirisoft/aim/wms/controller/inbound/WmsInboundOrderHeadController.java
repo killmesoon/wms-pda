@@ -31,7 +31,7 @@ import java.util.List;
  * @since 2020-05-14
  */
 @RestController
-@RequestMapping("/api/wms/inboundHead/wms-inbound-order-head")
+@RequestMapping("/web-api/wms/inboundHead/wms-inbound-order-head")
 public class WmsInboundOrderHeadController {
 
     @Autowired

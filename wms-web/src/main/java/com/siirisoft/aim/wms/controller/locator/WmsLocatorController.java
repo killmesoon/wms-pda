@@ -27,7 +27,7 @@ import java.util.List;
  * @since 2020-05-26
  */
 @RestController
-@RequestMapping("/api/wms/locator/wms-locator")
+@RequestMapping("/web-api/wms/locator/wms-locator")
 public class WmsLocatorController {
 
     @Autowired

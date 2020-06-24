@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
  * @since 2020-06-05
  */
 @RestController
-@RequestMapping("/api/wms/onhand/wms-item-onhand-quantity")
+@RequestMapping("/web-api/wms/onhand/wms-item-onhand-quantity")
 public class WmsItemOnhandQuantityController {
 
     @Autowired

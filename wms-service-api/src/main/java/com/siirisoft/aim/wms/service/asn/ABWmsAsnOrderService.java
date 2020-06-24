@@ -25,4 +25,6 @@ public interface ABWmsAsnOrderService {
     boolean deleteLineOrderAndDetailList(List<Integer> lineIdList);
 
     boolean saveWmsErpOrderLineList(int lineId, List<WmsErpAsnDetail> list);
+
+    boolean asnOrderCheck(List<WmsErpAsnHead> list);
 }

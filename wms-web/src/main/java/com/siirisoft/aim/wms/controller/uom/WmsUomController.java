@@ -25,7 +25,7 @@ import java.util.List;
  * @since 2020-05-18
  */
 @RestController
-@RequestMapping("/api/wms/uom/wms-uom")
+@RequestMapping("/web-api/wms/uom/wms-uom")
 public class WmsUomController {
 
 

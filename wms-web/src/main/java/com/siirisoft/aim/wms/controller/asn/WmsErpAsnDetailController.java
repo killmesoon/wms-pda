@@ -24,7 +24,7 @@ import java.util.List;
  * @since 2020-06-08
  */
 @RestController
-@RequestMapping("/api/wms/asnDetail/wms-erp-asn-detail")
+@RequestMapping("/web-api/wms/asnDetail/wms-erp-asn-detail")
 public class WmsErpAsnDetailController {
 
     @Autowired
@@ -67,5 +67,15 @@ public class WmsErpAsnDetailController {
             return Result.success(ResultCode.SUCCESS);
         }
         return Result.failure(ResultCode.DATA_IS_WRONG);
+    }
+
+    @PostMapping("/saveOrUpdateDetail")
+    @ApiOperation("逐条更新")
+    @ApiImplicitParam(name = "wmsErpAsnDetail", value = "明细信息po")
+    public Result saveOrUpdateDetail(@RequestBody WmsErpAsnDetail wmsErpAsnDetail) {
+        if (iWmsErpAsnDetailService.saveOrUpdate(wmsErpAsnDetail)) {
+            return Result.success(ResultCode.SUCCESS);
+        }
+        return Result.failure(ResultCode.PARAM_IS_INVALID);
     }
 }

@@ -25,7 +25,7 @@ import java.util.List;
  * @since 2020-05-20
  */
 @RestController
-@RequestMapping("/api/wms/supplier/wms-supplier")
+@RequestMapping("/web-api/wms/supplier/wms-supplier")
 public class WmsSupplierController {
 
     @Autowired

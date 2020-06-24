@@ -2,6 +2,7 @@ package com.siirisoft.aim.wms.controller.locator.pda;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.siirisoft.aim.wms.entity.area.WmsWarehouseArea;
 import com.siirisoft.aim.wms.entity.data.Result;
@@ -9,6 +10,7 @@ import com.siirisoft.aim.wms.entity.data.Result;
 import com.siirisoft.aim.wms.entity.data.ResultCode;
 import com.siirisoft.aim.wms.entity.data.TreeDataWrapper;
 import com.siirisoft.aim.wms.entity.locator.WmsLocator;
+import com.siirisoft.aim.wms.entity.locator.ext.WmsLocatorExt;
 import com.siirisoft.aim.wms.entity.locator.ext.pda.WmsPdaLocatorExt;
 import com.siirisoft.aim.wms.entity.warehouse.WmsWarehouse;
 import com.siirisoft.aim.wms.service.area.IWmsWarehouseAreaService;
@@ -30,7 +32,7 @@ import java.util.List;
  * @Description PDA执行controller
  */
 @RestController
-@RequestMapping("/api/wms/pda/locator")
+@RequestMapping("/m-api/wms/pda/locator")
 public class WmsPdaLocatorController {
 
     @Autowired
@@ -44,6 +46,34 @@ public class WmsPdaLocatorController {
 
     @Autowired
     private IWmsWarehouseAreaService iWmsWarehouseAreaService;
+
+    @PostMapping("/queryLocatorList")
+    @ApiOperation(value = "查询货位列表")
+    @ApiImplicitParam(name = "wmsLocator", value = "货位po")
+    public Result queryLocatorList(@RequestParam(defaultValue = "1") int current,
+                                   @RequestParam(defaultValue = "-1") int size,
+                                   @RequestBody(required = false) WmsLocator wmsLocator) {
+        QueryWrapper wrapper = new QueryWrapper();
+        if (wmsLocator != null) {
+            wrapper.eq(wmsLocator.getWarehouseId() != null , "a.warehouse_id", wmsLocator.getWarehouseId());
+            wrapper.eq(wmsLocator.getAreaId() != null , "a.area_id", wmsLocator.getAreaId());
+            wrapper.eq(wmsLocator.getLocatorCode() != null , "a.locator_code", wmsLocator.getLocatorCode());
+            wrapper.eq(wmsLocator.getLocatorName() != null , "a.locator_name", wmsLocator.getLocatorName());
+            wrapper.eq(wmsLocator.getLocatorType() != null , "a.locator_type", wmsLocator.getLocatorType());
+            wrapper.eq(wmsLocator.getGpsInfo() != null , "a.gps_info", wmsLocator.getGpsInfo());
+            wrapper.eq(wmsLocator.getEnableFlag() != null , "a.enable_flag", wmsLocator.getEnableFlag());
+            wrapper.eq(wmsLocator.getDescription() != null , "a.description", wmsLocator.getDescription());
+        }
+//        wrapper.orderByAsc("a.locator_code");
+        IPage iPage = iWmsLocatorService.queryLocatorList(new Page(current, size), wrapper);
+        List<WmsLocatorExt> records = iPage.getRecords();
+        for (WmsLocatorExt m: records) {
+            m.setPlantCode("WGQ1");
+            m.setPlantName("上海外高桥一厂");
+        }
+        iPage.setRecords(records);
+        return Result.success(iPage);
+    }
 
 
     @GetMapping("/queryLocatorDetail/{locatorId}")
@@ -110,7 +140,7 @@ public class WmsPdaLocatorController {
 
 
 
-    @PostMapping("/transformLocator/locatorId")
+    @PostMapping("/transformLocator/{locatorId}")
     @ApiOperation(value = "货位移动执行")
     @ApiImplicitParam(name = "locatorId", value = "目标货位id")
     public Result transformLocator(@PathVariable int locatorId, @RequestBody WmsPdaLocatorExt wmsPdaLocatorExt) {

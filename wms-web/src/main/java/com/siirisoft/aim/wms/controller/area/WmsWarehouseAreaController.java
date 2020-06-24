@@ -29,7 +29,7 @@ import java.util.List;
  * @since 2020-05-27
  */
 @RestController
-@RequestMapping("/api/wms/area/wms-warehouse-area")
+@RequestMapping("/web-api/wms/area/wms-warehouse-area")
 public class WmsWarehouseAreaController {
 
     @Autowired

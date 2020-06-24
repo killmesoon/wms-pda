@@ -25,7 +25,7 @@ import java.util.List;
  * @since 2020-05-22
  */
 @RestController
-@RequestMapping("/api/wms/barcode/wms-barcode")
+@RequestMapping("/web-api/wms/barcode/wms-barcode")
 public class WmsBarcodeController {
 
     @Autowired

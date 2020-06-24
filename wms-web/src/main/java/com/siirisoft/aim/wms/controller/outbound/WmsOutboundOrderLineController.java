@@ -25,7 +25,7 @@ import java.util.List;
  * @since 2020-05-15
  */
 @RestController
-@RequestMapping("/api/wms/outboundLine/wms-outbound-order-line")
+@RequestMapping("/web-api/wms/outboundLine/wms-outbound-order-line")
 public class WmsOutboundOrderLineController {
 
     @Autowired

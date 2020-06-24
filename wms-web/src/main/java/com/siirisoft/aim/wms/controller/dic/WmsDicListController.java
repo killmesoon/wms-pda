@@ -27,7 +27,7 @@ import java.util.Map;
  * @since 2020-05-14
  */
 @RestController
-@RequestMapping("/api/wms/dic/wms-dic-list")
+@RequestMapping("/web-api/wms/dic/wms-dic-list")
 public class WmsDicListController {
     @Autowired
     private IWmsDicListService wmsDicListService;

@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2020-05-14
  */
 @RestController
-@RequestMapping("/m-api/wms/dictype/wms-dic-type")
+@RequestMapping("/web-api/wms/dictype/wms-dic-type")
 public class WmsDicTypeController {
 
     @Autowired

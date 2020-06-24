@@ -23,7 +23,7 @@ import java.util.List;
  * @since 2020-06-09
  */
 @RestController
-@RequestMapping("/api/wms/docAutonumber/wms-doc-autonumber")
+@RequestMapping("/web-api/wms/docAutonumber/wms-doc-autonumber")
 public class WmsDocAutonumberController {
 
     @Autowired

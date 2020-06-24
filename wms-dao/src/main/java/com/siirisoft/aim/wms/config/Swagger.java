@@ -15,10 +15,10 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * @Date 2020/5/14
  * @Description Swagger配置
  */
-@Configuration
-@EnableSwagger2
+//@Configuration
+//@EnableSwagger2
 public class Swagger {
-    @Bean
+//    @Bean
     public Docket docket() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())

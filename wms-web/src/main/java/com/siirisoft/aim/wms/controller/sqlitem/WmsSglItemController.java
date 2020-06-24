@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
  * @since 2020-06-15
  */
 @RestController
-@RequestMapping("/api/wms/sqlItem/wms-sgl-item")
+@RequestMapping("/web-api/wms/sqlItem/wms-sgl-item")
 public class WmsSglItemController {
 
     @Autowired

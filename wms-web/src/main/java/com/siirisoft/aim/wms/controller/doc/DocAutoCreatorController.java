@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
  * @Description 获取自动单据编码
  */
 @RestController
-@RequestMapping("/api/wms/doc")
+@RequestMapping("/web-api/wms/doc")
 public class DocAutoCreatorController {
 
     @Autowired

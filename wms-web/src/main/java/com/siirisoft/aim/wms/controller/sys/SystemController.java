@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Description 系统controller
  */
 @RestController
-@RequestMapping("/api/wms")
+@RequestMapping("/web-api/wms")
 public class SystemController {
     @GetMapping("/menu/list")
     public Object getMenu() {

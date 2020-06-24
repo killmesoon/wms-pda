@@ -23,7 +23,7 @@ import java.util.List;
  * @since 2020-05-15
  */
 @RestController
-@RequestMapping("/api/wms/outboundDetail/wms-outbound-order-detail")
+@RequestMapping("/web-api/wms/outboundDetail/wms-outbound-order-detail")
 public class WmsOutboundOrderDetailController {
     @Autowired
     private IWmsOutboundOrderDetailService iWmsOutboundOrderDetailService;

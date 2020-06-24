@@ -21,7 +21,7 @@ import java.util.List;
  * @Description 出库执行PDA模块
  */
 @RestController
-@RequestMapping("/api/wms/pda/outboundOrder")
+@RequestMapping("/m-api/wms/pda/outboundOrder")
 public class WmsPdaOutboundOrderController {
 
 

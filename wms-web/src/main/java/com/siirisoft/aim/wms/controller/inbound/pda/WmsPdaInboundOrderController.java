@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
  * @Description 入库单PDA模块功能
  */
 @RestController
-@RequestMapping("/api/wms/pda/inboundOrder")
+@RequestMapping("/m-api/wms/pda/inboundOrder")
 public class WmsPdaInboundOrderController {
 
     @Autowired

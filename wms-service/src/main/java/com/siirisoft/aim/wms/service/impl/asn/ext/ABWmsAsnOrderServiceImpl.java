@@ -137,4 +137,9 @@ public class ABWmsAsnOrderServiceImpl  implements ABWmsAsnOrderService {
         }
         return false;
     }
+
+    @Override
+    public boolean asnOrderCheck(List<WmsErpAsnHead> list) {
+        return false;
+    }
 }

@@ -20,7 +20,7 @@ import java.util.List;
  * @Description PDA ASN模块服务提供
  */
 @RestController
-@RequestMapping("/api/wms/pda/asn")
+@RequestMapping("/m-api/wms/pda/asn")
 public class WmsAsnPdaController {
 
     @Autowired
