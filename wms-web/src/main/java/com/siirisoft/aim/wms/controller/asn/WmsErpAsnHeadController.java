@@ -115,8 +115,10 @@ public class WmsErpAsnHeadController {
 
     @PostMapping("/asnOrderCheck")
     public Result asnOrderCheck(@RequestBody List<WmsErpAsnHead> list) {
-        abWmsAsnOrderService.asnOrderCheck(list);
-        return Result.success();
+        if (abWmsAsnOrderService.asnOrderCheck(list)) {
+            return Result.success(ResultCode.SUCCESS);
+        }
+        return Result.failure(ResultCode.DATA_IS_WRONG);
     }
 
 }

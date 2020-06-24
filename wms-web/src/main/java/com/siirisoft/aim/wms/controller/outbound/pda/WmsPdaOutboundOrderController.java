@@ -3,10 +3,13 @@ package com.siirisoft.aim.wms.controller.outbound.pda;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.siirisoft.aim.wms.entity.data.Result;
+import com.siirisoft.aim.wms.entity.data.ResultCode;
 import com.siirisoft.aim.wms.entity.locator.ext.pda.WmsPdaLocatorExt;
+import com.siirisoft.aim.wms.entity.outbound.ext.WmsOutboundOrderHeadExt;
 import com.siirisoft.aim.wms.entity.outbound.ext.pda.WmsOutboundCondition;
 import com.siirisoft.aim.wms.entity.outbound.ext.pda.WmsPdaOutboundOrderDetail;
 import com.siirisoft.aim.wms.service.locator.pda.ABPdaWmsLocatorService;
+import com.siirisoft.aim.wms.service.outbound.IWmsOutboundOrderHeadService;
 import com.siirisoft.aim.wms.service.outbound.pda.ABPdaWmsOutboundOrderService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -30,6 +33,44 @@ public class WmsPdaOutboundOrderController {
 
     @Autowired
     private ABPdaWmsLocatorService wmsLocatorService;
+
+    @Autowired
+    private IWmsOutboundOrderHeadService iWmsOutboundOrderHeadService;
+
+
+    @PostMapping("/findOutboundHeadList")
+    @ApiOperation(value = "出库单头表list")
+    @ApiImplicitParam(name = "wmsOutboundOrderHead", value = "出库单po")
+    public Result findOutboundHeadList(@RequestParam(defaultValue = "1") int current,
+                                       @RequestParam(defaultValue = "-1") int size,
+                                       @RequestBody(required = false) WmsOutboundOrderHeadExt wmsOutboundOrderHead) {
+        QueryWrapper<WmsOutboundOrderHeadExt> wrapper = new QueryWrapper<WmsOutboundOrderHeadExt>();
+
+        if (wmsOutboundOrderHead != null) {
+            //遍历属性 添加筛选条件
+            wrapper.eq(wmsOutboundOrderHead.getPlantId() != null, "a.plant_id", wmsOutboundOrderHead.getPlantId());
+            wrapper.eq(wmsOutboundOrderHead.getDocStatus() != null, "a.doc_status", wmsOutboundOrderHead.getDocStatus());
+            wrapper.eq(wmsOutboundOrderHead.getDocNumber() != null, "a.doc_number", wmsOutboundOrderHead.getDocNumber());
+            wrapper.eq(wmsOutboundOrderHead.getDocType() != null, "a.doc_type", wmsOutboundOrderHead.getDocType());
+            wrapper.eq(wmsOutboundOrderHead.getErpFlag() != null, "a.erp_flag", wmsOutboundOrderHead.getErpFlag());
+            wrapper.eq(wmsOutboundOrderHead.getRfidFlag() != null, "a.rfid_flag", wmsOutboundOrderHead.getRfidFlag());
+            wrapper.eq(wmsOutboundOrderHead.getSourceDocType() != null, "a.source_doc_type", wmsOutboundOrderHead.getSourceDocType());
+            wrapper.eq(wmsOutboundOrderHead.getSourceDocNum() != null, "a.source_doc_num", wmsOutboundOrderHead.getSourceDocNum());
+            if (wmsOutboundOrderHead.getCreationDateRange() != null) {
+                wrapper.between(wmsOutboundOrderHead.getCreationDateRange().size() > 0,
+                        "a.creation_date", wmsOutboundOrderHead.getCreationDateRange().get(0),
+                        wmsOutboundOrderHead.getCreationDateRange().get(1));
+            }
+            if (wmsOutboundOrderHead.getPlanDateRange() != null) {
+                wrapper.between(wmsOutboundOrderHead.getPlanDateRange().size() > 0,
+                        "a.plan_time", wmsOutboundOrderHead.getPlanDateRange().get(0),
+                        wmsOutboundOrderHead.getPlanDateRange().get(1));
+            }
+        }
+        wrapper.orderByDesc("creation_date");
+        return Result.success(iWmsOutboundOrderHeadService.findOutboundOrderList(new Page(current, size), wrapper));
+    }
+
 
     @GetMapping("/queryOutboundOrderDetail/{headId}")
     @ApiOperation(value = "查询pda服务，出库单接口")
@@ -69,8 +110,10 @@ public class WmsPdaOutboundOrderController {
     @ApiOperation(value = "出库执行")
     @ApiImplicitParam(name = "wmsPdaOutboundOrderDetail", value = "出库单详情表PO")
     public Result outboundOrderExc(@RequestBody List<WmsPdaOutboundOrderDetail> detailList) {
-        abPdaWmsOutboundOrderService.outboundOrderExc(detailList);
-        return Result.success();
+        if (abPdaWmsOutboundOrderService.outboundOrderExc(detailList)) {
+            return Result.success(ResultCode.SUCCESS);
+        }
+        return Result.failure(ResultCode.DATA_IS_WRONG);
     }
 
 }

@@ -68,7 +68,7 @@ public class WmsInboundOrderHead implements Serializable {
     private String sourceDocType;
 
     @ApiModelProperty(value = "来源单据号")
-    private Integer sourceDocNum;
+    private String sourceDocNum;
 
     @ApiModelProperty(value = "分配人ID")
     private Integer assigneeId;

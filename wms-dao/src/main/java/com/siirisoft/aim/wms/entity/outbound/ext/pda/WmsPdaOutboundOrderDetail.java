@@ -23,13 +23,16 @@ public class WmsPdaOutboundOrderDetail extends WmsOutboundOrderDetail {
     private Integer heatNumber;
 
     @ApiModelProperty(value = "船号")
-    private Integer shipNumber;
+    private String shipNumber;
 
     @ApiModelProperty(value = "分段号")
-    private Integer sectionNum;
+    private String sectionNum;
 
     @ApiModelProperty(value = "尺寸")
     private String size;
+
+    @ApiModelProperty(value = "层号")
+    private Integer layerNumber;
 
     @ApiModelProperty(value = "建议货位编码")
     private String advLocatorCode;

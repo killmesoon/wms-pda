@@ -24,10 +24,10 @@ public class WmsPdaInboundOrderDetail extends WmsInboundOrderDetail {
     private Integer heatNumber;
 
     @ApiModelProperty(value = "船号")
-    private Integer shipNumber;
+    private String shipNumber;
 
     @ApiModelProperty(value = "分段号")
-    private Integer sectionNum;
+    private String sectionNum;
 
     @ApiModelProperty(value = "尺寸")
     private String size;

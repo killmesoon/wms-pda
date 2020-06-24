@@ -35,7 +35,7 @@ public class WmsErpAsnLine implements Serializable {
     private Integer headId;
 
     @ApiModelProperty(value = "送货单行号")
-    private Integer lineNum;
+    private String lineNum;
 
     @ApiModelProperty(value = "物料ID")
     private Integer itemId;
