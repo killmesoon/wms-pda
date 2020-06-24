@@ -7,6 +7,7 @@
         <result column="ship_number" property="shipNumber"></result>
         <result column="section_num" property="sectionNum"></result>
         <result column="size" property="size"></result>
+        <result column="layer_number" property="layerNumber"></result>
         <result column="item_id" property="itemId"></result>
         <result column="adv_locator_code" property="advLocatorCode"></result>
         <result column="adv_locator_name" property="advLocatorName"></result>
@@ -15,7 +16,7 @@
     </resultMap>
 
     <select id="queryOutboundOrderDetail" resultMap="BaseMap">
-      SELECT
+       SELECT
 	a.*,
 	c.item_id,
 	b.d_sequence_num,
@@ -23,6 +24,7 @@
 	b.ship_number,
 	b.section_num,
 	b.size,
+	b.layer_number,
 	d.locator_code as adv_locator_code,
 	d.locator_name as adv_locator_name,
 	f.locator_name as excu_locator_name,
