@@ -13,4 +13,6 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface WmsPdaLocatorMapperExt {
     IPage queryLocatorDetail(Page page , @Param(Constants.WRAPPER) Wrapper wrapper);
+
+    Integer querySglItemByLocatorId(@Param(Constants.WRAPPER) Wrapper wrapper);
 }

@@ -32,14 +32,14 @@ public class WmsErpPoDetail implements Serializable {
     private Integer createdBy;
 
     @ApiModelProperty(value = "创建时间")
-    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss" ,timezone = "GMT+8")
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd" ,timezone = "GMT+8")
     private Date creationDate;
 
     @ApiModelProperty(value = "最后更新用户ID")
     private Integer lastUpdateBy;
 
     @ApiModelProperty(value = "最后更新时间")
-    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss" ,timezone = "GMT+8")
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd" ,timezone = "GMT+8")
     private Date lastUpdateDate;
 
     @ApiModelProperty(value = "订单头ID")
@@ -62,11 +62,11 @@ public class WmsErpPoDetail implements Serializable {
     private String planOrderLine;
 
     @ApiModelProperty(value = "发运计划日期")
-    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss" ,timezone = "GMT+8")
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd" ,timezone = "GMT+8")
     private Date shippingPlanDate;
 
     @ApiModelProperty(value = "收货日期")
-    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss" ,timezone = "GMT+8")
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd" ,timezone = "GMT+8")
     private Date deliveryDate;
 
     @ApiModelProperty(value = "收货数量")

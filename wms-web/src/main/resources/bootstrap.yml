@@ -1,0 +1,12 @@
+spring:
+  cloud:
+    nacos:
+      config:
+#        server-addr: 192.168.1.75:8848
+        server-addr: 172.16.40.29:8848
+        namespace: 49ce1035-739a-412b-80f9-d8a6bc6372ab
+        file-extension: yaml
+  application:
+    name: aim-wms
+  profiles:
+    active: dev

@@ -6,6 +6,7 @@ import com.siirisoft.aim.wms.entity.asn.WmsErpAsnDetail;
 import com.siirisoft.aim.wms.entity.asn.ext.WmsErpAsnDetailExt;
 import com.siirisoft.aim.wms.entity.asn.ext.WmsErpAsnHeadExt;
 import com.siirisoft.aim.wms.entity.data.Result;
+import com.siirisoft.aim.wms.service.asn.IWmsErpAsnDetailService;
 import com.siirisoft.aim.wms.service.asn.IWmsErpAsnHeadService;
 import com.siirisoft.aim.wms.service.asn.pda.ABPdaWmsAsnOrderService;
 import io.swagger.annotations.ApiImplicitParam;
@@ -30,6 +31,9 @@ public class WmsAsnPdaController {
     @Autowired
     private IWmsErpAsnHeadService iWmsErpAsnHeadService;
 
+    @Autowired
+    private IWmsErpAsnDetailService iWmsErpAsnDetailService;
+
 
     @PostMapping("/queryWmsErpAsnHeadList")
     @ApiOperation(value = "查询送货单头表list")
@@ -50,6 +54,18 @@ public class WmsAsnPdaController {
             }
         }
         return Result.success(iWmsErpAsnHeadService.queryWmsErpAsnHeadList(new Page(current, size), wrapper));
+    }
+
+
+    @GetMapping("/queryWmsErpAsnDetailByHeadId/{headId}")
+    @ApiOperation("根据HeadId查询详情列表")
+    @ApiImplicitParam(name = "headId", value = "头ID")
+    public Result queryWmsErpAsnDetailByHeadId(@RequestParam(defaultValue = "1") int current,
+                                               @RequestParam(defaultValue = "-1") int size,
+                                               @PathVariable int headId) {
+        QueryWrapper wrapper = new QueryWrapper();
+        wrapper.eq("head_id", headId);
+        return Result.success(iWmsErpAsnDetailService.queryWmsErpAsnDetailListByHeadId(new Page<>(current, size),wrapper));
     }
 
     @PostMapping("/commitAsnOrder")

@@ -56,14 +56,7 @@ public class WmsWarehouseController {
             wrapper.eq(wmsWarehouse.getDescription() != null, "description", wmsWarehouse.getDescription());
         }
         wrapper.orderByAsc("a.warehouse_code");
-        IPage iPage = iWmsWarehouseService.queryWarehouseList(new Page<>(current, size), wrapper);
-        List<WmsWarehouseExt> records = iPage.getRecords();
-        for (WmsWarehouseExt m: records) {
-            m.setPlantCode("WGQ1");
-            m.setPlantName("上海外高桥一厂");
-        }
-        iPage.setRecords(records);
-        return Result.success(iPage);
+        return Result.success(iWmsWarehouseService.queryWarehouseList(new Page<>(current, size), wrapper));
     }
 
     @PostMapping("/saveOrUpdateWarehouse")

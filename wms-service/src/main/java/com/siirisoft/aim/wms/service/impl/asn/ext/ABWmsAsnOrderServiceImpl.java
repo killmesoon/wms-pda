@@ -173,7 +173,10 @@ public class ABWmsAsnOrderServiceImpl  implements ABWmsAsnOrderService {
             inboundHead.setDocType("66");
             inboundHead.setSupplierId(asn.getSupplierId());
             inboundHead.setSourceDocId(asn.getHeadId());
-            inboundHead.setPlantId(asn.getPlantId());
+            inboundHead.setPlantCode(asn.getPlantCode());
+            inboundHead.setPlantName(asn.getPlantName());
+            inboundHead.setPlanTime(asn.getPlanDeliverDate());
+            inboundHead.setNote(asn.getNote());
 
             //生成自动订单号
             QueryWrapper wrapper = new QueryWrapper();
@@ -202,6 +205,7 @@ public class ABWmsAsnOrderServiceImpl  implements ABWmsAsnOrderService {
                     inboundLine.setSourceDocType("63");
                     inboundLine.setItemId(asnLine.getItemId());
                     inboundLine.setWarehouseId(asnLine.getWarehouseId());
+                    inboundLine.setNote(asnLine.getNote());
 
                     //保存
                     if (iWmsInboundOrderLineService.saveOrUpdate(inboundLine)) {
@@ -218,6 +222,7 @@ public class ABWmsAsnOrderServiceImpl  implements ABWmsAsnOrderService {
                             inboundDetail.setLastUpdateDate(new Date());
                             inboundDetail.setHeadId(headId);
                             inboundDetail.setLineId(lineId);
+                            inboundDetail.setNote(asnDetail.getNote());
                             inboundOrderDetailList.add(inboundDetail);
                         }
                         iWmsInboundOrderDetailService.saveOrUpdateBatch(inboundOrderDetailList);

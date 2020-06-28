@@ -16,6 +16,7 @@ import com.siirisoft.aim.wms.entity.warehouse.WmsWarehouse;
 import com.siirisoft.aim.wms.service.area.IWmsWarehouseAreaService;
 import com.siirisoft.aim.wms.service.locator.IWmsLocatorService;
 import com.siirisoft.aim.wms.service.locator.pda.ABPdaWmsLocatorService;
+import com.siirisoft.aim.wms.service.sqlitem.IWmsSglItemService;
 import com.siirisoft.aim.wms.service.warehouse.IWmsWarehouseService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -47,6 +48,9 @@ public class WmsPdaLocatorController {
     @Autowired
     private IWmsWarehouseAreaService iWmsWarehouseAreaService;
 
+    @Autowired
+    private IWmsSglItemService iWmsSglItemService;
+
     @PostMapping("/queryLocatorList")
     @ApiOperation(value = "查询货位列表")
     @ApiImplicitParam(name = "wmsLocator", value = "货位po")
@@ -64,15 +68,7 @@ public class WmsPdaLocatorController {
             wrapper.eq(wmsLocator.getEnableFlag() != null , "a.enable_flag", wmsLocator.getEnableFlag());
             wrapper.eq(wmsLocator.getDescription() != null , "a.description", wmsLocator.getDescription());
         }
-//        wrapper.orderByAsc("a.locator_code");
-        IPage iPage = iWmsLocatorService.queryLocatorList(new Page(current, size), wrapper);
-        List<WmsLocatorExt> records = iPage.getRecords();
-        for (WmsLocatorExt m: records) {
-            m.setPlantCode("WGQ1");
-            m.setPlantName("上海外高桥一厂");
-        }
-        iPage.setRecords(records);
-        return Result.success(iPage);
+        return Result.success(iWmsLocatorService.queryLocatorList(new Page(current, size), wrapper));
     }
 
 
@@ -82,9 +78,16 @@ public class WmsPdaLocatorController {
     public Result queryLocatorDetail(@RequestParam(defaultValue = "1") int current,
                                      @RequestParam(defaultValue = "-1") int size,
                                      @PathVariable int locatorId) {
-        QueryWrapper wrapper = new QueryWrapper();
-        wrapper.eq("a.locator_id", locatorId);
-        return Result.success(wmsLocatorService.queryLocatorDetail(new Page(current, size), wrapper));
+
+        QueryWrapper checkWrapper = new QueryWrapper();
+        checkWrapper.eq("locator_id", locatorId);
+        int count = iWmsSglItemService.count(checkWrapper);
+        if (count > 0) {
+            QueryWrapper wrapper = new QueryWrapper();
+            wrapper.eq("a.locator_id", locatorId);
+            return Result.success(wmsLocatorService.queryLocatorDetail(new Page(current, size), wrapper));
+        }
+        return Result.success();
     }
 
     //生成级联字段

@@ -55,14 +55,7 @@ public class WmsWarehouseAreaController {
                 wrapper.eq(wmsWarehouseArea.getDescription() != null , "a.description", wmsWarehouseArea.getDescription());
             }
             wrapper.orderByAsc("a.area_code");
-            IPage areaList = iWmsWarehouseAreaService.findWarehouseAreaList(new Page(current, size), wrapper);
-            List<WmsWarehouseAreaExt> records = areaList.getRecords();
-            for (WmsWarehouseAreaExt m:records ) {
-                m.setPlantCode("WGQ1");
-                m.setPlantName("上海外高桥一厂");
-            }
-            areaList.setRecords(records);
-            return Result.success(areaList);
+            return Result.success(iWmsWarehouseAreaService.findWarehouseAreaList(new Page(current, size), wrapper));
         }
         catch (Exception e) {
             return Result.failure(ResultCode.DATA_IS_WRONG);

@@ -31,14 +31,14 @@ public class WmsSglItem implements Serializable {
     private Integer createdBy;
 
     @ApiModelProperty(value = "创建时间")
-    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss" ,timezone = "GMT+8")
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd" ,timezone = "GMT+8")
     private Date creationDate;
 
     @ApiModelProperty(value = "最后更新用户ID")
     private Integer lastUpdateBy;
 
     @ApiModelProperty(value = "最后更新时间")
-    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss" ,timezone = "GMT+8")
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd" ,timezone = "GMT+8")
     private Date lastUpdateDate;
 
     @ApiModelProperty(value = "工厂ID")
@@ -76,7 +76,7 @@ public class WmsSglItem implements Serializable {
     private Integer quantity;
 
     @ApiModelProperty(value = "批次号")
-    private Integer lotNumber;
+    private String lotNumber;
 
     @ApiModelProperty(value = "尺寸单位")
     private String sizeUom;
@@ -100,7 +100,7 @@ public class WmsSglItem implements Serializable {
     private Integer supplierId;
 
     @ApiModelProperty(value = "炉号")
-    private Integer heatNumber;
+    private String heatNumber;
 
     @ApiModelProperty(value = "供应商批次")
     private Integer supplierLotNumber;
@@ -112,7 +112,7 @@ public class WmsSglItem implements Serializable {
     private Boolean freeFlag;
 
     @ApiModelProperty(value = "赋值时间")
-    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss" ,timezone = "GMT+8")
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd" ,timezone = "GMT+8")
     private Date assignedTime;
 
     @ApiModelProperty(value = "单据锁定标识")
@@ -131,10 +131,10 @@ public class WmsSglItem implements Serializable {
     private String css;
 
     @ApiModelProperty(value = "分段号")
-    private Integer sectionNum;
+    private String sectionNum;
 
     @ApiModelProperty(value = "船号")
-    private Integer shipNumber;
+    private String shipNumber;
 
 
 }

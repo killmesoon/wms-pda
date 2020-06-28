@@ -31,6 +31,78 @@
         </dependency>
 
 
+
+        <!-- eepj -->
+        <dependency>
+            <groupId>eep.sippr.eepj</groupId>
+            <artifactId>eepj-springboot-tools-serviceconfig</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>eep.sippr.eepj</groupId>
+            <artifactId>eepj-springboot-tools-utils</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>eep.sippr.eepj</groupId>
+            <artifactId>eepj-springboot-cloud</artifactId>
+        </dependency>
+        <!-- eepj end -->
+
+        <!-- eepj -->
+        <dependency>
+            <groupId>eep.sippr.eepj</groupId>
+            <artifactId>eepj-springboot-tools-webconfig</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>eep.sippr.eepj</groupId>
+            <artifactId>eepj-springboot-tools-oauth2config</artifactId>
+        </dependency>
+
+        <!-- Cloud -->
+        <!-- security -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-security</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-oauth2</artifactId>
+        </dependency>
+
+        <!-- nacos config -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-alibaba-nacos-config</artifactId>
+        </dependency>
+
+        <!-- sleuth zipkin -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-zipkin</artifactId>
+        </dependency>
+        <!-- Cloud END-->
+
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-alibaba-nacos-discovery</artifactId>
+        </dependency>
+
+        <!-- feignclient -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-httpclient</artifactId>
+        </dependency>
+        <!-- Cloud End -->
+
+
         <dependency>
             <groupId>org.example</groupId>
             <artifactId>wms-service</artifactId>
@@ -39,6 +111,7 @@
 
     </dependencies>
     <build>
+        <finalName>aim-wms</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

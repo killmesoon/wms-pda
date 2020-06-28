@@ -1,45 +1,9 @@
-# service
-server:
-  port: 8080
-##key
-authentication:
-  public:
-    key: -----BEGIN PUBLIC KEY-----MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA41IwxVa25TI9psU3YRFQvLwKh3el1ORYd+XtgRokRJAtKh00pMDgbScsEio0/lQ7n2o0uOHejZ2rxbU5pPUrJmsaTYAJ4AG+jmws3YhbAqYx11X6XthOB4NqJ36CFg6IGi11cvU7g1/lewclLZagSf+MfSw8fUygv/Npe21TS+FaMiQIOJJmk5saincvkX4aezku9pY2RcRQ140FyORPs4wdHCES0C7Jc7leDoNUX6VIBhtUyV0pSxmbPrZ4mcZJQf+ccmcuh+H8QrTU0qRDV0/l/icYIrcB8ogfG7+foGlNiQXfqFVaKPHCaIzKB6ebzW5YsizgCQLkvWf0XlvimQIDAQAB-----END PUBLIC KEY-----
-#db
-database:
-  url: 172.16.40.29
-  port: 3306
-  name: wms
-  username: eepj
-  password: test@18538206096
-#nacos
-nacos:
-  #  server-url: 192.168.1.75:8848
-  server-url: 172.16.40.29:8848
-  namespace: 49ce1035-739a-412b-80f9-d8a6bc6372ab
-  cluster-name: ZZ
-  version: v1
-  target-version: v1
-
-#zipkin
-zipkin:
-  #  base-url: http://192.168.1.75:8850/
-  base-url: http://172.16.40.29:9411/
-#feign
-mfeign:
-  http-timeout: 5000
-
 # log
 logging:
-  config: classpath:logback-spring-dev.xml
+  config: classpath:logback-spring-prod.xml
   level:
     root: info
-
-#mybatis
-#mybatis-plus:
-#  mapper-locations: classpath:mapping/*.xml
-#  configuration:
-#    map-underscore-to-camel-case: true
+#rabbit
 
 #mybatis-plus
 mybatis-plus:
@@ -148,10 +112,10 @@ eepj:
       cros:
         #正式发布时关闭
         enabled: true
-        cors-urls: /web-api/**,/m-api/**,/open-api/**,/v2/api-docs/**,/api/**
+        cors-urls: /web-api/**,/m-api/**,/open-api/**
       swagger:
         enabled: true
-        title: AIM Data 接口
+        title: 工作社交平台基础服务接口
     security:
       oauth2:
         resource:
@@ -160,6 +124,11 @@ eepj:
           public-key: ${authentication.public.key}
     cloud:
       enable-ribbon: true
+    redis:
+      enabled: true
+      host: ${redis.host}
+      port: ${redis.port}
+      parser-package: siirisoft.wscp
 # management
 management:
   endpoints:
@@ -169,4 +138,3 @@ management:
   endpoint:
     health:
       show-details: always
-

@@ -29,6 +29,12 @@ public class WmsLocator implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @ApiModelProperty(value = "工厂编码")
+    private String plantCode;
+
+    @ApiModelProperty(value = "工厂名称")
+    private String plantName;
+
     @ApiModelProperty(value = "仓库ID")
     private Integer warehouseId;
 
@@ -61,14 +67,14 @@ public class WmsLocator implements Serializable {
     private Integer createdBy;
 
     @ApiModelProperty(value = "创建时间")
-    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss" ,timezone = "GMT+8")
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd" ,timezone = "GMT+8")
     private Date creationDate;
 
     @ApiModelProperty(value = "最后更新用户ID")
     private Integer lastUpdateBy;
 
     @ApiModelProperty(value = "最后更新时间")
-    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss" ,timezone = "GMT+8")
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd" ,timezone = "GMT+8")
     private Date lastUpdateDate;
 
 

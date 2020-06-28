@@ -48,6 +48,10 @@ public class ABPdaWmsLocatorServiceImpl implements ABPdaWmsLocatorService {
 
     @Override
     public IPage queryLocatorDetail(Page page, Wrapper wrapper) {
+        Integer count = wmsPdaLocatorMapperExt.querySglItemByLocatorId(wrapper);
+        if (count == 0) {
+            return new Page();
+        }
         return wmsPdaLocatorMapperExt.queryLocatorDetail(page, wrapper);
     }
 

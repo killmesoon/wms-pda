@@ -13,6 +13,4 @@ public class WmsWarehouseAreaExt extends WmsWarehouseArea {
     private String warehouseCode;
     private String warehouseShortName;
     private String areaTypeDic;
-    private String plantCode;
-    private String plantName;
 }

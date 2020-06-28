@@ -32,14 +32,14 @@ public class WmsInboundOrderDetail implements Serializable {
     private Integer createdBy;
 
     @ApiModelProperty(value = "创建日期")
-    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss" ,timezone = "GMT+8")
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd" ,timezone = "GMT+8")
     private Date creationDate;
 
     @ApiModelProperty(value = "更新人编码")
     private Integer lastUpdateBy;
 
     @ApiModelProperty(value = "更新日期")
-    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss" ,timezone = "GMT+8")
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd" ,timezone = "GMT+8")
     private Date lastUpdateDate;
 
     @ApiModelProperty(value = "订单头ID")

@@ -50,15 +50,7 @@ public class WmsLocatorController {
             wrapper.eq(wmsLocator.getEnableFlag() != null , "a.enable_flag", wmsLocator.getEnableFlag());
             wrapper.eq(wmsLocator.getDescription() != null , "a.description", wmsLocator.getDescription());
         }
-//        wrapper.orderByAsc("a.locator_code");
-        IPage iPage = iWmsLocatorService.queryLocatorList(new Page(current, size), wrapper);
-        List<WmsLocatorExt> records = iPage.getRecords();
-        for (WmsLocatorExt m: records) {
-            m.setPlantCode("WGQ1");
-            m.setPlantName("上海外高桥一厂");
-        }
-        iPage.setRecords(records);
-        return Result.success(iPage);
+        return Result.success(iWmsLocatorService.queryLocatorList(new Page(current, size), wrapper));
     }
 
     @PostMapping("/saveOrUpdateLocator")

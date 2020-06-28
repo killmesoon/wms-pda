@@ -17,7 +17,5 @@ public class WmsLocatorExt extends WmsLocator {
     private String areaTypeDic;
     private String warehouseShortName;
     private String warehouseCode;
-    private String plantCode;
-    private String plantName;
     private Integer layerNumber;
 }

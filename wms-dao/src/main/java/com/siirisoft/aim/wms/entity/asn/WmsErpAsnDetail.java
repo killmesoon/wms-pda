@@ -87,7 +87,7 @@ public class WmsErpAsnDetail implements Serializable {
     private Integer supplierId;
 
     @ApiModelProperty(value = "炉号")
-    private Integer heatNumber;
+    private String heatNumber;
 
     @ApiModelProperty(value = "供应商批次")
     private Integer supplierLotNumber;
@@ -99,10 +99,10 @@ public class WmsErpAsnDetail implements Serializable {
     private String ccs;
 
     @ApiModelProperty(value = "船号")
-    private Integer shipNumber;
+    private String shipNumber;
 
     @ApiModelProperty(value = "分段号")
-    private Integer sectionNum;
+    private String sectionNum;
 
     @ApiModelProperty(value = "备注")
     private String note;

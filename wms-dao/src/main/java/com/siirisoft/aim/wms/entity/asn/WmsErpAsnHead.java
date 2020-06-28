@@ -48,8 +48,14 @@ public class WmsErpAsnHead implements Serializable {
     @ApiModelProperty(value = "采购工厂")
     private Integer plantId;
 
+    @ApiModelProperty(value = "工厂编码")
+    private String plantCode;
+
+    @ApiModelProperty(value = "工厂名称")
+    private String plantName;
+
     @ApiModelProperty(value = "预计到货日期")
-    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss" ,timezone = "GMT+8")
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd" ,timezone = "GMT+8")
     private Date planDeliverDate;
 
     @ApiModelProperty(value = "来源单据类型")

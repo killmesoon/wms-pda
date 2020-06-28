@@ -56,6 +56,7 @@ public class WmsErpAsnDetailController {
             wrapper.eq(wmsErpAsnDetail.getHeadId() != null ,"a.head_id", wmsErpAsnDetail.getHeadId());
             wrapper.eq(wmsErpAsnDetail.getLineId() != null ,"a.line_id", wmsErpAsnDetail.getLineId());
         }
+        wrapper.orderByAsc("d_sequence_num");
         return Result.success(iWmsErpAsnDetailService.queryWmsErpAsnDetailListByHeadId(new Page(current, size), wrapper));
     }
 

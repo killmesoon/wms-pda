@@ -27,6 +27,12 @@ public class WmsItem implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @ApiModelProperty(value = "工厂编码")
+    private String plantCode;
+
+    @ApiModelProperty(value = "工厂名称")
+    private String plantName;
+
     @ApiModelProperty(value = "创建用户ID")
     private Integer createdBy;
 

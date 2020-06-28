@@ -45,7 +45,7 @@ public class WmsOutboundOrderDetailController {
     @ApiImplicitParam(name = "wmsOutboundOrderDetail", value = "出库单详情bo")
     public Result findOutboundOrderDetailList(@RequestParam(defaultValue = "1") int current,
                                               @RequestParam(defaultValue = "-1") int size,
-                                              @RequestBody WmsOutboundOrderDetail wmsOutboundOrderDetail) {
+                                              @RequestBody(required = false) WmsOutboundOrderDetail wmsOutboundOrderDetail) {
         QueryWrapper wrapper = new QueryWrapper();
         if (wmsOutboundOrderDetail != null) {
             wrapper.eq("a.head_id", wmsOutboundOrderDetail.getHeadId());

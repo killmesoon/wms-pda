@@ -49,7 +49,7 @@ public class WmsItemController {
             wrapper.eq(wmsItem.getCodeType() != null, "a.code_type" , wmsItem.getCodeType());
             wrapper.eq(wmsItem.getItemTexture() != null, "a.item_texture" , wmsItem.getItemTexture());
         }
-        wrapper.orderByDesc("a.item_code");
+        wrapper.orderByAsc("a.item_code");
         return Result.success(iWmsItemService.findItemAllList(new Page<>(current,size),wrapper));
     }
 
@@ -64,12 +64,12 @@ public class WmsItemController {
             wmsItem.setLastUpdateDate(new Date());
         }
         //插入前校验
-        String itemCode = wmsItem.getItemCode();
-        QueryWrapper queryWrapper = new QueryWrapper();
-        queryWrapper.eq("item_code", itemCode);
-        if (iWmsItemService.count(queryWrapper) > 0) {
-            return Result.failure(ResultCode.DATA_ALREADY_EXISTED);
-        }
+//        String itemCode = wmsItem.getItemCode();
+//        QueryWrapper queryWrapper = new QueryWrapper();
+//        queryWrapper.eq("item_code", itemCode);
+//        if (iWmsItemService.count(queryWrapper) > 0) {
+//            return Result.failure(ResultCode.DATA_ALREADY_EXISTED);
+//        }
         if (iWmsItemService.saveOrUpdate(wmsItem)) {
             return Result.success(ResultCode.SUCCESS);
         }

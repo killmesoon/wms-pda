@@ -32,14 +32,14 @@ public class WmsObjectEvents implements Serializable {
     private Integer createdBy;
 
     @ApiModelProperty(value = "创建时间")
-    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss" ,timezone = "GMT+8")
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd" ,timezone = "GMT+8")
     private Date creationDate;
 
     @ApiModelProperty(value = "最后更新用户ID")
     private Integer lastUpdateBy;
 
     @ApiModelProperty(value = "最后更新时间")
-    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss" ,timezone = "GMT+8")
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd" ,timezone = "GMT+8")
     private Date lastUpdateDate;
 
     @ApiModelProperty(value = "事件ID")
@@ -62,7 +62,7 @@ public class WmsObjectEvents implements Serializable {
     private String lotCode;
 
     @ApiModelProperty(value = "事件时间")
-    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss" ,timezone = "GMT+8")
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd" ,timezone = "GMT+8")
     private Date eventTime;
 
     @ApiModelProperty(value = "事件数量")
@@ -72,7 +72,7 @@ public class WmsObjectEvents implements Serializable {
     private String eventUomCode;
 
     @ApiModelProperty(value = "账务时间")
-    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss" ,timezone = "GMT+8")
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd" ,timezone = "GMT+8")
     private Date accountTime;
 
     @ApiModelProperty(value = "事件原因编码")

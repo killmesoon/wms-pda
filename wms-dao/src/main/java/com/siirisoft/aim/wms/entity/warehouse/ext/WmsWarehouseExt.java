@@ -11,6 +11,4 @@ import lombok.Data;
 @Data
 public class WmsWarehouseExt extends WmsWarehouse {
     private String warehouseTypeDic;
-    private String plantCode;
-    private String plantName;
 }

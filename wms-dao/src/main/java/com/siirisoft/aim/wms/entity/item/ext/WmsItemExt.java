@@ -10,7 +10,6 @@ import lombok.Data;
  */
 @Data
 public class WmsItemExt extends WmsItem {
-    private String plantCode; //工厂编码
     private String itemTypeDic; //物料类型
     private String primaryUomDic; //主单位
     private String receiveWarehouse; //默认接收仓库

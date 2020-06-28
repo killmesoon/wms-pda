@@ -101,8 +101,7 @@ public class WmsPdaOutboundOrderController {
     public Result commitPreparation(@RequestBody WmsOutboundCondition wmsOutboundCondition) {
 
         //原货位到新货位，货位移动
-        abPdaWmsOutboundOrderService.commitPreparation(wmsOutboundCondition);
-        return Result.success();
+        return Result.success(abPdaWmsOutboundOrderService.commitPreparation(wmsOutboundCondition));
     }
 
 
