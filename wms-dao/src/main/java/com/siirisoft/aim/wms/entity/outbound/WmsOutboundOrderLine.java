@@ -50,7 +50,7 @@ public class WmsOutboundOrderLine implements Serializable {
     private Integer lineId;
 
     @ApiModelProperty(value = "行号")
-    private Integer lineNum;
+    private String lineNum;
 
     @ApiModelProperty(value = "物料ID")
     private Integer itemId;
@@ -74,10 +74,10 @@ public class WmsOutboundOrderLine implements Serializable {
     private String sourceDocType;
 
     @ApiModelProperty(value = "来源单据号")
-    private Integer sourceDocNum;
+    private String sourceDocNum;
 
     @ApiModelProperty(value = "来源单据行号")
-    private Integer sourceLineNum;
+    private String sourceLineNum;
 
     @ApiModelProperty(value = "备注")
     private String note;
