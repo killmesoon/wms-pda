@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.siirisoft.aim.wms.mapper.quantity.ext.WmsItemOnhandQuantityMapperExt">
+    <resultMap id="AreaExtMap" type="com.siirisoft.aim.wms.entity.quantity.ext.WmsItemOnhandQuantityExt">
+        <result column="item_code" property="itemCode"></result>
+        <result column="description" property="description"></result>
+        <result column="warehouse_name" property="warehouseName"></result>
+        <result column="warehouse_code" property="warehouseCode"></result>
+        <result column="total" property="total"></result>
+        <result column="locator_code" property="locatorCode"></result>
+        <result column="locator_name" property="locatorName"></result>
+    </resultMap>
+
+    <select id="queryTotal" resultMap="AreaExtMap">
+        SELECT
+            a.item_id,
+            a.locator_id,
+            count( loct_onhand ) AS total,
+            a.warehouse_id,
+            b.item_code,
+            b.description,
+            c.warehouse_name,
+            c.warehouse_code,
+            d.locator_code,
+            d.locator_name
+        FROM
+            wms_item_onhand_quantity a
+            LEFT JOIN wms_item b ON a.item_id = b.item_id
+            LEFT JOIN wms_warehouse c ON a.warehouse_id = c.warehouse_id
+            LEFT JOIN wms_locator d ON a.locator_id = d.locator_id
+        GROUP BY
+            a.locator_id,
+            a.item_id,
+            a.warehouse_id
+            ${ew.customSqlSegment}
+    </select>
+</mapper>

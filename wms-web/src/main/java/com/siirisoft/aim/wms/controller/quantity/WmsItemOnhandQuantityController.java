@@ -33,6 +33,6 @@ public class WmsItemOnhandQuantityController {
                                     @RequestParam(defaultValue = "-1") int size,
                                     @RequestBody(required = false) WmsItemOnhandQuantity wmsItemOnhandQuantity) {
         QueryWrapper wrapper = new QueryWrapper(wmsItemOnhandQuantity);
-        return Result.success(iWmsItemOnhandQuantityService.page(new Page<>(current,size), wrapper));
+        return Result.success(iWmsItemOnhandQuantityService.queryTotal(new Page<>(current,size), wrapper));
     }
 }

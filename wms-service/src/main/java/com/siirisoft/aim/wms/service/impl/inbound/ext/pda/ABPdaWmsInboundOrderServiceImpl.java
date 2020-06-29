@@ -111,6 +111,9 @@ public class ABPdaWmsInboundOrderServiceImpl implements ABPdaWmsInboundOrderServ
         wmsObjectEvents.setItemId(sglItem.getItemId());
         wmsObjectEvents.setEventTypeId(2);
         wmsObjectEvents.setEventTypeCode("GD_ASN_INSTOCK");
+        wmsObjectEvents.setCreationDate(new Date());
+        wmsObjectEvents.setWarehouseIdFrom(wmsPdaInboundOrderDetail.getAdvWarehouseId());
+        wmsObjectEvents.setWarehouseIdTo(sglItem.getWarehouseId());
         wmsObjectEventsMapper.insert(wmsObjectEvents);
         return true;
     }
