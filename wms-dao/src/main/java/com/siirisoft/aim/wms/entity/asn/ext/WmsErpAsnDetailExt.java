@@ -15,4 +15,6 @@ public class WmsErpAsnDetailExt extends WmsErpAsnDetail {
     private String description;
     private Integer warehouseId;
     private Integer locatorId;
+    private String plantCode;
+    private String plantName;
 }

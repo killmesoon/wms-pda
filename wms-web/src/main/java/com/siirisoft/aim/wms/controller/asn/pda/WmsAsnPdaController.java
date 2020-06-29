@@ -64,7 +64,7 @@ public class WmsAsnPdaController {
                                                @RequestParam(defaultValue = "-1") int size,
                                                @PathVariable int headId) {
         QueryWrapper wrapper = new QueryWrapper();
-        wrapper.eq("head_id", headId);
+        wrapper.eq("a.head_id", headId);
         return Result.success(iWmsErpAsnDetailService.queryWmsErpAsnDetailListByHeadId(new Page<>(current, size),wrapper));
     }
 

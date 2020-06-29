@@ -90,7 +90,8 @@ public class WmsPdaOutboundOrderController {
                               @RequestParam(defaultValue = "-1") int size,
                               @RequestBody WmsPdaOutboundOrderDetail wmsPdaOutboundOrderDetail) {
         QueryWrapper wrapper = new QueryWrapper();
-        wrapper.eq("a.locator_id", wmsPdaOutboundOrderDetail.getAdvLocatorId());
+        int locatorId = wmsLocatorService.queryLocatorByCode(wmsPdaOutboundOrderDetail.getAdvBarcode());
+        wrapper.eq("a.locator_id", locatorId);
         return Result.success(wmsLocatorService.queryLocatorDetail(new Page(current, size), wrapper));
     }
 

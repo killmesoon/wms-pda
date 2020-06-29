@@ -4,16 +4,21 @@
     <resultMap id="AsnExtMap" type="com.siirisoft.aim.wms.entity.asn.ext.WmsErpAsnDetailExt">
         <result column="item_code" property="itemCode"></result>
         <result column="description" property="description"></result>
+        <result column="plant_code" property="plantCode"></result>
+        <result column="plant_name" property="plantName"></result>
     </resultMap>
 
     <select id="findWmsErpAsnDetailByHeadId" resultMap="AsnExtMap">
-        SELECT
+       SELECT
 	a.*,
 	b.item_code,
-	b.description
+	b.description,
+	c.plant_code,
+	c.plant_name
 FROM
 	wms_erp_asn_detail a
 	LEFT JOIN wms_item b on a.item_id = b.item_id
+	LEFT JOIN wms_erp_asn_head c on a.head_id = c.head_id
         ${ew.customSqlSegment}
     </select>
 </mapper>

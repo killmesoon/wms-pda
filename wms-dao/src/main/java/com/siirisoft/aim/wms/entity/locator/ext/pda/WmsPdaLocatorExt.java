@@ -17,13 +17,13 @@ public class WmsPdaLocatorExt extends WmsLocator {
     private String dSequenceNum;
 
     @ApiModelProperty(value = "炉号")
-    private Integer heatNumber;
+    private String heatNumber;
 
     @ApiModelProperty(value = "船号")
-    private Integer shipNumber;
+    private String shipNumber;
 
     @ApiModelProperty(value = "分段号")
-    private Integer sectionNum;
+    private String sectionNum;
 
     @ApiModelProperty(value = "层号")
     private Integer layerNumber;

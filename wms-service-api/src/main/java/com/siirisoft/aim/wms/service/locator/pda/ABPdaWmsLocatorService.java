@@ -13,4 +13,5 @@ import com.siirisoft.aim.wms.entity.locator.ext.pda.WmsPdaLocatorExt;
 public interface ABPdaWmsLocatorService {
     IPage queryLocatorDetail(Page page, Wrapper wrapper);
     boolean transformLocator(int locatorId, WmsPdaLocatorExt wmsPdaLocatorExt);
+    int queryLocatorByCode(String advBarcode);
 }

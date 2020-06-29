@@ -108,4 +108,12 @@ public class ABPdaWmsLocatorServiceImpl implements ABPdaWmsLocatorService {
         wmsObjectEventsMapper.insert(wmsObjectEvents);
         return true;
     }
+
+    @Override
+    public int queryLocatorByCode(String advBarcode) {
+        QueryWrapper wrapper = new QueryWrapper();
+        wrapper.eq("d_sequence_num", advBarcode);
+        WmsSglItem sglItem = wmsSglItemMapper.selectOne(wrapper);
+        return sglItem.getLocatorId();
+    }
 }

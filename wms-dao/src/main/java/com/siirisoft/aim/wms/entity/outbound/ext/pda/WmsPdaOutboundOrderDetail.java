@@ -20,7 +20,7 @@ public class WmsPdaOutboundOrderDetail extends WmsOutboundOrderDetail {
     private String dSequenceNum;
 
     @ApiModelProperty(value = "炉号")
-    private Integer heatNumber;
+    private String heatNumber;
 
     @ApiModelProperty(value = "船号")
     private String shipNumber;

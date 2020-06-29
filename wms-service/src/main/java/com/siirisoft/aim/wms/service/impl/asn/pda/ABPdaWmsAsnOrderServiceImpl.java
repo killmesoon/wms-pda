@@ -63,6 +63,8 @@ public class ABPdaWmsAsnOrderServiceImpl implements ABPdaWmsAsnOrderService {
 
             //插入条码物料表
             WmsSglItem wmsSglItem = new WmsSglItem();
+            wmsSglItem.setPlantCode(asn.getPlantCode());
+            wmsSglItem.setPlantName(asn.getPlantName());
             wmsSglItem.setDSequenceNum(asn.getDSequenceNum());
             wmsSglItem.setItemId(asn.getItemId());
             wmsSglItem.setWarehouseId(asn.getWarehouseId());
@@ -122,6 +124,7 @@ public class ABPdaWmsAsnOrderServiceImpl implements ABPdaWmsAsnOrderService {
             wmsObjectEvents.setEventTime(new Date());
             wmsObjectEvents.setEventTypeId(1);
             wmsObjectEvents.setEventTypeCode("GD_PO_RCV");
+            wmsObjectEventsMapper.insert(wmsObjectEvents);
 
         }
         detailFlag = iWmsErpAsnDetailService.saveOrUpdateBatch(updateList);
