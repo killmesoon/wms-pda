@@ -17,4 +17,5 @@ public class WmsItemOnhandQuantityExt extends WmsItemOnhandQuantity {
     private String description;
     private String locatorCode;
     private String locatorName;
+    private String keyWord;
 }

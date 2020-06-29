@@ -28,10 +28,11 @@
             LEFT JOIN wms_item b ON a.item_id = b.item_id
             LEFT JOIN wms_warehouse c ON a.warehouse_id = c.warehouse_id
             LEFT JOIN wms_locator d ON a.locator_id = d.locator_id
+            ${ew.customSqlSegment}
         GROUP BY
             a.locator_id,
             a.item_id,
             a.warehouse_id
-            ${ew.customSqlSegment}
+
     </select>
 </mapper>

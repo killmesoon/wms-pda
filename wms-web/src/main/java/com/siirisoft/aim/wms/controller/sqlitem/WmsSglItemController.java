@@ -33,6 +33,21 @@ public class WmsSglItemController {
                                       @RequestParam(defaultValue = "-1") int size,
                                       @RequestBody(required = false) WmsSglItem wmsSglItem) {
         QueryWrapper wrapper = new QueryWrapper();
+        if (wmsSglItem != null) {
+            String keyWord = wmsSglItem.getNote();
+            if (keyWord != null) {
+                wrapper.like("a.d_sequence_num", keyWord);
+                wrapper.or();
+                wrapper.like("a.plant_code", keyWord);
+                wrapper.or();
+                wrapper.like("d.locator_code", keyWord);
+                wrapper.or();
+                wrapper.like("c.warehouse_code", keyWord);
+                wrapper.or();
+                wrapper.like("b.item_code", keyWord);
+            }
+        }
+
         return Result.success(iWmsSglItemService.queryWmsSglItemList(new Page(current, size), wrapper));
     }
 }
