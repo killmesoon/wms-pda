@@ -95,6 +95,7 @@ public class WmsLocatorController {
     public Result checkLocatorCodeExits(@RequestBody WmsLocator wmsLocator) {
         QueryWrapper wrapper = new QueryWrapper();
         wrapper.eq("locator_code", wmsLocator.getLocatorCode());
+        wrapper.eq("area_id", wmsLocator.getAreaId());
         if (iWmsLocatorService.count(wrapper) > 0) {
             return Result.success(false);
         }

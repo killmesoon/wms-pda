@@ -54,6 +54,7 @@ public class WmsWarehouseAreaController {
                 wrapper.eq(wmsWarehouseArea.getEnableFlag() != null , "a.enable_flag", wmsWarehouseArea.getEnableFlag());
                 wrapper.eq(wmsWarehouseArea.getDescription() != null , "a.description", wmsWarehouseArea.getDescription());
             }
+            wrapper.orderByAsc("c.warehouse_code");
             wrapper.orderByAsc("a.area_code");
             return Result.success(iWmsWarehouseAreaService.findWarehouseAreaList(new Page(current, size), wrapper));
         }
@@ -119,6 +120,7 @@ public class WmsWarehouseAreaController {
     public Result checkAreaCodeExits(@RequestBody WmsWarehouseArea wmsWarehouseArea) {
         QueryWrapper wrapper = new QueryWrapper();
         wrapper.eq("area_code", wmsWarehouseArea.getAreaCode());
+        wrapper.eq("warehouse_id", wmsWarehouseArea.getWarehouseId());
         if (iWmsWarehouseAreaService.count(wrapper) > 0) {
             return Result.success(false);
         }
