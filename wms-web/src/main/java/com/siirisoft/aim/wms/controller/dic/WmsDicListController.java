@@ -9,6 +9,7 @@ import com.siirisoft.aim.wms.entity.dic.WmsDicList;
 import com.siirisoft.aim.wms.entity.dic.ext.WmsDic;
 import com.siirisoft.aim.wms.entity.dic.ext.WmsDicListExt;
 import com.siirisoft.aim.wms.service.dic.IWmsDicListService;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -44,28 +45,28 @@ public class WmsDicListController {
     @ApiOperation(value = "查询所有字典类型及字典类型具体信息")
     public Result queryWmsDicListExtList() {
         QueryWrapper wrapper = new QueryWrapper();
-//        List<WmsDicListExt> wmsDicListExts = wmsDicListService.queryWmsDicListExtList(wrapper);
-//        Map result = new HashMap();
-//        for (WmsDicListExt w : wmsDicListExts) {
-//            if (result.containsKey(w.getDicTypeId())) {
-//              WmsDic wmsDic = (WmsDic) result.get(w.getDicTypeId());
-//              w.setTreeName(w.getDicName());
-//              wmsDic.getChildren().add(w);
-//            } else {
-//                WmsDic wmsDic = new WmsDic();
-//                List<WmsDicListExt> list = new ArrayList<>();
-//                w.setTreeName(w.getDicName());
-//                list.add(w);
-//                wmsDic.setChildren(list);
-//                wmsDic.setDicTypeId(w.getDicTypeId());
-//                wmsDic.setDicTypeCode(w.getDicTypeCode());
-//                wmsDic.setDicTypeName(w.getDicTypeName());
-//                wmsDic.setTreeName(w.getDicTypeName());
-//                result.put(w.getDicTypeId(), wmsDic);
-//            }
-//        }
-//        List<WmsDic> list = new ArrayList<>(result.values());
-        return Result.success(wmsDicListService.queryWmsDicListExtList(wrapper));
+        List<WmsDicListExt> wmsDicListExts = wmsDicListService.queryWmsDicListExtList(wrapper);
+        Map result = new HashMap();
+        for (WmsDicListExt w : wmsDicListExts) {
+            if (result.containsKey(w.getDicTypeId())) {
+              WmsDic wmsDic = (WmsDic) result.get(w.getDicTypeId());
+              w.setTreeName(w.getDicName());
+              wmsDic.getChildren().add(w);
+            } else {
+                WmsDic wmsDic = new WmsDic();
+                List<WmsDicListExt> list = new ArrayList<>();
+                w.setTreeName(w.getDicName());
+                list.add(w);
+                wmsDic.setChildren(list);
+                wmsDic.setDicTypeId(w.getDicTypeId());
+                wmsDic.setDicTypeCode(w.getDicTypeCode());
+                wmsDic.setDicTypeName(w.getDicTypeName());
+                wmsDic.setTreeName(w.getDicTypeName());
+                result.put(w.getDicTypeId(), wmsDic);
+            }
+        }
+        List<WmsDic> list = new ArrayList<>(result.values());
+        return Result.success(list);
     }
 
 
@@ -80,5 +81,13 @@ public class WmsDicListController {
 
     }
 
-
+    @DeleteMapping("/deleteWmsDic/{dicId}")
+    @ApiOperation(value = "删除快码")
+    @ApiImplicitParam(name = "dicId", value = "快码ID")
+    public Result deleteWmsDic(@PathVariable int dicId) {
+        if (wmsDicListService.removeById(dicId)) {
+            return Result.success(ResultCode.SUCCESS);
+        }
+        return Result.failure(ResultCode.DATA_IS_WRONG);
+    }
 }

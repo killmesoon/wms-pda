@@ -2,12 +2,12 @@ package com.siirisoft.aim.wms.controller.dic;
 
 
 import com.siirisoft.aim.wms.entity.data.Result;
+import com.siirisoft.aim.wms.entity.data.ResultCode;
+import com.siirisoft.aim.wms.entity.dic.WmsDicType;
 import com.siirisoft.aim.wms.service.dic.IWmsDicTypeService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>
@@ -28,5 +28,14 @@ public class WmsDicTypeController {
     @ApiOperation(value = "查询所有字典类型")
     public Result findAllDicTypeList() {
         return Result.success(wmsDicTypeService.list());
+    }
+
+    @PostMapping("/saveOrUpdateWmsDicType")
+    @ApiOperation(value = "保存更新快码类型")
+    public Result saveOrUpdateWmsDicType(@RequestBody WmsDicType wmsDicType) {
+        if (wmsDicTypeService.saveOrUpdate(wmsDicType)) {
+            return Result.success(ResultCode.SUCCESS);
+        }
+        return Result.failure(ResultCode.DATA_IS_WRONG);
     }
 }
