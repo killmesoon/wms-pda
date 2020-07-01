@@ -46,7 +46,7 @@ public class WmsSupplierController {
             wrapper.eq(wmsSupplier.getSupplierType() != null, "a.supplier_type", wmsSupplier.getSupplierType());
             wrapper.eq(wmsSupplier.getShortName() != null, "a.short_name", wmsSupplier.getShortName());
         }
-        wrapper.orderByDesc("creation_date");
+        wrapper.orderByAsc("supplier_code");
         return Result.success(iWmsSupplierService.findWmsSupplierListExt(new Page<>(current, size), wrapper));
     }
 

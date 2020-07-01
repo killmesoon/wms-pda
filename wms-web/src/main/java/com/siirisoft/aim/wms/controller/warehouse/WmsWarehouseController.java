@@ -123,4 +123,17 @@ public class WmsWarehouseController {
         return Result.success(true);
     }
 
+    @GetMapping("/checkPlantDelete/{plantCode}")
+    @ApiOperation("校验是否有仓库挂载在工厂下")
+    @ApiImplicitParam(name = "warehouseIdList", value = "id列表")
+    public Result checkPlantDelete(@PathVariable String plantCode) {
+        QueryWrapper wrapper = new QueryWrapper();
+        wrapper.eq("plant_code", plantCode);
+        if (iWmsWarehouseService.count(wrapper) > 0) {
+            return Result.success(false);
+        }
+        return Result.success(true);
+    }
+
+
 }
