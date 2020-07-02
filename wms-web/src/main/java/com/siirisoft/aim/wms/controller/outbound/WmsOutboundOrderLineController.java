@@ -58,10 +58,13 @@ public class WmsOutboundOrderLineController {
     @ApiOperation(value = "出库单行信息批量插入")
     @ApiImplicitParam(name = "lines", value = "出库单行表list")
     public Result saveOrUpdateOutboundOrderLineList(@RequestBody List<WmsOutboundOrderLine> lines) {
-        if (iWmsOutboundOrderLineService.saveOrUpdateBatch(lines)) {
-         return Result.success(ResultCode.SUCCESS);
+        if (lines != null && lines.size() != 0) {
+            if (iWmsOutboundOrderLineService.saveOrUpdateBatch(lines)) {
+                return Result.success(ResultCode.SUCCESS);
+            }
+            return Result.failure(ResultCode.DATA_IS_WRONG);
         }
-        return Result.failure(ResultCode.DATA_IS_WRONG);
+        return Result.success(ResultCode.SUCCESS);
     }
 
     @PostMapping("/saveOrUpdateOutboundOrderLine")

@@ -18,12 +18,17 @@ public class AutoDocNumberGenerator {
 
         //时间字符串
 //        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+        Integer sequenceNum = 6;
+        String prefix = "D";
+        try {
+            //获得位数
+            sequenceNum = wmsDocAutonumber.getSequenceNum();
 
-        //获得位数
-        Integer sequenceNum = wmsDocAutonumber.getSequenceNum();
-
-        //获得前缀
-        String prefix = wmsDocAutonumber.getPrefix();
+            //获得前缀
+            prefix = wmsDocAutonumber.getPrefix();
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
 
         //生成指定位数
         String number = AutoDocNumberGenerator.getNumber(sequenceNum);

@@ -39,9 +39,12 @@ public class ABDocAutoNumberServiceImpl implements ABDocAutoNumberService {
         docWrapper.eq("doc_type", wmsDoc.getDicCode());
         docWrapper.eq("lookupcode",wmsDoc.getDicTypeCode());
         WmsDocAutonumber docPo = wmsDocAutonumberService.getOne(docWrapper);
-        String autoDocNumber = AutoDocNumberGenerator.getAutoDocNumber(docPo);
-        //生成订单号后校验
-
-        return autoDocNumber;
+        if (docPo == null) {
+            return null;
+        } else {
+           String autoDocNumber = AutoDocNumberGenerator.getAutoDocNumber(docPo);
+            //生成订单号后校验
+            return autoDocNumber;
+        }
     }
 }

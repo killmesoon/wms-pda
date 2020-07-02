@@ -2,6 +2,7 @@ package com.siirisoft.aim.wms.controller.doc;
 
 
 import com.siirisoft.aim.wms.entity.data.Result;
+import com.siirisoft.aim.wms.entity.data.ResultCode;
 import com.siirisoft.aim.wms.service.doc.ABDocAutoNumberService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ public class DocAutoCreatorController {
     @GetMapping("/getDocNumber/{dicId}")
     @ApiOperation(value = "获取自动单据号")
     public Result getAutoDocNumber(@PathVariable int dicId) {
-        return Result.success(abDocAutoNumberService.generateAutoNumber(dicId));
+        if (abDocAutoNumberService.generateAutoNumber(dicId) != null) {
+            return Result.success(abDocAutoNumberService.generateAutoNumber(dicId));
+        }
+        return Result.failure(ResultCode.DOC_TYPE_NOT_SET);
     }
 }
