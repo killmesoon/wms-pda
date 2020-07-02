@@ -11,5 +11,6 @@ public class TreeDataWrapper {
     private Integer warehouseId;
     private Integer areaId;
     private Integer locatorId;
+    private Integer layerNumber;
     private List<TreeDataWrapper> children;
 }

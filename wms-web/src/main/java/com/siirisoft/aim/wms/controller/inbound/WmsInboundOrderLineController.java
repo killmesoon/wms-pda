@@ -91,14 +91,9 @@ public class WmsInboundOrderLineController {
     public Result deleteOrderLinesByHeadId(@PathVariable int headId) {
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("head_id", headId);
-        if (iWmsInboundOrderLineService.count(queryWrapper) == 0) {
-            return Result.success(ResultCode.SUCCESS);
-        } else {
-            if (iWmsInboundOrderLineService.remove(queryWrapper)) {
-                return Result.success(ResultCode.SUCCESS);
-            }
-        }
-        return Result.failure(ResultCode.DATA_IS_WRONG);
+        iWmsInboundOrderLineService.remove(queryWrapper);
+        iWmsInboundOrderLineService.count(queryWrapper);
+        return Result.success(ResultCode.SUCCESS);
     }
 
     @GetMapping("/deleteLineById/{lineId}")
@@ -117,7 +112,7 @@ public class WmsInboundOrderLineController {
     @ApiImplicitParam(name = "wmsInboundOrderLine", value = "行信息po")
     @Transactional
     public Result saveOrUpdateOrderLine(@RequestBody WmsInboundOrderLine wmsInboundOrderLine) {
-        if (iWmsInboundOrderLineService.saveOrUpdate(wmsInboundOrderLine)) {
+        if (abWmsInboundOrderService.saveWmsLine(wmsInboundOrderLine)) {
             return Result.success(ResultCode.SUCCESS);
         }
         return Result.failure(ResultCode.DATA_IS_WRONG);

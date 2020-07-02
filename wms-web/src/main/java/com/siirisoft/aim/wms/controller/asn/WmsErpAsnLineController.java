@@ -33,6 +33,7 @@ public class WmsErpAsnLineController {
     @Autowired
     private ABWmsAsnOrderService abWmsAsnOrderService;
 
+
     @GetMapping("/queryWmsErpAsnLineListByHeadId/{headId}")
     @ApiOperation(value = "根据HeadId查询关联行信息")
     @ApiImplicitParam(name = "headId", value = "头信息ID")
@@ -48,6 +49,8 @@ public class WmsErpAsnLineController {
     @ApiOperation(value = "更新行信息")
     @ApiImplicitParam(name = "wmsErpAsnLine", value = "行信息po")
     public Result saveOrUpdateWmsErpAsnLine(@RequestBody WmsErpAsnLine wmsErpAsnLine) {
+        Integer maxLineNumber = abWmsAsnOrderService.getMaxLineNumber(wmsErpAsnLine);
+        wmsErpAsnLine.setLineNum(maxLineNumber + 10 + "");
         if (iWmsErpAsnLineService.saveOrUpdate(wmsErpAsnLine)) {
             return Result.success(ResultCode.SUCCESS);
         }

@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.siirisoft.aim.wms.entity.asn.ext.WmsErpAsnLineExt;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 /**
  * @User DKY
@@ -14,4 +15,7 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface WmsErpAsnLineMapperExt {
     IPage<WmsErpAsnLineExt> findWmsErpAsnLineList(Page page, @Param(Constants.WRAPPER)Wrapper wrapper);
+
+    @Select("SELECT max(line_num) FROM wms_erp_asn_line ${ew.customSqlSegment}")
+    Integer findMaxLineNumber(@Param(Constants.WRAPPER) Wrapper wrapper);
 }

@@ -49,6 +49,12 @@ public class WmsOutboundOrderHead implements Serializable {
     @ApiModelProperty(value = "工厂ID")
     private Integer plantId;
 
+    @ApiModelProperty(value = "工厂编码")
+    private String plantCode;
+
+    @ApiModelProperty(value = "工厂名称")
+    private String plantName;
+
     @ApiModelProperty(value = "单据类型")
     private String docType;
 

@@ -27,4 +27,6 @@ public interface ABWmsAsnOrderService {
     boolean saveWmsErpOrderLineList(int lineId, List<WmsErpAsnDetail> list);
 
     boolean asnOrderCheck(List<WmsErpAsnHead> list);
+
+    Integer getMaxLineNumber(WmsErpAsnLine wmsErpAsnLine);
 }

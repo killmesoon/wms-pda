@@ -13,6 +13,7 @@ import com.siirisoft.aim.wms.entity.inbound.WmsInboundOrderLine;
 import com.siirisoft.aim.wms.mapper.asn.WmsErpAsnDetailMapper;
 import com.siirisoft.aim.wms.mapper.asn.WmsErpAsnHeadMapper;
 import com.siirisoft.aim.wms.mapper.asn.WmsErpAsnLineMapper;
+import com.siirisoft.aim.wms.mapper.asn.ext.WmsErpAsnLineMapperExt;
 import com.siirisoft.aim.wms.service.asn.ABWmsAsnOrderService;
 import com.siirisoft.aim.wms.service.asn.IWmsErpAsnDetailService;
 import com.siirisoft.aim.wms.service.asn.IWmsErpAsnHeadService;
@@ -59,6 +60,9 @@ public class ABWmsAsnOrderServiceImpl  implements ABWmsAsnOrderService {
 
     @Autowired
     private IWmsInboundOrderDetailService iWmsInboundOrderDetailService;
+
+    @Autowired
+    private WmsErpAsnLineMapperExt wmsErpAsnLineMapperExt;
 
 
     @Override
@@ -233,5 +237,12 @@ public class ABWmsAsnOrderServiceImpl  implements ABWmsAsnOrderService {
 
         }
         return true;
+    }
+
+    @Override
+    public Integer getMaxLineNumber(WmsErpAsnLine wmsErpAsnLine) {
+        QueryWrapper wrapper = new QueryWrapper();
+        wrapper.eq("head_id", wmsErpAsnLine.getHeadId());
+        return wmsErpAsnLineMapperExt.findMaxLineNumber(wrapper);
     }
 }

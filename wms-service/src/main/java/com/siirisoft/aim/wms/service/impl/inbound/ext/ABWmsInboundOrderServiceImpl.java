@@ -3,6 +3,8 @@ package com.siirisoft.aim.wms.service.impl.inbound.ext;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.siirisoft.aim.wms.entity.inbound.WmsInboundOrderDetail;
 import com.siirisoft.aim.wms.entity.inbound.WmsInboundOrderHead;
+import com.siirisoft.aim.wms.entity.inbound.WmsInboundOrderLine;
+import com.siirisoft.aim.wms.mapper.inbound.ext.WmsInboundOrderLineMapperExt;
 import com.siirisoft.aim.wms.service.inbound.ABWmsInboundOrderService;
 import com.siirisoft.aim.wms.service.inbound.IWmsInboundOrderDetailService;
 import com.siirisoft.aim.wms.service.inbound.IWmsInboundOrderHeadService;
@@ -29,6 +31,9 @@ public class ABWmsInboundOrderServiceImpl implements ABWmsInboundOrderService {
 
     @Autowired
     private IWmsInboundOrderHeadService inboundOrderHeadService;
+
+    @Autowired
+    private WmsInboundOrderLineMapperExt wmsInboundOrderLineMapperExt;
 
     @Override
     @Transactional
@@ -78,6 +83,16 @@ public class ABWmsInboundOrderServiceImpl implements ABWmsInboundOrderService {
         queryWrapper.in("head_id", headIdList);
         iWmsInboundOrderLineService.remove(queryWrapper); //删除行表关联
         iWmsInboundOrderDetailService.remove(queryWrapper); //删除明细表关联
+        return true;
+    }
+
+    @Override
+    public boolean saveWmsLine(WmsInboundOrderLine wmsInboundOrderLine) {
+        QueryWrapper wrapper = new QueryWrapper();
+        wrapper.eq("head_id", wmsInboundOrderLine.getHeadId());
+        Integer maxLineNumber = wmsInboundOrderLineMapperExt.findMaxLineNumber(wrapper);
+        wmsInboundOrderLine.setLineNum(maxLineNumber + 10 + "");
+        iWmsInboundOrderLineService.saveOrUpdate(wmsInboundOrderLine);
         return true;
     }
 }

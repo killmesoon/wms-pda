@@ -6,7 +6,11 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.siirisoft.aim.wms.entity.autonumber.WmsDocAutonumber;
 import com.siirisoft.aim.wms.entity.data.Result;
 import com.siirisoft.aim.wms.entity.data.ResultCode;
+import com.siirisoft.aim.wms.entity.dic.WmsDicList;
+import com.siirisoft.aim.wms.entity.dic.WmsDicType;
 import com.siirisoft.aim.wms.service.autonumber.IWmsDocAutonumberService;
+import com.siirisoft.aim.wms.service.dic.IWmsDicListService;
+import com.siirisoft.aim.wms.service.dic.IWmsDicTypeService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +32,12 @@ public class WmsDocAutonumberController {
 
     @Autowired
     private IWmsDocAutonumberService iWmsDocAutonumberService;
+
+    @Autowired
+    private IWmsDicTypeService iWmsDicTypeService;
+
+    @Autowired
+    private IWmsDicListService iWmsDicListService;
 
     @PostMapping("/queryDocAutoNumber")
     @ApiOperation("查询单据编码list")
@@ -64,8 +74,22 @@ public class WmsDocAutonumberController {
     @ApiOperation("逐条删除Autonumber")
     @ApiImplicitParam(name = "id", value = "单据ID")
     public Result deleteDocAutoNumberById(@PathVariable int id) {
+        WmsDocAutonumber doc = iWmsDocAutonumberService.getById(id);
         if (iWmsDocAutonumberService.removeById(id)) {
-            return Result.success(ResultCode.SUCCESS);
+            //删除之后要修改docFlag
+            QueryWrapper wrapper = new QueryWrapper();
+            wrapper.eq("dic_type_code",doc.getLookupcode());
+            WmsDicType dicType = iWmsDicTypeService.getOne(wrapper);
+            if (dicType != null) {
+                QueryWrapper resultWrapper = new QueryWrapper();
+                resultWrapper.eq("dic_type_id", dicType.getDicTypeId());
+                resultWrapper.eq("dic_code", doc.getDocType());
+                WmsDicList wmsDicList = new WmsDicList();
+                wmsDicList.setDocFlag(false);
+                if (iWmsDicListService.update(wmsDicList,resultWrapper)) {
+                    return Result.success(ResultCode.SUCCESS);
+                }
+            }
         }
         return Result.failure(ResultCode.DATA_IS_WRONG);
     }

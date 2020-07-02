@@ -2,6 +2,8 @@ package com.siirisoft.aim.wms.service.impl.outbound.ext;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.siirisoft.aim.wms.entity.outbound.WmsOutboundOrderDetail;
+import com.siirisoft.aim.wms.entity.outbound.WmsOutboundOrderLine;
+import com.siirisoft.aim.wms.mapper.outbound.ext.WmsOutboundOrderLineMapperExt;
 import com.siirisoft.aim.wms.service.outbound.ABWmsOutboundOrderService;
 import com.siirisoft.aim.wms.service.outbound.IWmsOutboundOrderDetailService;
 import com.siirisoft.aim.wms.service.outbound.IWmsOutboundOrderHeadService;
@@ -28,6 +30,9 @@ public class ABWmsOutboundOrderServiceImpl implements ABWmsOutboundOrderService 
 
     @Autowired
     private IWmsOutboundOrderLineService iWmsOutboundOrderLineService;
+
+    @Autowired
+    private WmsOutboundOrderLineMapperExt wmsOutboundOrderLineMapperExt;
 
 
     @Override
@@ -94,5 +99,12 @@ public class ABWmsOutboundOrderServiceImpl implements ABWmsOutboundOrderService 
             return true;
         }
         return false;
+    }
+
+    @Override
+    public int getMaxLineNumber(WmsOutboundOrderLine wmsOutboundOrderLine) {
+        QueryWrapper wrapper = new QueryWrapper();
+        wrapper.eq("head_id", wmsOutboundOrderLine.getHeadId());
+        return wmsOutboundOrderLineMapperExt.getMaxLineNumber(wrapper);
     }
 }

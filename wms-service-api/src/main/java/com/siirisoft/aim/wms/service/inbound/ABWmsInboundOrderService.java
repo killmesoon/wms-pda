@@ -2,6 +2,7 @@ package com.siirisoft.aim.wms.service.inbound;
 
 import com.siirisoft.aim.wms.entity.inbound.WmsInboundOrderDetail;
 import com.siirisoft.aim.wms.entity.inbound.WmsInboundOrderHead;
+import com.siirisoft.aim.wms.entity.inbound.WmsInboundOrderLine;
 
 import java.util.List;
 
@@ -18,4 +19,6 @@ public interface ABWmsInboundOrderService {
     boolean deleteHeadAndAll(int headId);
 
     boolean deleteHeadAndAllList(List<Integer> headIdlist);
+
+    boolean saveWmsLine(WmsInboundOrderLine wmsInboundOrderLine);
 }

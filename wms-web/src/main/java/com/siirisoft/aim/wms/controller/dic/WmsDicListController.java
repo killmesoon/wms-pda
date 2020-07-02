@@ -69,6 +69,16 @@ public class WmsDicListController {
         return Result.success(list);
     }
 
+    @GetMapping("/queryWmsDicListList")
+    @ApiOperation(value = "查询所有字典类型及字典类型具体信息")
+    public Result queryWmsDicListList() {
+        QueryWrapper wrapper = new QueryWrapper();
+        return Result.success(wmsDicListService.queryWmsDicListExtList(wrapper));
+    }
+
+
+
+
 
     @PostMapping("/saveOrUpdateWmsDic")
     @ApiOperation(value = "更新快码状态")

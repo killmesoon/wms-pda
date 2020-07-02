@@ -13,6 +13,7 @@ import com.siirisoft.aim.wms.entity.locator.WmsLocator;
 import com.siirisoft.aim.wms.entity.locator.ext.WmsLocatorExt;
 import com.siirisoft.aim.wms.entity.locator.ext.pda.WmsPdaLocatorExt;
 import com.siirisoft.aim.wms.entity.warehouse.WmsWarehouse;
+import com.siirisoft.aim.wms.mapper.sqlitem.ext.WmsSglItemMapperExt;
 import com.siirisoft.aim.wms.service.area.IWmsWarehouseAreaService;
 import com.siirisoft.aim.wms.service.locator.IWmsLocatorService;
 import com.siirisoft.aim.wms.service.locator.pda.ABPdaWmsLocatorService;
@@ -50,6 +51,9 @@ public class WmsPdaLocatorController {
 
     @Autowired
     private IWmsSglItemService iWmsSglItemService;
+
+    @Autowired
+    private WmsSglItemMapperExt wmsSglItemMapperExt;
 
     @PostMapping("/queryLocatorList")
     @ApiOperation(value = "查询货位列表")
@@ -122,11 +126,15 @@ public class WmsPdaLocatorController {
                 List<TreeDataWrapper> locatorList = new ArrayList<>();
                 for (WmsLocator locator: lList) {
                     TreeDataWrapper locatorTree = new TreeDataWrapper();
+                    QueryWrapper layerWrapper = new QueryWrapper();
+                    layerWrapper.eq("locator_id", locator.getLocatorId());
+                    Integer maxLayerNumber = wmsSglItemMapperExt.findMaxLayerNumber(layerWrapper);
                     locatorTree.setLocatorId(locator.getLocatorId());
                     locatorTree.setCode(locator.getLocatorCode());
                     locatorTree.setName(locator.getLocatorName());
                     locatorTree.setWarehouseId(locator.getWarehouseId());
                     locatorTree.setAreaId(locator.getAreaId());
+                    locatorTree.setLayerNumber(maxLayerNumber);
                     locatorList.add(locatorTree);
                 }
                 areaTree.setChildren(locatorList);

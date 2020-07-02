@@ -68,6 +68,8 @@ public class WmsOutboundOrderLineController {
     @ApiOperation(value = "出库单行信息单条插入")
     @ApiImplicitParam(name = "wmsOutboundOrderLine", value = "出库单po")
     public Result saveOrUpdateOutboundOrderLine(@RequestBody WmsOutboundOrderLine wmsOutboundOrderLine) {
+        int maxLineNumber = abWmsOutboundOrderService.getMaxLineNumber(wmsOutboundOrderLine);
+        wmsOutboundOrderLine.setLineNum(maxLineNumber + 10 + "");
         if (iWmsOutboundOrderLineService.saveOrUpdate(wmsOutboundOrderLine)) {
             return Result.success(ResultCode.SUCCESS);
         }

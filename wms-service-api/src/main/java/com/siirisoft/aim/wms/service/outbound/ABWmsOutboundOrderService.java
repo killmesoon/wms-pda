@@ -1,6 +1,7 @@
 package com.siirisoft.aim.wms.service.outbound;
 
 import com.siirisoft.aim.wms.entity.outbound.WmsOutboundOrderDetail;
+import com.siirisoft.aim.wms.entity.outbound.WmsOutboundOrderLine;
 
 import java.util.List;
 
@@ -19,4 +20,6 @@ public interface ABWmsOutboundOrderService {
     boolean deleteOutboundHeadOrder(int headId);
 
     boolean deleteOutboundHeadOrder(List<Integer> headIdList);
+
+    int getMaxLineNumber(WmsOutboundOrderLine wmsOutboundOrderLine);
 }

@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.siirisoft.aim.wms.entity.inbound.ext.WmsInboundOrderLineExt;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 /**
  * <p>
@@ -17,4 +18,7 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface WmsInboundOrderLineMapperExt extends BaseMapper<WmsInboundOrderLineExt> {
     IPage<WmsInboundOrderLineExt> wmsInboundLineOrderList(IPage<WmsInboundOrderLineExt> page, @Param(Constants.WRAPPER) Wrapper wrapper);
+
+    @Select("SELECT max(line_num) FROM wms_inbound_order_line ${ew.customSqlSegment}")
+    Integer findMaxLineNumber(@Param(Constants.WRAPPER) Wrapper wrapper);
 }
