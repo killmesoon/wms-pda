@@ -46,6 +46,7 @@ public class WmsWarehouseController {
                                     @RequestBody(required = false) WmsWarehouse wmsWarehouse) {
         QueryWrapper wrapper = new QueryWrapper(wmsWarehouse);
         if (wmsWarehouse != null) {
+            wrapper.eq(wmsWarehouse.getPlantCode() != null, "plant_code", wmsWarehouse.getPlantCode());
             wrapper.eq(wmsWarehouse.getWarehouseType() != null, "warehouse_type", wmsWarehouse.getWarehouseType());
             wrapper.eq(wmsWarehouse.getNegativeFlag() != null, "negative_flag", wmsWarehouse.getNegativeFlag());
             wrapper.eq(wmsWarehouse.getWarehouseCode() != null, "warehouse_code", wmsWarehouse.getWarehouseCode());
@@ -69,6 +70,7 @@ public class WmsWarehouseController {
         } else {
             wmsWarehouse.setCreationDate(new Date());
         }
+
         if (iWmsWarehouseService.saveOrUpdate(wmsWarehouse,wrapper)) {
             return Result.success(ResultCode.SUCCESS);
         }
@@ -117,8 +119,17 @@ public class WmsWarehouseController {
     public Result checkWarehouseCodeExits(@RequestBody WmsWarehouse wmsWarehouse) {
         QueryWrapper wrapper = new QueryWrapper();
         wrapper.eq("warehouse_code", wmsWarehouse.getWarehouseCode());
-        if (iWmsWarehouseService.count(wrapper) > 0) {
-            return Result.success(false);
+        //如果是本人就不校验了
+        WmsWarehouse tmp = iWmsWarehouseService.getById(wmsWarehouse.getWarehouseId());
+        if (tmp == null) {
+            return Result.success(true);
+        }
+        if (tmp.getWarehouseCode().equals(wmsWarehouse.getWarehouseCode())) {
+            return Result.success(true);
+        } else {
+            if (iWmsWarehouseService.count(wrapper) > 0) {
+                return Result.success(false);
+            }
         }
         return Result.success(true);
     }

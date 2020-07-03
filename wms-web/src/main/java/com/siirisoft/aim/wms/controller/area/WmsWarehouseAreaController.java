@@ -47,6 +47,7 @@ public class WmsWarehouseAreaController {
         try {
             QueryWrapper wrapper = new QueryWrapper();
             if (wmsWarehouseArea != null) {
+                wrapper.eq(wmsWarehouseArea.getPlantCode() != null , "a.plant_code", wmsWarehouseArea.getPlantCode());
                 wrapper.eq(wmsWarehouseArea.getWarehouseId() != null , "a.warehouse_id", wmsWarehouseArea.getWarehouseId());
                 wrapper.eq(wmsWarehouseArea.getAreaCode() != null , "a.area_code", wmsWarehouseArea.getAreaCode());
                 wrapper.eq(wmsWarehouseArea.getAreaName() != null , "a.area_name", wmsWarehouseArea.getAreaName());
