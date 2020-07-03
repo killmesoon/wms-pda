@@ -56,6 +56,7 @@ public class WmsWarehouseController {
             wrapper.eq(wmsWarehouse.getShortName() != null, "short_name", wmsWarehouse.getShortName());
             wrapper.eq(wmsWarehouse.getDescription() != null, "description", wmsWarehouse.getDescription());
         }
+        wrapper.orderByAsc("a.plant_code");
         wrapper.orderByAsc("a.warehouse_code");
         return Result.success(iWmsWarehouseService.queryWarehouseList(new Page<>(current, size), wrapper));
     }
@@ -119,12 +120,16 @@ public class WmsWarehouseController {
     public Result checkWarehouseCodeExits(@RequestBody WmsWarehouse wmsWarehouse) {
         QueryWrapper wrapper = new QueryWrapper();
         wrapper.eq("warehouse_code", wmsWarehouse.getWarehouseCode());
+        wrapper.eq("plant_code", wmsWarehouse.getPlantCode());
         //如果是本人就不校验了
         WmsWarehouse tmp = iWmsWarehouseService.getById(wmsWarehouse.getWarehouseId());
         if (tmp == null) {
+            if (iWmsWarehouseService.count(wrapper) > 0) {
+                return Result.success(false);
+            }
             return Result.success(true);
         }
-        if (tmp.getWarehouseCode().equals(wmsWarehouse.getWarehouseCode())) {
+        if ((tmp.getWarehouseCode().equals(wmsWarehouse.getWarehouseCode())) && (tmp.getPlantCode().equals(wmsWarehouse.getPlantCode()))) {
             return Result.success(true);
         } else {
             if (iWmsWarehouseService.count(wrapper) > 0) {

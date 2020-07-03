@@ -93,6 +93,13 @@ public class WmsLocatorController {
     @ApiOperation(value = "验证货位编码是否存在")
     @ApiImplicitParam(name = "wmsLocator", value = "货位po")
     public Result checkLocatorCodeExits(@RequestBody WmsLocator wmsLocator) {
+        WmsLocator tmp = iWmsLocatorService.getById(wmsLocator.getLocatorId());
+        if (tmp == null) {
+            return Result.success(true);
+        }
+        if ((tmp.getAreaId() == wmsLocator.getAreaId()) && (tmp.getLocatorCode().equals(wmsLocator.getLocatorCode()))) {
+            return Result.success(true);
+        }
         QueryWrapper wrapper = new QueryWrapper();
         wrapper.eq("locator_code", wmsLocator.getLocatorCode());
         wrapper.eq("area_id", wmsLocator.getAreaId());
