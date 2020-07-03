@@ -119,6 +119,13 @@ public class WmsWarehouseAreaController {
     @ApiOperation(value = "验证区域编码是否存在")
     @ApiImplicitParam(name = "wmsWarehouseArea", value = "区域po")
     public Result checkAreaCodeExits(@RequestBody WmsWarehouseArea wmsWarehouseArea) {
+        WmsWarehouseArea tmp = iWmsWarehouseAreaService.getById(wmsWarehouseArea.getAreaId());
+        if (tmp == null) {
+            return Result.success(true);
+        }
+        if ((tmp.getAreaCode().equals(wmsWarehouseArea.getAreaCode())) && (tmp.getWarehouseId() == wmsWarehouseArea.getWarehouseId())) {
+            return Result.success(true);
+        }
         QueryWrapper wrapper = new QueryWrapper();
         wrapper.eq("area_code", wmsWarehouseArea.getAreaCode());
         wrapper.eq("warehouse_id", wmsWarehouseArea.getWarehouseId());
