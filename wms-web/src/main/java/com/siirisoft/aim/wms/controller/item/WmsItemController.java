@@ -103,6 +103,18 @@ public class WmsItemController {
     public Result checkItemCodeExits(@RequestBody WmsItem wmsItem) {
         QueryWrapper wrapper = new QueryWrapper();
         wrapper.eq("item_code", wmsItem.getItemCode());
+        WmsItem tmp = iWmsItemService.getById(wmsItem.getItemId());
+        if (tmp == null) {
+            if (iWmsItemService.count(wrapper) > 0) {
+                return Result.success(false);
+            }
+            return Result.success(true);
+        }
+
+        if (tmp.getItemCode().equals(wmsItem.getItemCode())) {
+            return Result.success(true);
+        }
+
         if (iWmsItemService.count(wrapper) > 0) {
             return Result.success(false);
         }

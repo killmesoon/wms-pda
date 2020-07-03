@@ -94,6 +94,18 @@ public class WmsSupplierController {
     public Result checkSupplierExits(@RequestBody WmsSupplier wmsSupplier) {
         QueryWrapper wrapper = new QueryWrapper();
         wrapper.eq("supplier_code", wmsSupplier.getSupplierCode());
+        WmsSupplier tmp = iWmsSupplierService.getById(wmsSupplier.getSupplierId());
+        if(tmp == null) {
+            if (iWmsSupplierService.count(wrapper) > 0) {
+                return Result.success(false);
+            }
+            return Result.success(true);
+        }
+
+        if (wmsSupplier.getSupplierId() == tmp.getSupplierId()) {
+            return Result.success(true);
+        }
+
         if (iWmsSupplierService.count(wrapper) > 0) {
             return Result.success(false);
         }
