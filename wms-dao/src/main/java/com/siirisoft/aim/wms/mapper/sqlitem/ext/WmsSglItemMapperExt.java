@@ -15,6 +15,6 @@ import org.apache.ibatis.annotations.Select;
 public interface WmsSglItemMapperExt {
     IPage findWmsSglItemList(Page page, @Param(Constants.WRAPPER)Wrapper wrapper);
 
-    @Select("select max(layer_number) from wms_sgl_item ${ew.customSqlSegment}")
+    @Select("select COALESCE(max(layer_number),0) from wms_sgl_item ${ew.customSqlSegment}")
     Integer findMaxLayerNumber(@Param(Constants.WRAPPER) Wrapper wrapper);
 }

@@ -70,7 +70,10 @@ public class ABPdaWmsLocatorServiceImpl implements ABPdaWmsLocatorService {
         Integer maxLayerNumber = wmsSglItemMapperExt.findMaxLayerNumber(layerWrapper);
 
         //更新货位号 仓库号 与层号
-        sglItem.setLayerNumber(maxLayerNumber);
+        if (maxLayerNumber == null) {
+
+        }
+        sglItem.setLayerNumber(maxLayerNumber + 1);
         sglItem.setLocatorId(locatorId);
         wmsSglItemMapper.update(sglItem, wrapper);
 

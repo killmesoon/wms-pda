@@ -16,6 +16,6 @@ import org.apache.ibatis.annotations.Select;
 public interface WmsOutboundOrderLineMapperExt extends BaseMapper<WmsOutboundOrderLineExt> {
     IPage<WmsOutboundOrderLineExt> findWmsOutboundOrderLineListExt(IPage page, @Param(Constants.WRAPPER) Wrapper wrapper);
 
-    @Select("SELECT max(line_num) FROM wms_outbound_order_line ${ew.customSqlSegment}")
+    @Select("SELECT COALESCE(max(line_num), 0) FROM wms_outbound_order_line ${ew.customSqlSegment}")
     Integer getMaxLineNumber(@Param(Constants.WRAPPER) Wrapper wrapper);
 }
