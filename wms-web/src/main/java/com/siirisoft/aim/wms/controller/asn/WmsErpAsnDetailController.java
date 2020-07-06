@@ -79,4 +79,15 @@ public class WmsErpAsnDetailController {
         }
         return Result.failure(ResultCode.PARAM_IS_INVALID);
     }
+
+    @GetMapping("/isdSequenceNumExits/{dSequenceNum}")
+    @ApiOperation("校验钢板号是否存在")
+    @ApiImplicitParam(name = "dSequenceNum", value = "钢板号")
+    public Result isdSequenceNumExits(@PathVariable String dSequenceNum) {
+        QueryWrapper wrapper = new QueryWrapper();
+        if (iWmsErpAsnDetailService.count(wrapper) > 0) {
+            return Result.success(false);
+        }
+        return Result.success(true);
+    }
 }
