@@ -13,7 +13,7 @@
     </resultMap>
 
     <sql id="order">
-        ORDER BY  b.warehouse_code, c.area_code, a.locator_code ASC
+        ORDER BY  a.plant_code,b.warehouse_code, c.area_code, a.locator_code ASC
     </sql>
 
     <select id="findLocatorList" resultMap="locatorExtMap">

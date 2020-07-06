@@ -55,6 +55,7 @@ public class WmsWarehouseAreaController {
                 wrapper.eq(wmsWarehouseArea.getEnableFlag() != null , "a.enable_flag", wmsWarehouseArea.getEnableFlag());
                 wrapper.eq(wmsWarehouseArea.getDescription() != null , "a.description", wmsWarehouseArea.getDescription());
             }
+            wrapper.orderByAsc("a.plant_code");
             wrapper.orderByAsc("c.warehouse_code");
             wrapper.orderByAsc("a.area_code");
             return Result.success(iWmsWarehouseAreaService.findWarehouseAreaList(new Page(current, size), wrapper));

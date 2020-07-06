@@ -27,6 +27,9 @@ public class WmsWarehouse implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @ApiModelProperty(value = "工厂ID")
+    private Integer plantId;
+
     @ApiModelProperty(value = "工厂编码")
     private String plantCode;
 
