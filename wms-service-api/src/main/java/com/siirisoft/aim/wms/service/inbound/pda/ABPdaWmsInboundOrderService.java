@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.siirisoft.aim.wms.entity.inbound.ext.pda.WmsPdaInboundOrderDetail;
+import com.siirisoft.aim.wms.entity.locator.ext.WmsLocatorExt;
 
 /**
  * @User DKY
@@ -14,4 +15,6 @@ public interface ABPdaWmsInboundOrderService {
     IPage queryInboundOrderDetail(Page page, Wrapper wrapper);
 
     boolean commitInboundOrder(WmsPdaInboundOrderDetail wmsPdaInboundOrderDetail);
+
+    WmsLocatorExt getAdviceLocator();
 }

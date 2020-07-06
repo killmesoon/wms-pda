@@ -49,4 +49,21 @@
         wms_sgl_item a
     ${ew.customSqlSegment}
     </select>
+
+    <select id="getAdviceLocator" resultType="com.siirisoft.aim.wms.entity.locator.ext.WmsLocatorExt">
+        SELECT
+        a.locator_id,
+        a.locator_code,
+        a.locator_name,
+        COALESCE
+            ( max( b.layer_number ), 0 ) AS layer_number
+        FROM
+            wms_locator a
+            LEFT JOIN wms_sgl_item b ON a.locator_id = b.locator_id
+        GROUP BY
+            a.locator_id
+        ORDER BY layer_number ASC
+        LIMIT 1
+    </select>
+
 </mapper>

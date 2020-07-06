@@ -85,6 +85,7 @@ public class WmsErpAsnDetailController {
     @ApiImplicitParam(name = "dSequenceNum", value = "钢板号")
     public Result isdSequenceNumExits(@PathVariable String dSequenceNum) {
         QueryWrapper wrapper = new QueryWrapper();
+        wrapper.eq("d_sequence_num", dSequenceNum);
         if (iWmsErpAsnDetailService.count(wrapper) > 0) {
             return Result.success(false);
         }

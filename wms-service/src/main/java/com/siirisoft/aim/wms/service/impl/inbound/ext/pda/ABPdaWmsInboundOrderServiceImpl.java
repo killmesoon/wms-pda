@@ -7,12 +7,14 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.siirisoft.aim.wms.entity.events.WmsObjectEvents;
 import com.siirisoft.aim.wms.entity.inbound.ext.pda.WmsPdaInboundOrderDetail;
+import com.siirisoft.aim.wms.entity.locator.ext.WmsLocatorExt;
 import com.siirisoft.aim.wms.entity.quantity.WmsItemOnhandQuantity;
 import com.siirisoft.aim.wms.entity.sqlitem.WmsSglItem;
 import com.siirisoft.aim.wms.mapper.events.WmsObjectEventsMapper;
 import com.siirisoft.aim.wms.mapper.inbound.WmsInboundOrderDetailMapper;
 import com.siirisoft.aim.wms.mapper.inbound.WmsInboundOrderLineMapper;
 import com.siirisoft.aim.wms.mapper.inbound.ext.pda.WmsPdaInboundOrderDetailMapper;
+import com.siirisoft.aim.wms.mapper.locator.ext.pda.WmsPdaLocatorMapperExt;
 import com.siirisoft.aim.wms.mapper.quantity.WmsItemOnhandQuantityMapper;
 import com.siirisoft.aim.wms.mapper.sqlitem.WmsSglItemMapper;
 import com.siirisoft.aim.wms.mapper.sqlitem.ext.WmsSglItemMapperExt;
@@ -51,6 +53,9 @@ public class ABPdaWmsInboundOrderServiceImpl implements ABPdaWmsInboundOrderServ
 
     @Autowired
     private WmsObjectEventsMapper wmsObjectEventsMapper;
+
+    @Autowired
+    private WmsPdaLocatorMapperExt wmsPdaLocatorMapperExt;
 
 
     @Override
@@ -116,5 +121,10 @@ public class ABPdaWmsInboundOrderServiceImpl implements ABPdaWmsInboundOrderServ
         wmsObjectEvents.setWarehouseIdTo(sglItem.getWarehouseId());
         wmsObjectEventsMapper.insert(wmsObjectEvents);
         return true;
+    }
+
+    @Override
+    public WmsLocatorExt getAdviceLocator() {
+        return wmsPdaLocatorMapperExt.getAdviceLocator();
     }
 }

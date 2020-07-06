@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.siirisoft.aim.wms.entity.data.Result;
 import com.siirisoft.aim.wms.entity.inbound.ext.WmsInboundOrderHeadExt;
 import com.siirisoft.aim.wms.entity.inbound.ext.pda.WmsPdaInboundOrderDetail;
+import com.siirisoft.aim.wms.entity.locator.ext.WmsLocatorExt;
 import com.siirisoft.aim.wms.service.inbound.ext.IWmsInboundOrderHeadServiceExt;
 import com.siirisoft.aim.wms.service.inbound.pda.ABPdaWmsInboundOrderService;
 import io.swagger.annotations.ApiImplicitParam;
@@ -70,6 +71,13 @@ public class WmsPdaInboundOrderController {
         //通过ID查询具体信息
         return Result.success(abPdaWmsInboundOrderService.queryInboundOrderDetail(new Page(current,size), wrapper));
     }
+
+    @GetMapping("/getAdviceLocator")
+    @ApiOperation("获得建议货位")
+    public Result getAdviceLocator() {
+        return Result.success(abPdaWmsInboundOrderService.getAdviceLocator());
+    }
+
 
     @PostMapping("/commitInboundOrder")
     @ApiOperation("提交入库单请求")

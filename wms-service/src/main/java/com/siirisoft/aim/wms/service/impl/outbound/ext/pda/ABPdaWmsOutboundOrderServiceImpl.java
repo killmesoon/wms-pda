@@ -87,7 +87,7 @@ public class ABPdaWmsOutboundOrderServiceImpl implements ABPdaWmsOutboundOrderSe
         Integer maxLayerNumber = wmsSglItemMapperExt.findMaxLayerNumber(layerWrapper);
 
         //更新货位号 仓库号 与层号
-        sglItem.setLayerNumber(maxLayerNumber);
+        sglItem.setLayerNumber(maxLayerNumber + 1);
         sglItem.setLocatorId(targetLocatorId);
         sglItem.setWarehouseId(targetWarehouseId);
         wmsSglItemMapper.update(sglItem, wrapper);
