@@ -86,10 +86,10 @@ public class WmsItem implements Serializable {
     private String codeType;
 
     @ApiModelProperty(value = "最小包装数")
-    private Integer minPackageQty;
+    private String minPackageQty;
 
     @ApiModelProperty(value = "制单数量")
-    private Integer docCreateQty;
+    private String docCreateQty;
 
     @ApiModelProperty(value = "是否来料检")
     private Boolean iqcFlag;
@@ -107,16 +107,16 @@ public class WmsItem implements Serializable {
     private String outstockRule;
 
     @ApiModelProperty(value = "安全库存值")
-    private Integer safetyStockValue;
+    private String safetyStockValue;
 
     @ApiModelProperty(value = "最大库存")
-    private Integer maxStockQty;
+    private String maxStockQty;
 
     @ApiModelProperty(value = "最小库存")
-    private Integer minStockQty;
+    private String minStockQty;
 
     @ApiModelProperty(value = "转运批量")
-    private Integer transferLotSize;
+    private String transferLotSize;
 
 
 }
