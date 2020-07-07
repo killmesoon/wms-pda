@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.siirisoft.aim.wms.entity.data.Result;
 import com.siirisoft.aim.wms.entity.data.ResultCode;
 import com.siirisoft.aim.wms.entity.item.WmsItem;
+import com.siirisoft.aim.wms.service.item.ABWmsItemService;
 import com.siirisoft.aim.wms.service.item.IWmsItemService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -30,6 +31,9 @@ public class WmsItemController {
 
     @Autowired
     private IWmsItemService iWmsItemService;
+
+    @Autowired
+    private ABWmsItemService abWmsItemService;
 
     @PostMapping("/queryItemList")
     @ApiOperation(value = "查询物料列表")
@@ -80,10 +84,14 @@ public class WmsItemController {
     @ApiOperation(value = "删除物料信息")
     @ApiImplicitParam(name = "itemId", value = "物料id")
     public Result deleteItemById(@PathVariable int itemId) {
-        if (iWmsItemService.removeById(itemId)) {
-            return Result.success(ResultCode.SUCCESS);
+        if (abWmsItemService.checkItemDelete(itemId)) {
+            if (iWmsItemService.removeById(itemId)) {
+                return Result.success(ResultCode.SUCCESS);
+            }
+            return Result.failure(ResultCode.DATA_IS_WRONG);
+        } else {
+            return Result.failure(ResultCode.DATA_BIND);
         }
-        return Result.failure(ResultCode.DATA_IS_WRONG);
     }
 
 
