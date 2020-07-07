@@ -10,8 +10,6 @@ import lombok.Data;
  */
 @Data
 public class WmsBarcodeExt extends WmsBarcode {
-    private String plantCode;
-    private String plantName;
     private String barcodeTypeDic;
     private String barcodeStatusDic;
     private String supplierCode;

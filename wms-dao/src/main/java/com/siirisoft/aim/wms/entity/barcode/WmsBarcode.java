@@ -45,6 +45,12 @@ public class WmsBarcode implements Serializable {
     @ApiModelProperty(value = "工厂ID")
     private Integer plantId;
 
+    @ApiModelProperty(value = "工厂编码")
+    private String plantCode;
+
+    @ApiModelProperty(value = "工厂名称")
+    private String plantName;
+
     @ApiModelProperty(value = "主键ID")
     @TableId(value = "barcode_id", type = IdType.AUTO)
     private Integer barcodeId;

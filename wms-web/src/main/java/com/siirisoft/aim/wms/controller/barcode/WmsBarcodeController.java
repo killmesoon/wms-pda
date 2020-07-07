@@ -40,6 +40,7 @@ public class WmsBarcodeController {
                                    @RequestBody(required = false) WmsBarcode wmsBarcode) {
         QueryWrapper wrapper = new QueryWrapper();
         if (wmsBarcode != null) {
+            wrapper.eq(wmsBarcode.getPlantCode() != null , "a.plant_code", wmsBarcode.getPlantCode());
             wrapper.eq(wmsBarcode.getBarcode() != null , "a.barcode", wmsBarcode.getBarcode());
             wrapper.eq(wmsBarcode.getBarcodeType() != null , "a.barcode_type", wmsBarcode.getBarcodeType());
             wrapper.eq(wmsBarcode.getBarcodeStatus() != null , "a.barcode_status", wmsBarcode.getBarcodeStatus());
@@ -84,5 +85,24 @@ public class WmsBarcodeController {
             return Result.success(ResultCode.SUCCESS);
         }
         return Result.failure(ResultCode.DATA_IS_WRONG);
+    }
+
+    @PostMapping("/checkBarcodeExits")
+    @ApiOperation(value = "校验条码是否重复")
+    public Result checkBarcodeExits(@RequestBody WmsBarcode wmsBarcode) {
+        QueryWrapper wrapper = new QueryWrapper();
+        wrapper.eq("barcode", wmsBarcode.getBarcode());
+        wrapper.eq("plant_code", wmsBarcode.getPlantCode());
+        WmsBarcode tmp = iWmsBarcodeService.getById(wmsBarcode.getBarcodeId());
+        if (tmp == null) {
+            if (iWmsBarcodeService.count(wrapper) > 0 ) {
+                return Result.success(false);
+            }
+            return Result.success(true);
+        }
+        if (iWmsBarcodeService.count(wrapper) > 0 ) {
+            return Result.success(false);
+        }
+        return Result.success(true);
     }
 }
