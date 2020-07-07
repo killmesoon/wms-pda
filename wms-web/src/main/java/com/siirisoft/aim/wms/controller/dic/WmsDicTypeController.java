@@ -4,6 +4,7 @@ package com.siirisoft.aim.wms.controller.dic;
 import com.siirisoft.aim.wms.entity.data.Result;
 import com.siirisoft.aim.wms.entity.data.ResultCode;
 import com.siirisoft.aim.wms.entity.dic.WmsDicType;
+import com.siirisoft.aim.wms.service.dic.ABWmsDicTypeService;
 import com.siirisoft.aim.wms.service.dic.IWmsDicTypeService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ public class WmsDicTypeController {
     @Autowired
     private IWmsDicTypeService wmsDicTypeService;
 
+    @Autowired
+    private ABWmsDicTypeService abWmsDicTypeService;
+
     @GetMapping("/list")
     @ApiOperation(value = "查询所有字典类型")
     public Result findAllDicTypeList() {
@@ -34,6 +38,15 @@ public class WmsDicTypeController {
     @ApiOperation(value = "保存更新快码类型")
     public Result saveOrUpdateWmsDicType(@RequestBody WmsDicType wmsDicType) {
         if (wmsDicTypeService.saveOrUpdate(wmsDicType)) {
+            return Result.success(ResultCode.SUCCESS);
+        }
+        return Result.failure(ResultCode.DATA_IS_WRONG);
+    }
+
+    @GetMapping("/deleteDicType/{typeId}")
+    @ApiOperation(value = "删除快码类型及值")
+    public Result deleteDicType(@PathVariable int typeId) {
+        if (abWmsDicTypeService.deleteDicType(typeId)) {
             return Result.success(ResultCode.SUCCESS);
         }
         return Result.failure(ResultCode.DATA_IS_WRONG);

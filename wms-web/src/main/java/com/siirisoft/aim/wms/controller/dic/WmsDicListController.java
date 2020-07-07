@@ -57,8 +57,10 @@ public class WmsDicListController {
                 List<WmsDicListExt> list = new ArrayList<>();
                 w.setTreeName(w.getDicName());
                 list.add(w);
-                wmsDic.setChildren(list);
-                wmsDic.setDicTypeId(w.getDicTypeId());
+                if (w.getDicId() != null) {
+                    wmsDic.setChildren(list);
+                }
+                wmsDic.setDicTypeId(w.getDicTypeId())   ;
                 wmsDic.setDicTypeCode(w.getDicTypeCode());
                 wmsDic.setDicTypeName(w.getDicTypeName());
                 wmsDic.setTreeName(w.getDicTypeName());

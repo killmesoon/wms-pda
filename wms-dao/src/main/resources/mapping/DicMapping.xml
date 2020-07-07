@@ -7,13 +7,22 @@
     </resultMap>
 
     <select id="findWmsDicListExtList" resultMap="DicExtMap">
-        SELECT
+         SELECT
         a.* ,
-        b.dic_type_code,
-        b.dic_type_name
+				b.created_by,
+				b.creation_date,
+				b.last_update_by,
+				b.last_update_date,
+				b.dic_id,
+				b.dic_code,
+				b.dic_name,
+				b.enable_flag,
+				b.is_system,
+				b.doc_flag,
+				b.note
         FROM
-        wms_dic_list a
-        LEFT JOIN wms_dic_type b on a.dic_type_id = b.dic_type_id
+        wms_dic_type a
+        LEFT JOIN wms_dic_list b on a.dic_type_id = b.dic_type_id
         ${ew.customSqlSegment}
     </select>
 </mapper>
