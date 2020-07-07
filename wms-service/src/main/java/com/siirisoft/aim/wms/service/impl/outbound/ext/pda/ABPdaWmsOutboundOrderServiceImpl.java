@@ -92,6 +92,10 @@ public class ABPdaWmsOutboundOrderServiceImpl implements ABPdaWmsOutboundOrderSe
         sglItem.setWarehouseId(targetWarehouseId);
         wmsSglItemMapper.update(sglItem, wrapper);
 
+        //更新行信息
+
+
+
         //更新现有量
         WmsItemOnhandQuantity wmsItemOnhandQuantity = new WmsItemOnhandQuantity();
         wmsItemOnhandQuantity.setItemId(sglItem.getItemId());
@@ -120,6 +124,8 @@ public class ABPdaWmsOutboundOrderServiceImpl implements ABPdaWmsOutboundOrderSe
             detail.setPreQuantity(1);
             detail.setPreLotCode(sglItem.getDSequenceNum());
             detail.setPreLocatorCode(wmsPdaLocatorExt.getLocatorCode());
+            detail.setHeadId(wmsPdaOutboundOrderDetail.getHeadId());
+            detail.setLineId(wmsPdaOutboundOrderDetail.getLineId());
             wmsOutboundOrderDetailMapper.insert(detail);
 
 

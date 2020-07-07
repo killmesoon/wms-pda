@@ -39,12 +39,12 @@ public class WmsObjectEventTypeController {
                                               @RequestBody(required = false) WmsObjectEventType wmsObjectEventType) {
         QueryWrapper wrapper = new QueryWrapper();
         if (wmsObjectEventType != null) {
-            wrapper.eq(wmsObjectEventType.getEventTypeCode() != null , "event_type_code", wmsObjectEventType.getEventTypeCode());
-            wrapper.eq(wmsObjectEventType.getEventTypeName() != null , "event_type_name", wmsObjectEventType.getEventTypeName());
-            wrapper.eq(wmsObjectEventType.getCalculatorFlag() != null , "calculator_flag", wmsObjectEventType.getCalculatorFlag());
-            wrapper.eq(wmsObjectEventType.getCalculatorType() != null , "calculator_type", wmsObjectEventType.getCalculatorType());
-            wrapper.eq(wmsObjectEventType.getEnableFlag() != null , "enable_flag", wmsObjectEventType.getEnableFlag());
-            wrapper.eq(wmsObjectEventType.getDescription() != null , "description", wmsObjectEventType.getDescription());
+            wrapper.eq(wmsObjectEventType.getEventTypeCode() != null , "a.event_type_code", wmsObjectEventType.getEventTypeCode());
+            wrapper.eq(wmsObjectEventType.getEventTypeName() != null , "a.event_type_name", wmsObjectEventType.getEventTypeName());
+            wrapper.eq(wmsObjectEventType.getCalculatorFlag() != null , "a.calculator_flag", wmsObjectEventType.getCalculatorFlag());
+            wrapper.eq(wmsObjectEventType.getCalculatorType() != null , "a.calculator_type", wmsObjectEventType.getCalculatorType());
+            wrapper.eq(wmsObjectEventType.getEnableFlag() != null , "a.enable_flag", wmsObjectEventType.getEnableFlag());
+            wrapper.eq(wmsObjectEventType.getDescription() != null , "a.description", wmsObjectEventType.getDescription());
         }
         return Result.success(iWmsObjectEventTypeService.queryObjectEventTypeList(new Page<>(current, size), wrapper));
     }
@@ -77,6 +77,27 @@ public class WmsObjectEventTypeController {
             return Result.success(ResultCode.SUCCESS);
         }
         return Result.failure(ResultCode.DATA_IS_WRONG);
+    }
+
+    @PostMapping("/checkEventTypeCode")
+    @ApiOperation(value = "校验事件类型存在")
+    public Result checkEventTypeCode(@RequestBody WmsObjectEventType wmsObjectEventType) {
+        QueryWrapper wrapper = new QueryWrapper();
+        wrapper.eq("event_type_code", wmsObjectEventType.getEventTypeCode());
+        WmsObjectEventType tmp = iWmsObjectEventTypeService.getById(wmsObjectEventType.getEventTypeId());
+        if (tmp == null) {
+            if (iWmsObjectEventTypeService.count(wrapper) > 0) {
+                return Result.success(false);
+            }
+            return Result.success(true);
+        }
+        if (tmp.getEventTypeCode().equals(wmsObjectEventType.getEventTypeCode())) {
+            return Result.success(true);
+        }
+        if (iWmsObjectEventTypeService.count(wrapper) > 0) {
+            return Result.success(false);
+        }
+        return Result.success(true);
     }
 
 }

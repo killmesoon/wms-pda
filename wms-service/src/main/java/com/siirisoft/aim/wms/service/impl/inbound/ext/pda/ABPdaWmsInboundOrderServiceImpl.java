@@ -74,7 +74,7 @@ public class ABPdaWmsInboundOrderServiceImpl implements ABPdaWmsInboundOrderServ
         //更新sgl表中的货位位置，以及层号 由于是一张板子，不涉及此处不涉及数量变化
         WmsSglItem wmsSglItem = new WmsSglItem();
         wmsSglItem.setLocatorId(wmsPdaInboundOrderDetail.getExcuLocatorId());
-        wmsSglItem.setLayerNumber(maxLayerNumber);
+        wmsSglItem.setLayerNumber(maxLayerNumber + 1);
         UpdateWrapper updateWrapper = new UpdateWrapper();
         updateWrapper.eq("d_sequence_num", wmsPdaInboundOrderDetail.getDSequenceNum());
         wmsSglItemMapper.update(wmsSglItem, updateWrapper);

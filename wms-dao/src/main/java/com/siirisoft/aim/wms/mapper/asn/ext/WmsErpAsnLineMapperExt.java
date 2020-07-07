@@ -16,6 +16,6 @@ import org.apache.ibatis.annotations.Select;
 public interface WmsErpAsnLineMapperExt {
     IPage<WmsErpAsnLineExt> findWmsErpAsnLineList(Page page, @Param(Constants.WRAPPER)Wrapper wrapper);
 
-    @Select("SELECT max(line_num) FROM wms_erp_asn_line ${ew.customSqlSegment}")
+    @Select("SELECT COALESCE(max(line_num) , 0) FROM wms_erp_asn_line ${ew.customSqlSegment}")
     Integer findMaxLineNumber(@Param(Constants.WRAPPER) Wrapper wrapper);
 }

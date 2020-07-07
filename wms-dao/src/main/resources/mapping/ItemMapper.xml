@@ -12,12 +12,12 @@
     </resultMap>
 
     <select id="findItemAllList" resultMap="itemExtMap">
-                SELECT
+                 SELECT
             a.*,
             b.dic_name AS item_type_dic,
             c.uom_name as primary_uom_dic,
-            d.warehouse_name AS inbound_warehouse,
-            e.warehouse_name AS receive_warehouse,
+            d.warehouse_code AS inbound_warehouse,
+            e.warehouse_code AS receive_warehouse,
 						f.dic_name as code_type_dic
         FROM
             wms_item a
