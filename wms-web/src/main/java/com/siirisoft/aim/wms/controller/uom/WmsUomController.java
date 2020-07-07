@@ -45,6 +45,8 @@ public class WmsUomController {
             queryWrapper.eq(wmsUom.getUomType() != null, "a.uom_type", wmsUom.getUomType());
             queryWrapper.eq(wmsUom.getEnableFlag() != null, "a.enable_flag", wmsUom.getEnableFlag());
             queryWrapper.eq(wmsUom.getPrimaryFlag() != null, "a.primary_flag", wmsUom.getPrimaryFlag());
+            queryWrapper.eq(wmsUom.getConversionRatio() != null, "a.conversion_ratio", wmsUom.getConversionRatio());
+            queryWrapper.eq(wmsUom.getDecimalNumber() != null, "a.decimal_number", wmsUom.getDecimalNumber());
         }
         return Result.success(iWmsUomService.findUomList(new Page<>(current,size),queryWrapper));
     }
@@ -94,6 +96,27 @@ public class WmsUomController {
         wrapper.eq("uom_type", uomType);
         int count = iWmsUomService.count(wrapper);
         if (count == 0) {
+            return Result.success(false);
+        }
+        return Result.success(true);
+    }
+
+    @PostMapping("/checkUomCodeExits")
+    @ApiOperation(value = "校验单位编码是否重复")
+    public Result checkUomCodeExits(@RequestBody WmsUom wmsUom) {
+        QueryWrapper wrapper = new QueryWrapper();
+        wrapper.eq("uom_code", wmsUom.getUomCode());
+        WmsUom tmp = iWmsUomService.getById(wmsUom.getUomId());
+        if (tmp == null) {
+            if (iWmsUomService.count(wrapper) > 0) {
+                return Result.success(false);
+            }
+            return Result.success(true);
+        }
+        if (tmp.getUomCode().equals(wmsUom.getUomCode())) {
+            return Result.success(true);
+        }
+        if (iWmsUomService.count(wrapper) > 0) {
             return Result.success(false);
         }
         return Result.success(true);
