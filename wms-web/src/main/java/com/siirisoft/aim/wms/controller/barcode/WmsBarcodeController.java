@@ -47,7 +47,8 @@ public class WmsBarcodeController {
             wrapper.eq(wmsBarcode.getDescription() != null , "a.description", wmsBarcode.getDescription());
             wrapper.eq(wmsBarcode.getSupplierId() != null , "a.supplier_id", wmsBarcode.getSupplierId());
         }
-        wrapper.orderByDesc("creation_date");
+        wrapper.orderByDesc("a.plant_code");
+        wrapper.orderByAsc("a.barcode");
         return Result.success(iWmsBarcodeService.findBarcodeList(new Page(current,size), wrapper));
     }
 
@@ -98,6 +99,9 @@ public class WmsBarcodeController {
             if (iWmsBarcodeService.count(wrapper) > 0 ) {
                 return Result.success(false);
             }
+            return Result.success(true);
+        }
+        if (tmp.getBarcode().equals(wmsBarcode.getBarcode())) {
             return Result.success(true);
         }
         if (iWmsBarcodeService.count(wrapper) > 0 ) {

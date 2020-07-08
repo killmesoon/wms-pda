@@ -48,6 +48,7 @@ public class WmsUomController {
             queryWrapper.eq(wmsUom.getConversionRatio() != null, "a.conversion_ratio", wmsUom.getConversionRatio());
             queryWrapper.eq(wmsUom.getDecimalNumber() != null, "a.decimal_number", wmsUom.getDecimalNumber());
         }
+        queryWrapper.orderByAsc("uom_code");
         return Result.success(iWmsUomService.findUomList(new Page<>(current,size),queryWrapper));
     }
 

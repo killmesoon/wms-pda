@@ -111,6 +111,7 @@ public class WmsItemController {
     public Result checkItemCodeExits(@RequestBody WmsItem wmsItem) {
         QueryWrapper wrapper = new QueryWrapper();
         wrapper.eq("item_code", wmsItem.getItemCode());
+        wrapper.eq("plant_code", wmsItem.getPlantCode());
         WmsItem tmp = iWmsItemService.getById(wmsItem.getItemId());
         if (tmp == null) {
             if (iWmsItemService.count(wrapper) > 0) {
