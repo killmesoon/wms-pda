@@ -84,6 +84,7 @@ public class WmsInboundOrderHeadController {
             wmsInboundOrderHead.setCreationDate(new Date());
         } else {
             wmsInboundOrderHead.setLastUpdateDate(new Date());
+            wmsInboundOrderHead.setLastUpdateBy(wmsInboundOrderHead.getCreatedBy());
         }
         if (inboundOrderHeadService.saveOrUpdate(wmsInboundOrderHead)) {
             Integer headId = wmsInboundOrderHead.getHeadId();

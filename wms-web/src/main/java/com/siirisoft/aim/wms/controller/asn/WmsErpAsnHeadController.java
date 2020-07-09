@@ -15,6 +15,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -61,6 +62,12 @@ public class WmsErpAsnHeadController {
     @ApiOperation(value = "更新送货单头信息")
     @ApiImplicitParam(name = "wmsErpAsnHead", value = "送货单头表po")
     public Result saveOrUpdateWmsErpAsnHead(@RequestBody WmsErpAsnHead wmsErpAsnHead) {
+        if (wmsErpAsnHead.getCreationDate() == null) {
+            wmsErpAsnHead.setCreationDate(new Date());
+        } else {
+            wmsErpAsnHead.setLastUpdateDate(new Date());
+            wmsErpAsnHead.setLastUpdateBy(wmsErpAsnHead.getCreatedBy());
+        }
         if (iWmsErpAsnHeadService.saveOrUpdate(wmsErpAsnHead)) {
             return Result.success(wmsErpAsnHead.getHeadId());
         }

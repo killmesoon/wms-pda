@@ -81,6 +81,7 @@ public class WmsOutboundOrderHeadController {
             wmsOutboundOrderHead.setCreationDate(new Date());
         } else {
             wmsOutboundOrderHead.setLastUpdateDate(new Date());
+            wmsOutboundOrderHead.setLastUpdateBy(wmsOutboundOrderHead.getLastUpdateBy());
         }
         if (iWmsOutboundOrderHeadService.saveOrUpdate(wmsOutboundOrderHead)) {
             Integer headId = wmsOutboundOrderHead.getHeadId();

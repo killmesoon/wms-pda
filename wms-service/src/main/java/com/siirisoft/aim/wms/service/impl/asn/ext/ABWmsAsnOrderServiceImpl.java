@@ -99,6 +99,12 @@ public class ABWmsAsnOrderServiceImpl  implements ABWmsAsnOrderService {
         QueryWrapper wrapper = new QueryWrapper();
         WmsErpAsnHead wmsErpAsnHead = wmsErpAsnCondition.getWmsErpAsnHead();
         List<WmsErpAsnLine> lineList = wmsErpAsnCondition.getWmsErpAsnLines();
+        if (wmsErpAsnHead.getCreationDate() == null) {
+            wmsErpAsnHead.setCreationDate(new Date());
+        } else {
+            wmsErpAsnHead.setLastUpdateDate(new Date());
+            wmsErpAsnHead.setLastUpdateBy(wmsErpAsnHead.getCreatedBy());
+        }
         if (iWmsErpAsnHeadService.saveOrUpdate(wmsErpAsnHead)) {
             Integer headId = wmsErpAsnHead.getHeadId();
             for(WmsErpAsnLine line : lineList) {
