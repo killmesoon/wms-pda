@@ -71,7 +71,7 @@ public class WmsWarehouse implements Serializable {
     private Boolean enableFlag;
 
     @ApiModelProperty(value = "创建用户ID")
-    private Integer createdBy;
+    private String createdBy;
 
     @ApiModelProperty(value = "描述")
     private String description;
@@ -80,7 +80,7 @@ public class WmsWarehouse implements Serializable {
     private Date creationDate;
 
     @ApiModelProperty(value = "最后更新用户ID")
-    private Integer lastUpdateBy;
+    private String lastUpdateBy;
 
     @ApiModelProperty(value = "最后更新日期")
     private Date lastUpdateDate;

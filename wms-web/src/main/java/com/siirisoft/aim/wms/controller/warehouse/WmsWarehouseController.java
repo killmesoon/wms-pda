@@ -52,7 +52,7 @@ public class WmsWarehouseController {
             wrapper.eq(wmsWarehouse.getWarehouseCode() != null, "warehouse_code", wmsWarehouse.getWarehouseCode());
             wrapper.eq(wmsWarehouse.getPanrangeFlag() != null, "panrange_flag", wmsWarehouse.getPanrangeFlag());
             wrapper.eq(wmsWarehouse.getWarehouseName() != null, "warehouse_name", wmsWarehouse.getWarehouseName());
-            wrapper.eq(wmsWarehouse.getEnableFlag() != null, "enable_flag", wmsWarehouse.getEnableFlag());
+            wrapper.eq(wmsWarehouse.getEnableFlag() != null, "a.enable_flag", wmsWarehouse.getEnableFlag());
             wrapper.eq(wmsWarehouse.getShortName() != null, "short_name", wmsWarehouse.getShortName());
             wrapper.eq(wmsWarehouse.getDescription() != null, "description", wmsWarehouse.getDescription());
         }

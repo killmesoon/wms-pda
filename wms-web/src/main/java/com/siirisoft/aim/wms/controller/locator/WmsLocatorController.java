@@ -41,6 +41,7 @@ public class WmsLocatorController {
                                    @RequestBody(required = false) WmsLocator wmsLocator) {
         QueryWrapper wrapper = new QueryWrapper();
         if (wmsLocator != null) {
+            wrapper.eq(wmsLocator.getPlantId() != null , "a.plant_id", wmsLocator.getPlantId());
             wrapper.eq(wmsLocator.getWarehouseId() != null , "a.warehouse_id", wmsLocator.getWarehouseId());
             wrapper.eq(wmsLocator.getAreaId() != null , "a.area_id", wmsLocator.getAreaId());
             wrapper.eq(wmsLocator.getLocatorCode() != null , "a.locator_code", wmsLocator.getLocatorCode());

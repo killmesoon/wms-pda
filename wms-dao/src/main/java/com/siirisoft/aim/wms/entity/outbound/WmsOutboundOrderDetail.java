@@ -29,14 +29,14 @@ public class WmsOutboundOrderDetail implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "创建人编码")
-    private Integer createdBy;
+    private String createdBy;
 
     @ApiModelProperty(value = "创建时间")
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd" ,timezone = "GMT+8")
     private Date creationDate;
 
     @ApiModelProperty(value = "最后更新用户ID")
-    private Integer lastUpdateBy;
+    private String lastUpdateBy;
 
     @ApiModelProperty(value = "最后更新时间")
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd" ,timezone = "GMT+8")
