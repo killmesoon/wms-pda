@@ -17,4 +17,5 @@ public class WmsErpAsnDetailExt extends WmsErpAsnDetail {
     private Integer locatorId;
     private String plantCode;
     private String plantName;
+    private String itemTextureReal;
 }

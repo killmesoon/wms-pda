@@ -5,6 +5,7 @@ import com.siirisoft.aim.wms.entity.asn.WmsErpAsnHead;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @User DKY
@@ -18,8 +19,13 @@ public class WmsErpAsnHeadExt extends WmsErpAsnHead {
     private String sourceDocTypeDic;
     private String supplierName;
     private String supplierCode;
+    private List<Integer> asnStatusList;
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd" ,timezone = "GMT+8")
     private Date planStartDate;
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd" ,timezone = "GMT+8")
     private Date planEndDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd" ,timezone = "GMT+8")
+    private Date createdStartDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd" ,timezone = "GMT+8")
+    private Date createdEndDate;
 }

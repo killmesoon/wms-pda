@@ -33,6 +33,9 @@ public class WmsErpAsnHead implements Serializable {
     @ApiModelProperty(value = "创建用户ID")
     private String createdBy;
 
+    @ApiModelProperty(value = "创建用户名称")
+    private String createdName;
+
     @ApiModelProperty(value = "创建时间")
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd" ,timezone = "GMT+8")
     private Date creationDate;

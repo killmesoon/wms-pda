@@ -6,6 +6,7 @@
         <result column="description" property="description"></result>
         <result column="plant_code" property="plantCode"></result>
         <result column="plant_name" property="plantName"></result>
+        <result column="item_texture_real" property="itemTextureReal"></result>
     </resultMap>
 
     <select id="findWmsErpAsnDetailByHeadId" resultMap="AsnExtMap">
@@ -13,6 +14,7 @@
 	a.*,
 	b.item_code,
 	b.description,
+	b.item_texture as item_texture_real,
 	c.plant_code,
 	c.plant_name
 FROM
