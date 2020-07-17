@@ -1,5 +1,6 @@
 package com.siirisoft.aim.wms.service.impl.asn.pda;
 import com.siirisoft.aim.wms.entity.asn.WmsErpAsnDetail;
+import com.siirisoft.aim.wms.entity.asn.WmsErpAsnHead;
 import com.siirisoft.aim.wms.entity.asn.WmsErpAsnLine;
 import com.siirisoft.aim.wms.entity.asn.ext.WmsErpAsnDetailExt;
 import com.siirisoft.aim.wms.entity.events.WmsObjectEvents;
@@ -7,6 +8,7 @@ import com.siirisoft.aim.wms.entity.quantity.WmsItemOnhandQuantity;
 import com.siirisoft.aim.wms.entity.sqlitem.WmsSglItem;
 import com.siirisoft.aim.wms.mapper.events.WmsObjectEventsMapper;
 import com.siirisoft.aim.wms.service.asn.IWmsErpAsnDetailService;
+import com.siirisoft.aim.wms.service.asn.IWmsErpAsnHeadService;
 import com.siirisoft.aim.wms.service.asn.IWmsErpAsnLineService;
 import com.siirisoft.aim.wms.service.asn.pda.ABPdaWmsAsnOrderService;
 import com.siirisoft.aim.wms.service.quantity.IWmsItemOnhandQuantityService;
@@ -42,6 +44,9 @@ public class ABPdaWmsAsnOrderServiceImpl implements ABPdaWmsAsnOrderService {
     @Autowired
     private WmsObjectEventsMapper wmsObjectEventsMapper;
 
+    @Autowired
+    private IWmsErpAsnHeadService iWmsErpAsnHeadService;
+
 
     @Override
     @Transactional
@@ -52,6 +57,15 @@ public class ABPdaWmsAsnOrderServiceImpl implements ABPdaWmsAsnOrderService {
         boolean lineUpdateFlag = false;
         List<WmsSglItem> sglList = new ArrayList<>();
         List<WmsErpAsnDetail> updateList = new ArrayList<>();
+        int headId;
+        WmsErpAsnHead asnHead  = null;
+        //获取asn头信息
+        if (list.size() > 0) {
+            WmsErpAsnDetailExt asnDetailExt = list.get(0);
+            headId = asnDetailExt.getHeadId();
+            asnHead = iWmsErpAsnHeadService.getById(headId);
+        }
+
         for (WmsErpAsnDetailExt asn : list) {
 
             //更新明细表
@@ -61,10 +75,16 @@ public class ABPdaWmsAsnOrderServiceImpl implements ABPdaWmsAsnOrderService {
             updateList.add(wmsErpAsnDetail);
 
 
+            String lotNumber = asn.getShipNumber() + "-" + asn.getSectionNum(); // 批次号
+
             //插入条码物料表
             WmsSglItem wmsSglItem = new WmsSglItem();
+            wmsSglItem.setPlantId(asnHead.getPlantId());
+            wmsSglItem.setCreatedBy(asnHead.getCreatedBy());
+            wmsSglItem.setCreationDate(new Date());
             wmsSglItem.setPlantCode(asn.getPlantCode());
             wmsSglItem.setPlantName(asn.getPlantName());
+            wmsSglItem.setLotNumber(lotNumber);
             wmsSglItem.setDSequenceNum(asn.getDSequenceNum());
             wmsSglItem.setItemId(asn.getItemId());
             wmsSglItem.setWarehouseId(asn.getWarehouseId());
@@ -94,8 +114,9 @@ public class ABPdaWmsAsnOrderServiceImpl implements ABPdaWmsAsnOrderService {
 
             //更新现有量
             //批次号 船号+分段
-            String lotNumber = asn.getShipNumber() + "-" + asn.getSectionNum();
+
             WmsItemOnhandQuantity wmsItemOnhandQuantity = new WmsItemOnhandQuantity();
+            wmsItemOnhandQuantity.setPlantId(asnHead.getPlantId());
             wmsItemOnhandQuantity.setItemId(asn.getItemId());
             wmsItemOnhandQuantity.setLocatorId(asn.getLocatorId());
             wmsItemOnhandQuantity.setLotNumber(lotNumber);
@@ -119,11 +140,22 @@ public class ABPdaWmsAsnOrderServiceImpl implements ABPdaWmsAsnOrderService {
 
             //插入事件
             WmsObjectEvents wmsObjectEvents = new WmsObjectEvents();
+            wmsObjectEvents.setLotCode(lotNumber); // 插入批次
             wmsObjectEvents.setItemId(asn.getItemId());
             wmsObjectEvents.setEventQty(1);
             wmsObjectEvents.setEventTime(new Date());
             wmsObjectEvents.setEventTypeId(1);
             wmsObjectEvents.setEventTypeCode("GD_PO_RCV");
+            wmsObjectEvents.setWarehouseIdTo(asn.getWarehouseId());
+            wmsObjectEvents.setLocatorIdTo(asn.getLocatorId());
+            wmsObjectEvents.setPlantIdTo(asnHead.getPlantId());
+            wmsObjectEvents.setSupplierId(asnHead.getSupplierId());
+            wmsObjectEvents.setSourceDocType(asnHead.getSourceDocType());
+            wmsObjectEvents.setSourceDocNumber(asnHead.getAsnNumber());
+            wmsObjectEvents.setSourceDocHeadId(asnHead.getHeadId());
+            wmsObjectEvents.setSourceDocLineId(asn.getLineId());
+            wmsObjectEvents.setCreatedBy(asnHead.getCreatedBy());
+            wmsObjectEvents.setCreationDate(new Date());
             wmsObjectEventsMapper.insert(wmsObjectEvents);
 
         }

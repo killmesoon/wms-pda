@@ -37,7 +37,7 @@ import java.util.List;
  * @Description ABWmsAsnOrderService实现类
  */
 @Service
-public class ABWmsAsnOrderServiceImpl  implements ABWmsAsnOrderService {
+public class ABWmsAsnOrderServiceImpl implements ABWmsAsnOrderService {
 
 
     @Autowired
@@ -70,12 +70,12 @@ public class ABWmsAsnOrderServiceImpl  implements ABWmsAsnOrderService {
     public boolean deleteAsnOrder(int headId) {
         QueryWrapper wrapper = new QueryWrapper();
         wrapper.eq("head_id", headId);
-        if(iWmsErpAsnHeadService.remove(wrapper)) {
+        if (iWmsErpAsnHeadService.remove(wrapper)) {
             iWmsErpAsnLineService.remove(wrapper);
             iWmsErpAsnDetailService.remove(wrapper);
             return true;
         } else {
-          throw new IllegalArgumentException("参数错误");
+            throw new IllegalArgumentException("参数错误");
         }
     }
 
@@ -84,7 +84,7 @@ public class ABWmsAsnOrderServiceImpl  implements ABWmsAsnOrderService {
     public boolean deleteAsnOrderList(List<Integer> headIdList) {
         QueryWrapper wrapper = new QueryWrapper();
         wrapper.in("head_id", headIdList);
-        if(iWmsErpAsnHeadService.remove(wrapper)) {
+        if (iWmsErpAsnHeadService.remove(wrapper)) {
             iWmsErpAsnLineService.remove(wrapper);
             iWmsErpAsnDetailService.remove(wrapper);
             return true;
@@ -107,22 +107,22 @@ public class ABWmsAsnOrderServiceImpl  implements ABWmsAsnOrderService {
         }
         if (iWmsErpAsnHeadService.saveOrUpdate(wmsErpAsnHead)) {
             Integer headId = wmsErpAsnHead.getHeadId();
-            for(WmsErpAsnLine line : lineList) {
+            for (WmsErpAsnLine line : lineList) {
                 line.setHeadId(headId);
             }
-            wrapper.eq("head_id", headId);
-            List<WmsErpAsnLine> list = iWmsErpAsnLineService.list(wrapper);
-            if (list.size() > 0) {
-                QueryWrapper detailWrapper = new QueryWrapper();
-                List<Integer> lineIdList = new ArrayList<>();
-                for (WmsErpAsnLine w: list) {
-                    lineIdList.add(w.getLineId());
-                }
-                //删除行时删除对应明细
-                iWmsErpAsnLineService.remove(wrapper);
-                detailWrapper.in("line_id", lineIdList);
-                iWmsErpAsnDetailService.remove(detailWrapper);
-            }
+//            wrapper.eq("head_id", headId);
+//            List<WmsErpAsnLine> list = iWmsErpAsnLineService.list(wrapper);
+//            if (list.size() > 0) {
+//                QueryWrapper detailWrapper = new QueryWrapper();
+//                List<Integer> lineIdList = new ArrayList<>();
+//                for (WmsErpAsnLine w: list) {
+//                    lineIdList.add(w.getLineId());
+//                }
+//                //删除行时删除对应明细
+//                iWmsErpAsnLineService.remove(wrapper);
+//                detailWrapper.in("line_id", lineIdList);
+//                iWmsErpAsnDetailService.remove(detailWrapper);
+//            }
             iWmsErpAsnLineService.saveOrUpdateBatch(lineList);
             return true;
         }
@@ -135,7 +135,7 @@ public class ABWmsAsnOrderServiceImpl  implements ABWmsAsnOrderService {
     @Transactional
     public boolean deleteLineOrderAndDetail(int lineId) {
         QueryWrapper wrapper = new QueryWrapper();
-        if(iWmsErpAsnLineService.removeById(lineId)) {
+        if (iWmsErpAsnLineService.removeById(lineId)) {
             wrapper.eq("line_id", lineId);
             iWmsErpAsnDetailService.remove(wrapper);
             return true;
@@ -147,12 +147,10 @@ public class ABWmsAsnOrderServiceImpl  implements ABWmsAsnOrderService {
     @Transactional
     public boolean deleteLineOrderAndDetailList(List<Integer> lineIdList) {
         QueryWrapper wrapper = new QueryWrapper();
-        if (iWmsErpAsnLineService.removeByIds(lineIdList)) {
-            wrapper.in("line_id", lineIdList);
-            iWmsErpAsnDetailService.remove(wrapper);
-            return true;
-        }
-        return false;
+        iWmsErpAsnLineService.removeByIds(lineIdList);
+        wrapper.in("line_id", lineIdList);
+        iWmsErpAsnDetailService.remove(wrapper);
+        return true;
     }
 
     @Override
@@ -174,7 +172,7 @@ public class ABWmsAsnOrderServiceImpl  implements ABWmsAsnOrderService {
     @Transactional
     public boolean asnOrderCheck(List<WmsErpAsnHead> list) {
         //先加头
-        for (WmsErpAsnHead asn: list) {
+        for (WmsErpAsnHead asn : list) {
             WmsInboundOrderHead inboundHead = new WmsInboundOrderHead();
             inboundHead.setCreationDate(new Date());
             inboundHead.setSourceDocType("63");
@@ -190,9 +188,9 @@ public class ABWmsAsnOrderServiceImpl  implements ABWmsAsnOrderService {
 
             //生成自动订单号
             QueryWrapper wrapper = new QueryWrapper();
-            wrapper.eq("lookupcode","wms_inbound_order_type");
+            wrapper.eq("lookupcode", "wms_inbound_order_type");
             wrapper.eq("doc_type", "P");
-            WmsDocAutonumber docAuto= iWmsDocAutonumberService.getOne(wrapper);
+            WmsDocAutonumber docAuto = iWmsDocAutonumberService.getOne(wrapper);
             if (docAuto != null) {
                 String autoDocNumber = AutoDocNumberGenerator.getAutoDocNumber(docAuto);
                 inboundHead.setDocNumber(autoDocNumber);
@@ -205,7 +203,7 @@ public class ABWmsAsnOrderServiceImpl  implements ABWmsAsnOrderService {
                 lineWrapper.eq("head_id", asn.getHeadId());
                 List<WmsErpAsnLine> asnLineList = iWmsErpAsnLineService.list(lineWrapper);
 
-                for (WmsErpAsnLine asnLine: asnLineList ) {
+                for (WmsErpAsnLine asnLine : asnLineList) {
                     WmsInboundOrderLine inboundLine = new WmsInboundOrderLine();
                     inboundLine.setHeadId(headId);
                     inboundLine.setCreationDate(new Date());
@@ -225,7 +223,7 @@ public class ABWmsAsnOrderServiceImpl  implements ABWmsAsnOrderService {
                         detailWrapper.eq("line_id", asnLine.getLineId());
                         List<WmsErpAsnDetail> asnDetailList = iWmsErpAsnDetailService.list(detailWrapper);
                         List<WmsInboundOrderDetail> inboundOrderDetailList = new ArrayList();
-                        for (WmsErpAsnDetail asnDetail: asnDetailList) {
+                        for (WmsErpAsnDetail asnDetail : asnDetailList) {
                             WmsInboundOrderDetail inboundDetail = new WmsInboundOrderDetail();
                             inboundDetail.setAdvBarcode(asnDetail.getDSequenceNum());
                             inboundDetail.setCreationDate(new Date());
