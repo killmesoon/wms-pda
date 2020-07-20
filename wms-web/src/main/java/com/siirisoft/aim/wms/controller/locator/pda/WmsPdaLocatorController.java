@@ -150,6 +150,62 @@ public class WmsPdaLocatorController {
     }
 
 
+    @GetMapping("/queryAsnPosition")
+    public Result queryAsnPosition() {
+        List<WmsWarehouse> warehouses = iWmsWarehouseService.list();
+        List<TreeDataWrapper> resultList = new ArrayList<>();
+        for (WmsWarehouse w : warehouses) {
+            QueryWrapper wrapper = new QueryWrapper();
+            wrapper.eq("warehouse_id", w.getWarehouseId());
+            wrapper.eq("area_type", "7");
+            List<WmsWarehouseArea> list = iWmsWarehouseAreaService.list(wrapper);
+            if (list.size() == 0) {
+                continue;
+            }
+            TreeDataWrapper warehouseTree = new TreeDataWrapper();
+            warehouseTree.setWarehouseId(w.getWarehouseId());
+            warehouseTree.setCode(w.getWarehouseCode());
+            warehouseTree.setName(w.getWarehouseName());
+            List<TreeDataWrapper> areaList = new ArrayList<>();
+            for (WmsWarehouseArea area : list) {
+                QueryWrapper locatorWrapper = new QueryWrapper();
+                locatorWrapper.eq("area_id", area.getAreaId());
+                List<WmsLocator> lList = iWmsLocatorService.list(locatorWrapper);
+                if (lList.size() == 0) {
+                    continue;
+                }
+                TreeDataWrapper areaTree = new TreeDataWrapper();
+                areaTree.setName(area.getAreaName());
+                areaTree.setAreaId(area.getAreaId());
+                areaTree.setCode(area.getAreaCode());
+                areaTree.setWarehouseId(area.getWarehouseId());
+                List<TreeDataWrapper> locatorList = new ArrayList<>();
+                for (WmsLocator locator: lList) {
+                    TreeDataWrapper locatorTree = new TreeDataWrapper();
+                    QueryWrapper layerWrapper = new QueryWrapper();
+                    layerWrapper.eq("locator_id", locator.getLocatorId());
+                    Integer maxLayerNumber = wmsSglItemMapperExt.findMaxLayerNumber(layerWrapper);
+                    locatorTree.setLocatorId(locator.getLocatorId());
+                    locatorTree.setCode(locator.getLocatorCode());
+                    locatorTree.setName(locator.getLocatorName());
+                    locatorTree.setWarehouseId(locator.getWarehouseId());
+                    locatorTree.setAreaId(locator.getAreaId());
+                    locatorTree.setLayerNumber(maxLayerNumber);
+                    locatorList.add(locatorTree);
+                }
+                areaTree.setChildren(locatorList);
+                areaList.add(areaTree);
+            }
+            if (areaList.size() == 0) {
+                continue;
+            }
+            warehouseTree.setChildren(areaList);
+            resultList.add(warehouseTree);
+        }
+        return Result.success(resultList);
+    }
+
+
 
     @PostMapping("/transformLocator/{locatorId}")
     @ApiOperation(value = "货位移动执行")

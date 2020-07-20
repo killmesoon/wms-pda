@@ -19,6 +19,7 @@ public class WmsErpAsnHeadExt extends WmsErpAsnHead {
     private String sourceDocTypeDic;
     private String supplierName;
     private String supplierCode;
+    private String shortName;
     private List<Integer> asnStatusList;
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd" ,timezone = "GMT+8")
     private Date planStartDate;

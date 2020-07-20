@@ -7,16 +7,18 @@
         <result column="source_doc_type_dic" property="sourceDocTypeDic"></result>
         <result column="supplier_name" property="supplierName"></result>
         <result column="supplier_code" property="supplierCode"></result>
+        <result column="short_name"  property="shortName"></result>
     </resultMap>
 
     <select id="findWmsErpAsnHeadList" resultMap="AsnExtMap">
-        SELECT
+               SELECT
 	a.*,
 	b.dic_name as asn_status_dic,
 	c.dic_name as asn_type_dic,
 	d.dic_name as source_doc_type_dic,
 	e.supplier_name,
-	e.supplier_code
+	e.supplier_code,
+	e.short_name
 FROM
 	wms_erp_asn_head a
 	LEFT JOIN wms_dic_list b on a.asn_status = b.dic_id
