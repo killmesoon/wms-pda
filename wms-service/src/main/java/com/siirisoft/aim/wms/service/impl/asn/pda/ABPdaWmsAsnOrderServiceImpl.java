@@ -124,6 +124,7 @@ public class ABPdaWmsAsnOrderServiceImpl implements ABPdaWmsAsnOrderService {
             wmsItemOnhandQuantity.setLoctOnhand(1);
             wmsItemOnhandQuantity.setUomCode(asn.getPrimaryUom());
             wmsItemOnhandQuantity.setMergeFlag(true);
+            wmsItemOnhandQuantity.setUomCode(asn.getWeightUom()); //增加重量单位
             quantityFlag = iWmsItemOnhandQuantityService.save(wmsItemOnhandQuantity);
             if (quantityFlag) {
                 //现有量增加后 更新行信息的接收数量

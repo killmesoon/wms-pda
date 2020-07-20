@@ -185,6 +185,7 @@ public class ABWmsAsnOrderServiceImpl implements ABWmsAsnOrderService {
             inboundHead.setPlantName(asn.getPlantName());
             inboundHead.setPlanTime(asn.getPlanDeliverDate());
             inboundHead.setNote(asn.getNote());
+            inboundHead.setCreatedBy(asn.getCreatedBy());
 
             //生成自动订单号
             QueryWrapper wrapper = new QueryWrapper();

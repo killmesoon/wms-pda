@@ -18,6 +18,7 @@
             count( loct_onhand ) AS total,
             a.warehouse_id,
             a.lot_number,
+            a.uom_code,
             b.item_code,
             b.description,
             c.warehouse_name,

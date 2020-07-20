@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.siirisoft.aim.wms.entity.events.WmsObjectEvents;
+import com.siirisoft.aim.wms.entity.inbound.WmsInboundOrderHead;
 import com.siirisoft.aim.wms.entity.inbound.ext.pda.WmsPdaInboundOrderDetail;
 import com.siirisoft.aim.wms.entity.locator.ext.WmsLocatorExt;
 import com.siirisoft.aim.wms.entity.quantity.WmsItemOnhandQuantity;
@@ -18,6 +19,7 @@ import com.siirisoft.aim.wms.mapper.locator.ext.pda.WmsPdaLocatorMapperExt;
 import com.siirisoft.aim.wms.mapper.quantity.WmsItemOnhandQuantityMapper;
 import com.siirisoft.aim.wms.mapper.sqlitem.WmsSglItemMapper;
 import com.siirisoft.aim.wms.mapper.sqlitem.ext.WmsSglItemMapperExt;
+import com.siirisoft.aim.wms.service.inbound.IWmsInboundOrderHeadService;
 import com.siirisoft.aim.wms.service.inbound.pda.ABPdaWmsInboundOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -57,6 +59,9 @@ public class ABPdaWmsInboundOrderServiceImpl implements ABPdaWmsInboundOrderServ
     @Autowired
     private WmsPdaLocatorMapperExt wmsPdaLocatorMapperExt;
 
+    @Autowired
+    private IWmsInboundOrderHeadService inboundOrderHeadService;
+
 
     @Override
     public IPage queryInboundOrderDetail(Page page, Wrapper wrapper) {
@@ -67,6 +72,9 @@ public class ABPdaWmsInboundOrderServiceImpl implements ABPdaWmsInboundOrderServ
     @Transactional
     public synchronized boolean commitInboundOrder(WmsPdaInboundOrderDetail wmsPdaInboundOrderDetail) {
         QueryWrapper wrapper = new QueryWrapper();
+        Integer headId = wmsPdaInboundOrderDetail.getHeadId();
+        WmsInboundOrderHead inboundHead = inboundOrderHeadService.getById(headId);
+
         wrapper.eq("locator_id", wmsPdaInboundOrderDetail.getExcuLocatorId());
         //获取要更新的这个板子要去货位的最大层号
         Integer maxLayerNumber = wmsSglItemMapperExt.findMaxLayerNumber(wrapper);
@@ -93,12 +101,13 @@ public class ABPdaWmsInboundOrderServiceImpl implements ABPdaWmsInboundOrderServ
         wmsItemOnhandQuantity.setLocatorId(sglItem.getLocatorId());
         wmsItemOnhandQuantity.setLoctOnhand(1);
         wmsItemOnhandQuantity.setWarehouseId(sglItem.getWarehouseId());
-        wmsItemOnhandQuantity.setLotNumber(sglItem.getLotNumber() + "");
+        wmsItemOnhandQuantity.setLotNumber(sglItem.getLotNumber());
         wmsItemOnhandQuantity.setItemId(sglItem.getItemId());
+        wmsItemOnhandQuantity.setUomCode(sglItem.getWeightUom());
         wmsItemOnhandQuantityMapper.insert(wmsItemOnhandQuantity);
 
         //更新明细信息信息
-        wmsPdaInboundOrderDetail.setExcuLotCode(wmsPdaInboundOrderDetail.getShipNumber() + wmsPdaInboundOrderDetail.getSectionNum() + ""); //执行批次，船号+分段号
+        wmsPdaInboundOrderDetail.setExcuLotCode(wmsPdaInboundOrderDetail.getShipNumber() + wmsPdaInboundOrderDetail.getSectionNum()); //执行批次，船号+分段号
         wmsPdaInboundOrderDetail.setExcuQuantity(1);
         wmsInboundOrderDetailMapper.updateById(wmsPdaInboundOrderDetail);
 
@@ -117,6 +126,12 @@ public class ABPdaWmsInboundOrderServiceImpl implements ABPdaWmsInboundOrderServ
         wmsObjectEvents.setEventTypeId(2);
         wmsObjectEvents.setEventTypeCode("GD_ASN_INSTOCK");
         wmsObjectEvents.setCreationDate(new Date());
+        wmsObjectEvents.setCreatedBy(inboundHead.getCreatedBy());
+        wmsObjectEvents.setSupplierId(inboundHead.getSupplierId());
+        wmsObjectEvents.setSourceDocType(inboundHead.getSourceDocType());
+        wmsObjectEvents.setSourceDocNumber(inboundHead.getDocNumber());
+        wmsObjectEvents.setSourceDocHeadId(inboundHead.getHeadId());
+        wmsObjectEvents.setSourceDocLineId(wmsPdaInboundOrderDetail.getLineId());
         wmsObjectEvents.setWarehouseIdFrom(wmsPdaInboundOrderDetail.getAdvWarehouseId());
         wmsObjectEvents.setWarehouseIdTo(sglItem.getWarehouseId());
         wmsObjectEventsMapper.insert(wmsObjectEvents);
