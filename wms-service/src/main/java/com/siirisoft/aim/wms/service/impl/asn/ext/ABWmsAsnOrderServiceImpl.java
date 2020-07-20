@@ -186,6 +186,7 @@ public class ABWmsAsnOrderServiceImpl implements ABWmsAsnOrderService {
             inboundHead.setPlanTime(asn.getPlanDeliverDate());
             inboundHead.setNote(asn.getNote());
             inboundHead.setCreatedBy(asn.getCreatedBy());
+            inboundHead.setCreatedName(asn.getCreatedName());
 
             //生成自动订单号
             QueryWrapper wrapper = new QueryWrapper();
@@ -215,6 +216,7 @@ public class ABWmsAsnOrderServiceImpl implements ABWmsAsnOrderService {
                     inboundLine.setItemId(asnLine.getItemId());
                     inboundLine.setWarehouseId(asnLine.getWarehouseId());
                     inboundLine.setNote(asnLine.getNote());
+                    inboundLine.setPlanQty(asnLine.getPlanQty());
 
                     //保存
                     if (iWmsInboundOrderLineService.saveOrUpdate(inboundLine)) {

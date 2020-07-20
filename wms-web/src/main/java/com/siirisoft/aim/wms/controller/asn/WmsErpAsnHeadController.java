@@ -126,6 +126,7 @@ public class WmsErpAsnHeadController {
 
 
     @PostMapping("/asnOrderCheck")
+    @ApiOperation(value = "出库审核")
     public Result asnOrderCheck(@RequestBody List<WmsErpAsnHead> list) {
         if (abWmsAsnOrderService.asnOrderCheck(list)) {
             return Result.success(ResultCode.SUCCESS);
