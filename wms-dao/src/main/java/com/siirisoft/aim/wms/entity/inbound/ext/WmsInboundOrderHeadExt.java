@@ -24,4 +24,5 @@ public class WmsInboundOrderHeadExt extends WmsInboundOrderHead implements Seria
     private String realDocStatus;
     private List<Date> creationDateRange;
     private List<Date> planDateRange;
+    private List<Integer> asnStatusList;
 }

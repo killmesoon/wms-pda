@@ -58,8 +58,10 @@ public class WmsInboundOrderHeadController {
             queryWrapper.eq(wmsInboundOrderHeadExt.getDocType() != null, "a.doc_type", wmsInboundOrderHeadExt.getDocType());
             queryWrapper.eq(wmsInboundOrderHeadExt.getErpFlag() != null, "a.erp_flag", wmsInboundOrderHeadExt.getErpFlag());
             queryWrapper.eq(wmsInboundOrderHeadExt.getRfidFlag() != null, "a.rfid_flag", wmsInboundOrderHeadExt.getRfidFlag());
+            queryWrapper.in(wmsInboundOrderHeadExt.getAsnStatusList() != null && wmsInboundOrderHeadExt.getAsnStatusList().size() > 0 , "a.doc_status" , wmsInboundOrderHeadExt.getAsnStatusList());
             queryWrapper.eq(wmsInboundOrderHeadExt.getSourceDocType() != null , "a.source_doc_type", wmsInboundOrderHeadExt.getSourceDocType());
-            queryWrapper.eq(wmsInboundOrderHeadExt.getSourceDocNum() != null, "a.source_doc_num", wmsInboundOrderHeadExt.getSourceDocNum());
+            queryWrapper.apply(wmsInboundOrderHeadExt.getSourceDocNum() != null , "a.source_doc_num like {0}" , wmsInboundOrderHeadExt.getSourceDocNum());
+            queryWrapper.apply(wmsInboundOrderHeadExt.getCreatedName() != null , "a.created_name like {0}" , wmsInboundOrderHeadExt.getCreatedName());
             if (wmsInboundOrderHeadExt.getCreationDateRange() != null) {
                 queryWrapper.between(wmsInboundOrderHeadExt.getCreationDateRange().size() > 0,
                         "a.creation_date", wmsInboundOrderHeadExt.getCreationDateRange().get(0),
