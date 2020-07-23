@@ -53,15 +53,15 @@ public class WmsInboundOrderHeadController {
         if (wmsInboundOrderHeadExt != null) {
             //遍历属性 添加筛选条件
             queryWrapper.eq(wmsInboundOrderHeadExt.getPlantId() != null, "a.plant_id", wmsInboundOrderHeadExt.getPlantId());
-            queryWrapper.eq(wmsInboundOrderHeadExt.getDocStatus() != null , "a.doc_status", wmsInboundOrderHeadExt.getDocStatus());
-            queryWrapper.eq(wmsInboundOrderHeadExt.getDocNumber() != null , "a.doc_number", wmsInboundOrderHeadExt.getDocNumber());
+            queryWrapper.eq(wmsInboundOrderHeadExt.getDocStatus() != null, "a.doc_status", wmsInboundOrderHeadExt.getDocStatus());
+            queryWrapper.eq(wmsInboundOrderHeadExt.getDocNumber() != null, "a.doc_number", wmsInboundOrderHeadExt.getDocNumber());
             queryWrapper.eq(wmsInboundOrderHeadExt.getDocType() != null, "a.doc_type", wmsInboundOrderHeadExt.getDocType());
             queryWrapper.eq(wmsInboundOrderHeadExt.getErpFlag() != null, "a.erp_flag", wmsInboundOrderHeadExt.getErpFlag());
             queryWrapper.eq(wmsInboundOrderHeadExt.getRfidFlag() != null, "a.rfid_flag", wmsInboundOrderHeadExt.getRfidFlag());
-            queryWrapper.in(wmsInboundOrderHeadExt.getAsnStatusList() != null && wmsInboundOrderHeadExt.getAsnStatusList().size() > 0 , "a.doc_status" , wmsInboundOrderHeadExt.getAsnStatusList());
-            queryWrapper.eq(wmsInboundOrderHeadExt.getSourceDocType() != null , "a.source_doc_type", wmsInboundOrderHeadExt.getSourceDocType());
-            queryWrapper.apply(wmsInboundOrderHeadExt.getSourceDocNum() != null , "a.source_doc_num like {0}" , wmsInboundOrderHeadExt.getSourceDocNum());
-            queryWrapper.apply(wmsInboundOrderHeadExt.getCreatedName() != null , "a.created_name like {0}" , wmsInboundOrderHeadExt.getCreatedName());
+            queryWrapper.in(wmsInboundOrderHeadExt.getAsnStatusList() != null && wmsInboundOrderHeadExt.getAsnStatusList().size() > 0, "a.doc_status", wmsInboundOrderHeadExt.getAsnStatusList());
+            queryWrapper.eq(wmsInboundOrderHeadExt.getSourceDocType() != null, "a.source_doc_type", wmsInboundOrderHeadExt.getSourceDocType());
+            queryWrapper.apply(wmsInboundOrderHeadExt.getSourceDocNum() != null, "a.source_doc_num like {0}", wmsInboundOrderHeadExt.getSourceDocNum());
+            queryWrapper.apply(wmsInboundOrderHeadExt.getCreatedName() != null, "a.created_name like {0}", wmsInboundOrderHeadExt.getCreatedName());
             if (wmsInboundOrderHeadExt.getCreationDateRange() != null) {
                 queryWrapper.between(wmsInboundOrderHeadExt.getCreationDateRange().size() > 0,
                         "a.creation_date", wmsInboundOrderHeadExt.getCreationDateRange().get(0),
@@ -82,12 +82,11 @@ public class WmsInboundOrderHeadController {
     @ApiImplicitParam(name = "wmsInboundOrderHead", value = "入库单head po")
     @Transactional
     public Result insertInboundHead(@RequestBody WmsInboundOrderHead wmsInboundOrderHead) {
-        if (wmsInboundOrderHead.getCreationDate() == null) {
-            wmsInboundOrderHead.setCreationDate(new Date());
-        } else {
-            wmsInboundOrderHead.setLastUpdateDate(new Date());
-            wmsInboundOrderHead.setLastUpdateBy(wmsInboundOrderHead.getCreatedBy());
-        }
+        wmsInboundOrderHead.setCreatedName(wmsInboundOrderHead.getCreatedName());
+        wmsInboundOrderHead.setCreatedBy(wmsInboundOrderHead.getCreatedBy());
+        wmsInboundOrderHead.setCreationDate(new Date());
+        wmsInboundOrderHead.setLastUpdateDate(new Date());
+        wmsInboundOrderHead.setLastUpdateBy(wmsInboundOrderHead.getCreatedBy());
         if (inboundOrderHeadService.saveOrUpdate(wmsInboundOrderHead)) {
             Integer headId = wmsInboundOrderHead.getHeadId();
             return Result.success(headId);

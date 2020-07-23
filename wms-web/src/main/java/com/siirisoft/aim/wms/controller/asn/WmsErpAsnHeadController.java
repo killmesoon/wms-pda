@@ -44,13 +44,13 @@ public class WmsErpAsnHeadController {
                                          @RequestBody(required = false) WmsErpAsnHeadExt wmsErpAsnHead) {
         QueryWrapper wrapper = new QueryWrapper(wmsErpAsnHead);
         if (wmsErpAsnHead != null) {
-            wrapper.eq(wmsErpAsnHead.getPlantId() != null , "a.plant_id" , wmsErpAsnHead.getPlantId());
-            wrapper.eq(wmsErpAsnHead.getAsnType() != null , "a.asn_type" , wmsErpAsnHead.getAsnType());
+            wrapper.eq(wmsErpAsnHead.getPlantId() != null, "a.plant_id", wmsErpAsnHead.getPlantId());
+            wrapper.eq(wmsErpAsnHead.getAsnType() != null, "a.asn_type", wmsErpAsnHead.getAsnType());
             wrapper.apply(wmsErpAsnHead.getAsnNumber() != null, "a.asn_number like {0}", wmsErpAsnHead.getAsnNumber());
-            wrapper.in(wmsErpAsnHead.getAsnStatusList() != null && wmsErpAsnHead.getAsnStatusList().size() > 0 , "a.asn_status" , wmsErpAsnHead.getAsnStatusList());
-            wrapper.apply(wmsErpAsnHead.getSourceDocNum() != null , "a.source_doc_num like {0}" , wmsErpAsnHead.getSourceDocNum());
-            wrapper.apply(wmsErpAsnHead.getCreatedName() != null , "a.created_name like {0}" , wmsErpAsnHead.getCreatedName());
-            wrapper.eq(wmsErpAsnHead.getSupplierId() != null , "a.supplier_id" , wmsErpAsnHead.getSupplierId());
+            wrapper.in(wmsErpAsnHead.getAsnStatusList() != null && wmsErpAsnHead.getAsnStatusList().size() > 0, "a.asn_status", wmsErpAsnHead.getAsnStatusList());
+            wrapper.apply(wmsErpAsnHead.getSourceDocNum() != null, "a.source_doc_num like {0}", wmsErpAsnHead.getSourceDocNum());
+            wrapper.apply(wmsErpAsnHead.getCreatedName() != null, "a.created_name like {0}", wmsErpAsnHead.getCreatedName());
+            wrapper.eq(wmsErpAsnHead.getSupplierId() != null, "a.supplier_id", wmsErpAsnHead.getSupplierId());
             if (wmsErpAsnHead.getPlanStartDate() != null && wmsErpAsnHead.getPlanEndDate() != null) {
                 wrapper.between("a.plan_deliver_date", wmsErpAsnHead.getPlanStartDate(), wmsErpAsnHead.getPlanEndDate());
             }
@@ -67,12 +67,12 @@ public class WmsErpAsnHeadController {
     @ApiOperation(value = "更新送货单头信息")
     @ApiImplicitParam(name = "wmsErpAsnHead", value = "送货单头表po")
     public Result saveOrUpdateWmsErpAsnHead(@RequestBody WmsErpAsnHead wmsErpAsnHead) {
-        if (wmsErpAsnHead.getCreationDate() == null) {
-            wmsErpAsnHead.setCreationDate(new Date());
-        } else {
-            wmsErpAsnHead.setLastUpdateDate(new Date());
-            wmsErpAsnHead.setLastUpdateBy(wmsErpAsnHead.getCreatedBy());
-        }
+        wmsErpAsnHead.setCreatedName(wmsErpAsnHead.getCreatedName());
+        wmsErpAsnHead.setCreatedBy(wmsErpAsnHead.getCreatedBy());
+        wmsErpAsnHead.setCreationDate(new Date());
+        wmsErpAsnHead.setLastUpdateDate(new Date());
+        wmsErpAsnHead.setLastUpdateBy(wmsErpAsnHead.getCreatedBy());
+
         if (iWmsErpAsnHeadService.saveOrUpdate(wmsErpAsnHead)) {
             return Result.success(wmsErpAsnHead.getHeadId());
         }
@@ -88,7 +88,6 @@ public class WmsErpAsnHeadController {
         }
         return Result.failure(ResultCode.DATA_IS_WRONG);
     }
-
 
 
     @PostMapping("/deleteWmsErpAsnHeadList")
