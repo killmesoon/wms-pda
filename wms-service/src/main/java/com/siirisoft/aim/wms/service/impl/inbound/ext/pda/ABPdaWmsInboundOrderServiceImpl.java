@@ -83,6 +83,7 @@ public class ABPdaWmsInboundOrderServiceImpl implements ABPdaWmsInboundOrderServ
         WmsSglItem wmsSglItem = new WmsSglItem();
         wmsSglItem.setLocatorId(wmsPdaInboundOrderDetail.getExcuLocatorId());
         wmsSglItem.setLayerNumber(maxLayerNumber + 1);
+        wmsSglItem.setLastUpdateBy(inboundHead.getCreatedBy());
         UpdateWrapper updateWrapper = new UpdateWrapper();
         updateWrapper.eq("d_sequence_num", wmsPdaInboundOrderDetail.getDSequenceNum());
         wmsSglItemMapper.update(wmsSglItem, updateWrapper);
@@ -104,6 +105,7 @@ public class ABPdaWmsInboundOrderServiceImpl implements ABPdaWmsInboundOrderServ
         wmsItemOnhandQuantity.setLotNumber(sglItem.getLotNumber());
         wmsItemOnhandQuantity.setItemId(sglItem.getItemId());
         wmsItemOnhandQuantity.setUomCode(sglItem.getWeightUom());
+        wmsItemOnhandQuantity.setPlantId(sglItem.getPlantId());
         wmsItemOnhandQuantityMapper.insert(wmsItemOnhandQuantity);
 
         //更新明细信息信息
@@ -132,8 +134,13 @@ public class ABPdaWmsInboundOrderServiceImpl implements ABPdaWmsInboundOrderServ
         wmsObjectEvents.setSourceDocNumber(inboundHead.getDocNumber());
         wmsObjectEvents.setSourceDocHeadId(inboundHead.getHeadId());
         wmsObjectEvents.setSourceDocLineId(wmsPdaInboundOrderDetail.getLineId());
-        wmsObjectEvents.setWarehouseIdFrom(wmsPdaInboundOrderDetail.getAdvWarehouseId());
+        wmsObjectEvents.setWarehouseIdFrom(sglItem.getWarehouseId());
         wmsObjectEvents.setWarehouseIdTo(sglItem.getWarehouseId());
+        wmsObjectEvents.setLastUpdateDate(new Date());
+        wmsObjectEvents.setBarcode(sglItem.getDSequenceNum());
+        wmsObjectEvents.setLotCode(sglItem.getLotNumber());
+        wmsObjectEvents.setEventUomCode(sglItem.getWeightUom());
+        wmsObjectEvents.setLastUpdateBy(inboundHead.getCreatedBy());
         wmsObjectEventsMapper.insert(wmsObjectEvents);
         return true;
     }

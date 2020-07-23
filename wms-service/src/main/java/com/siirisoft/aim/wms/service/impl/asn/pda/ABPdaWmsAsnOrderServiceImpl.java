@@ -81,6 +81,7 @@ public class ABPdaWmsAsnOrderServiceImpl implements ABPdaWmsAsnOrderService {
             WmsSglItem wmsSglItem = new WmsSglItem();
             wmsSglItem.setPlantId(asnHead.getPlantId());
             wmsSglItem.setCreatedBy(asnHead.getCreatedBy());
+            wmsSglItem.setLastUpdateBy(asnHead.getCreatedBy());
             wmsSglItem.setCreationDate(new Date());
             wmsSglItem.setPlantCode(asn.getPlantCode());
             wmsSglItem.setPlantName(asn.getPlantName());
@@ -110,7 +111,6 @@ public class ABPdaWmsAsnOrderServiceImpl implements ABPdaWmsAsnOrderService {
             wmsSglItem.setShipNumber(asn.getShipNumber());
             wmsSglItem.setSectionNum(asn.getSectionNum());
             wmsSglItem.setQcReport(asn.getQcReport());
-            wmsSglItem.setLastUpdateBy(asnHead.getCreatedBy());
             wmsSglItem.setLastUpdateDate(new Date());
             wmsSglItem.setAssignedTime(new Date());
             wmsSglItem.setQcReport(asn.getQcReport());
