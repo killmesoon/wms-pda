@@ -187,14 +187,19 @@ public class ABWmsAsnOrderServiceImpl implements ABWmsAsnOrderService {
             inboundHead.setNote(asn.getNote());
             inboundHead.setCreatedBy(asn.getCreatedBy());
             inboundHead.setCreatedName(asn.getCreatedName());
+            inboundHead.setLastUpdateBy(asn.getLastUpdateBy());
+            inboundHead.setLastUpdateDate(new Date());
+            inboundHead.setPlantId(asn.getPlantId());
 
             //生成自动订单号
             QueryWrapper wrapper = new QueryWrapper();
             wrapper.eq("lookupcode", "wms_inbound_order_type");
             wrapper.eq("doc_type", "P");
             WmsDocAutonumber docAuto = iWmsDocAutonumberService.getOne(wrapper);
+            String autoDocNumber = "";
             if (docAuto != null) {
-                String autoDocNumber = AutoDocNumberGenerator.getAutoDocNumber(docAuto);
+                autoDocNumber = AutoDocNumberGenerator.getAutoDocNumber(docAuto);
+                //生成自动单号 回插送货单明细表
                 inboundHead.setDocNumber(autoDocNumber);
             }
             if (inboundOrderHeadService.saveOrUpdate(inboundHead)) {
@@ -217,6 +222,7 @@ public class ABWmsAsnOrderServiceImpl implements ABWmsAsnOrderService {
                     inboundLine.setWarehouseId(asnLine.getWarehouseId());
                     inboundLine.setNote(asnLine.getNote());
                     inboundLine.setPlanQty(asnLine.getPlanQty());
+                    inboundLine.setSourceLineNum(asnLine.getSourceLine());
 
                     //保存
                     if (iWmsInboundOrderLineService.saveOrUpdate(inboundLine)) {
@@ -227,15 +233,25 @@ public class ABWmsAsnOrderServiceImpl implements ABWmsAsnOrderService {
                         List<WmsErpAsnDetail> asnDetailList = iWmsErpAsnDetailService.list(detailWrapper);
                         List<WmsInboundOrderDetail> inboundOrderDetailList = new ArrayList();
                         for (WmsErpAsnDetail asnDetail : asnDetailList) {
-                            WmsInboundOrderDetail inboundDetail = new WmsInboundOrderDetail();
-                            inboundDetail.setAdvBarcode(asnDetail.getDSequenceNum());
-                            inboundDetail.setCreationDate(new Date());
-                            inboundDetail.setLastUpdateDate(new Date());
-                            inboundDetail.setHeadId(headId);
-                            inboundDetail.setLineId(lineId);
-                            inboundDetail.setNote(asnDetail.getNote());
-                            inboundOrderDetailList.add(inboundDetail);
+                            if (asnDetail.getInboundOrder() == null) {
+                                if ((asnDetail.getQcStatus().equals("OK")) && (asnDetail.getReceiveFlag())) {
+                                    asnDetail.setInboundOrder(autoDocNumber);
+                                    WmsInboundOrderDetail inboundDetail = new WmsInboundOrderDetail();
+                                    inboundDetail.setAdvBarcode(asnDetail.getDSequenceNum());
+                                    inboundDetail.setCreationDate(new Date());
+                                    inboundDetail.setLastUpdateDate(new Date());
+                                    inboundDetail.setHeadId(headId);
+                                    inboundDetail.setLineId(lineId);
+                                    inboundDetail.setCreatedBy(asn.getCreatedBy());
+                                    inboundDetail.setLastUpdateBy(asn.getLastUpdateBy());
+                                    inboundDetail.setNote(asnDetail.getNote());
+                                    inboundOrderDetailList.add(inboundDetail);
+                                }
+                            } else {
+                                continue;
+                            }
                         }
+                        iWmsErpAsnDetailService.saveOrUpdateBatch(asnDetailList);
                         iWmsInboundOrderDetailService.saveOrUpdateBatch(inboundOrderDetailList);
                     }
                 }

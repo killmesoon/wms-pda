@@ -118,6 +118,9 @@ public class WmsErpAsnDetail implements Serializable {
     @ApiModelProperty(value = "船社级")
     private String ccs;
 
+    @ApiModelProperty(value = "入库单号")
+    private String inboundOrder;
+
     @ApiModelProperty(value = "船号")
     private String shipNumber;
 

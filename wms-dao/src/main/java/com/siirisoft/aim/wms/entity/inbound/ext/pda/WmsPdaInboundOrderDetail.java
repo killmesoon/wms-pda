@@ -44,5 +44,8 @@ public class WmsPdaInboundOrderDetail extends WmsInboundOrderDetail {
     @ApiModelProperty(value = "执行货位名称")
     private String excuLocatorName;
 
+    @ApiModelProperty(value = "材质")
+    private String itemTexture;
+
 
 }

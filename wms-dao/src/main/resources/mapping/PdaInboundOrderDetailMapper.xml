@@ -12,10 +12,11 @@
         <result column="adv_locator_name" property="advLocatorName"></result>
         <result column="excu_locator_name" property="excuLocatorCode"></result>
         <result column="excu_locator_code" property="excuLocatorName"></result>
+        <result column="item_texture" property="itemTexture"></result>
     </resultMap>
 
     <select id="queryInboundOrderDetail" resultMap="BaseMap">
-      SELECT
+        SELECT
 	a.*,
 	c.item_id,
 	b.d_sequence_num,
@@ -26,13 +27,15 @@
 	d.locator_code as adv_locator_code,
 	d.locator_name as adv_locator_name,
 	f.locator_name as excu_locator_name,
-	f.locator_code as excu_locator_code
+	f.locator_code as excu_locator_code,
+	g.item_texture
 FROM
 	wms_inbound_order_detail a
 	LEFT JOIN wms_sgl_item b on a.adv_barcode = b.d_sequence_num
 	LEFT JOIN wms_inbound_order_line c on a.line_id = c.line_id
 	LEFT JOIN wms_locator d on a.adv_locator_id = d.locator_id
 	LEFT JOIN wms_locator f on a.excu_locator_id = f.locator_id
+	LEFT JOIN wms_item g on c.item_id = g.item_id
         ${ew.customSqlSegment}
     </select>
 </mapper>

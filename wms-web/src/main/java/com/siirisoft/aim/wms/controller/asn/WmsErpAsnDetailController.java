@@ -6,13 +6,16 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.siirisoft.aim.wms.entity.asn.WmsErpAsnDetail;
 import com.siirisoft.aim.wms.entity.data.Result;
 import com.siirisoft.aim.wms.entity.data.ResultCode;
+import com.siirisoft.aim.wms.entity.sqlitem.WmsSglItem;
 import com.siirisoft.aim.wms.service.asn.ABWmsAsnOrderService;
 import com.siirisoft.aim.wms.service.asn.IWmsErpAsnDetailService;
+import com.siirisoft.aim.wms.service.sqlitem.IWmsSglItemService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -32,6 +35,9 @@ public class WmsErpAsnDetailController {
 
     @Autowired
     private ABWmsAsnOrderService abWmsAsnOrderService;
+
+    @Autowired
+    private IWmsSglItemService iWmsSglItemService;
 
 
     @GetMapping("/queryWmsErpAsnDetailByHeadId/{headId}")
@@ -74,7 +80,21 @@ public class WmsErpAsnDetailController {
     @ApiOperation("逐条更新")
     @ApiImplicitParam(name = "wmsErpAsnDetail", value = "明细信息po")
     public Result saveOrUpdateDetail(@RequestBody WmsErpAsnDetail wmsErpAsnDetail) {
+        if (wmsErpAsnDetail.getCreationDate() != null) {
+            wmsErpAsnDetail.setLastUpdateDate(new Date());
+        }
+        wmsErpAsnDetail.setLastUpdateBy(wmsErpAsnDetail.getCreatedBy());
         if (iWmsErpAsnDetailService.saveOrUpdate(wmsErpAsnDetail)) {
+            //插入sgl
+            QueryWrapper wrapper = new QueryWrapper();
+            wrapper.eq("d_sequence_num", wmsErpAsnDetail.getDSequenceNum());
+            WmsSglItem one = iWmsSglItemService.getOne(wrapper);
+            one.setQcStatus(wmsErpAsnDetail.getQcStatus());
+            one.setQcReport(wmsErpAsnDetail.getQcReport());
+            one.setNote(wmsErpAsnDetail.getNote());
+            one.setLastUpdateDate(new Date());
+            one.setLastUpdateBy(wmsErpAsnDetail.getLastUpdateBy());
+            iWmsSglItemService.saveOrUpdate(one, wrapper);
             return Result.success(ResultCode.SUCCESS);
         }
         return Result.failure(ResultCode.PARAM_IS_INVALID);
