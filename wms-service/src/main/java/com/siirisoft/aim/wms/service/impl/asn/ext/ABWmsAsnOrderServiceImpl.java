@@ -187,7 +187,7 @@ public class ABWmsAsnOrderServiceImpl implements ABWmsAsnOrderService {
             inboundHead.setNote(asn.getNote());
             inboundHead.setCreatedBy(asn.getCreatedBy());
             inboundHead.setCreatedName(asn.getCreatedName());
-            inboundHead.setLastUpdateBy(asn.getLastUpdateBy());
+            inboundHead.setLastUpdateBy(asn.getCreatedBy());
             inboundHead.setLastUpdateDate(new Date());
             inboundHead.setPlantId(asn.getPlantId());
 
@@ -214,6 +214,10 @@ public class ABWmsAsnOrderServiceImpl implements ABWmsAsnOrderService {
                     WmsInboundOrderLine inboundLine = new WmsInboundOrderLine();
                     inboundLine.setHeadId(headId);
                     inboundLine.setCreationDate(new Date());
+                    inboundLine.setLastUpdateDate(new Date());
+                    inboundLine.setCreatedBy(asn.getCreatedBy());
+                    inboundLine.setLastUpdateBy(asn.getCreatedBy());
+                    inboundLine.setCreatedName(asn.getCreatedName());
                     inboundLine.setLineNum(asnLine.getLineNum());
                     inboundLine.setSourceDocId(asnLine.getLineId());
                     inboundLine.setSourceDocNum(asn.getAsnNumber());
@@ -233,7 +237,7 @@ public class ABWmsAsnOrderServiceImpl implements ABWmsAsnOrderService {
                         List<WmsErpAsnDetail> asnDetailList = iWmsErpAsnDetailService.list(detailWrapper);
                         List<WmsInboundOrderDetail> inboundOrderDetailList = new ArrayList();
                         for (WmsErpAsnDetail asnDetail : asnDetailList) {
-                            if (asnDetail.getInboundOrder() == null) {
+                            if (asnDetail.getInboundOrder() == null || "".equals(asnDetail.getInboundOrder())) {
                                 if ((asnDetail.getQcStatus().equals("OK")) && (asnDetail.getReceiveFlag())) {
                                     asnDetail.setInboundOrder(autoDocNumber);
                                     WmsInboundOrderDetail inboundDetail = new WmsInboundOrderDetail();
@@ -242,8 +246,9 @@ public class ABWmsAsnOrderServiceImpl implements ABWmsAsnOrderService {
                                     inboundDetail.setLastUpdateDate(new Date());
                                     inboundDetail.setHeadId(headId);
                                     inboundDetail.setLineId(lineId);
+                                    inboundDetail.setCreatedName(asn.getCreatedName());
                                     inboundDetail.setCreatedBy(asn.getCreatedBy());
-                                    inboundDetail.setLastUpdateBy(asn.getLastUpdateBy());
+                                    inboundDetail.setLastUpdateBy(asn.getCreatedBy());
                                     inboundDetail.setNote(asnDetail.getNote());
                                     inboundOrderDetailList.add(inboundDetail);
                                 }
