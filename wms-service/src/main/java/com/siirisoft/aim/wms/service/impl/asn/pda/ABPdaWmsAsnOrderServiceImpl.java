@@ -105,6 +105,7 @@ public class ABPdaWmsAsnOrderServiceImpl implements ABPdaWmsAsnOrderService {
             wmsSglItem.setSupplierLotNumber(asn.getSupplierLotNumber());
             wmsSglItem.setNote(asn.getNote());
             wmsSglItem.setItemTexture(asn.getItemTexture());
+            wmsSglItem.setItemTexture(asn.getItemTextureReal());
             wmsSglItem.setShipNumber(asn.getShipNumber());
             wmsSglItem.setSectionNum(asn.getSectionNum());
             wmsSglItem.setQcReport(asn.getQcReport());
