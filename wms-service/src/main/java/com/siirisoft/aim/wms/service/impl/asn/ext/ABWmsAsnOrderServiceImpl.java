@@ -229,7 +229,7 @@ public class ABWmsAsnOrderServiceImpl implements ABWmsAsnOrderService {
                     inboundLine.setSourceLineNum(asnLine.getSourceLine());
 
                     //保存
-                    if (iWmsInboundOrderLineService.saveOrUpdate(inboundLine)) {
+//                    if (iWmsInboundOrderLineService.saveOrUpdate(inboundLine)) {
                         Integer lineId = inboundLine.getLineId();
                         //查明细
                         QueryWrapper detailWrapper = new QueryWrapper();
@@ -238,7 +238,7 @@ public class ABWmsAsnOrderServiceImpl implements ABWmsAsnOrderService {
                         List<WmsInboundOrderDetail> inboundOrderDetailList = new ArrayList();
                         for (WmsErpAsnDetail asnDetail : asnDetailList) {
                             if (asnDetail.getInboundOrder() == null || "".equals(asnDetail.getInboundOrder())) {
-                                if ((asnDetail.getQcStatus().equals("OK")) && (asnDetail.getReceiveFlag())) {
+                                if ((asnDetail.getQcStatus() != null && asnDetail.getQcStatus().equals("OK")) && (asnDetail.getReceiveFlag())) {
                                     asnDetail.setInboundOrder(autoDocNumber);
                                     WmsInboundOrderDetail inboundDetail = new WmsInboundOrderDetail();
                                     inboundDetail.setAdvBarcode(asnDetail.getDSequenceNum());
@@ -251,6 +251,7 @@ public class ABWmsAsnOrderServiceImpl implements ABWmsAsnOrderService {
                                     inboundDetail.setLastUpdateBy(asn.getCreatedBy());
                                     inboundDetail.setNote(asnDetail.getNote());
                                     inboundOrderDetailList.add(inboundDetail);
+                                    iWmsInboundOrderLineService.saveOrUpdate(inboundLine);
                                 }
                             } else {
                                 continue;
@@ -258,7 +259,7 @@ public class ABWmsAsnOrderServiceImpl implements ABWmsAsnOrderService {
                         }
                         iWmsErpAsnDetailService.saveOrUpdateBatch(asnDetailList);
                         iWmsInboundOrderDetailService.saveOrUpdateBatch(inboundOrderDetailList);
-                    }
+//                    }
                 }
 
             }
