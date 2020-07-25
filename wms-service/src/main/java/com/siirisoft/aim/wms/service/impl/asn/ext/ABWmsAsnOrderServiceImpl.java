@@ -230,7 +230,6 @@ public class ABWmsAsnOrderServiceImpl implements ABWmsAsnOrderService {
 
                     //保存
 //                    if (iWmsInboundOrderLineService.saveOrUpdate(inboundLine)) {
-                        Integer lineId = inboundLine.getLineId();
                         //查明细
                         QueryWrapper detailWrapper = new QueryWrapper();
                         detailWrapper.eq("line_id", asnLine.getLineId());
@@ -239,19 +238,20 @@ public class ABWmsAsnOrderServiceImpl implements ABWmsAsnOrderService {
                         for (WmsErpAsnDetail asnDetail : asnDetailList) {
                             if (asnDetail.getInboundOrder() == null || "".equals(asnDetail.getInboundOrder())) {
                                 if ((asnDetail.getQcStatus() != null && asnDetail.getQcStatus().equals("OK")) && (asnDetail.getReceiveFlag())) {
+                                    iWmsInboundOrderLineService.saveOrUpdate(inboundLine);
                                     asnDetail.setInboundOrder(autoDocNumber);
                                     WmsInboundOrderDetail inboundDetail = new WmsInboundOrderDetail();
                                     inboundDetail.setAdvBarcode(asnDetail.getDSequenceNum());
                                     inboundDetail.setCreationDate(new Date());
                                     inboundDetail.setLastUpdateDate(new Date());
                                     inboundDetail.setHeadId(headId);
-                                    inboundDetail.setLineId(lineId);
+                                    inboundDetail.setLineId(inboundLine.getLineId());
                                     inboundDetail.setCreatedName(asn.getCreatedName());
                                     inboundDetail.setCreatedBy(asn.getCreatedBy());
                                     inboundDetail.setLastUpdateBy(asn.getCreatedBy());
+                                    inboundDetail.setAdvWarehouseId(inboundLine.getWarehouseId());
                                     inboundDetail.setNote(asnDetail.getNote());
                                     inboundOrderDetailList.add(inboundDetail);
-                                    iWmsInboundOrderLineService.saveOrUpdate(inboundLine);
                                 }
                             } else {
                                 continue;

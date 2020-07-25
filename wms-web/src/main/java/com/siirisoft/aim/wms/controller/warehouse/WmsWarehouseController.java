@@ -68,6 +68,7 @@ public class WmsWarehouseController {
         QueryWrapper wrapper = new QueryWrapper(wmsWarehouse);
         if (wmsWarehouse.getCreationDate() != null) {
             wmsWarehouse.setLastUpdateDate(new Date());
+            wmsWarehouse.setLastUpdateBy(wmsWarehouse.getCreatedBy());
         } else {
             wmsWarehouse.setCreationDate(new Date());
         }

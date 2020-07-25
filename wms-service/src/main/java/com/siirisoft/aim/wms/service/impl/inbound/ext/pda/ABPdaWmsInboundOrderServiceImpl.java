@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.siirisoft.aim.wms.entity.events.WmsObjectEvents;
 import com.siirisoft.aim.wms.entity.inbound.WmsInboundOrderHead;
 import com.siirisoft.aim.wms.entity.inbound.ext.pda.WmsPdaInboundOrderDetail;
+import com.siirisoft.aim.wms.entity.locator.WmsLocator;
 import com.siirisoft.aim.wms.entity.locator.ext.WmsLocatorExt;
 import com.siirisoft.aim.wms.entity.quantity.WmsItemOnhandQuantity;
 import com.siirisoft.aim.wms.entity.sqlitem.WmsSglItem;
@@ -15,12 +16,14 @@ import com.siirisoft.aim.wms.mapper.events.WmsObjectEventsMapper;
 import com.siirisoft.aim.wms.mapper.inbound.WmsInboundOrderDetailMapper;
 import com.siirisoft.aim.wms.mapper.inbound.WmsInboundOrderLineMapper;
 import com.siirisoft.aim.wms.mapper.inbound.ext.pda.WmsPdaInboundOrderDetailMapper;
+import com.siirisoft.aim.wms.mapper.locator.WmsLocatorMapper;
 import com.siirisoft.aim.wms.mapper.locator.ext.pda.WmsPdaLocatorMapperExt;
 import com.siirisoft.aim.wms.mapper.quantity.WmsItemOnhandQuantityMapper;
 import com.siirisoft.aim.wms.mapper.sqlitem.WmsSglItemMapper;
 import com.siirisoft.aim.wms.mapper.sqlitem.ext.WmsSglItemMapperExt;
 import com.siirisoft.aim.wms.service.inbound.IWmsInboundOrderHeadService;
 import com.siirisoft.aim.wms.service.inbound.pda.ABPdaWmsInboundOrderService;
+import com.siirisoft.aim.wms.service.quantity.ABWmsItemOnQuantityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,6 +65,13 @@ public class ABPdaWmsInboundOrderServiceImpl implements ABPdaWmsInboundOrderServ
     @Autowired
     private IWmsInboundOrderHeadService inboundOrderHeadService;
 
+    @Autowired
+    private WmsLocatorMapper wmsLocatorMapper;
+
+    @Autowired
+    private ABWmsItemOnQuantityService abWmsItemOnQuantityService;
+
+
 
     @Override
     public IPage queryInboundOrderDetail(Page page, Wrapper wrapper) {
@@ -78,39 +88,58 @@ public class ABPdaWmsInboundOrderServiceImpl implements ABPdaWmsInboundOrderServ
         wrapper.eq("locator_id", wmsPdaInboundOrderDetail.getExcuLocatorId());
         //获取要更新的这个板子要去货位的最大层号
         Integer maxLayerNumber = wmsSglItemMapperExt.findMaxLayerNumber(wrapper);
+        //根据目标货位，拉出所有信息
+        WmsLocator wmsTargetLocator = wmsLocatorMapper.selectById(wmsPdaInboundOrderDetail.getExcuLocatorId());
+
 
         //更新sgl表中的货位位置，以及层号 由于是一张板子，不涉及此处不涉及数量变化
         WmsSglItem wmsSglItem = new WmsSglItem();
-        wmsSglItem.setLocatorId(wmsPdaInboundOrderDetail.getExcuLocatorId());
-        wmsSglItem.setLayerNumber(maxLayerNumber + 1);
-        wmsSglItem.setLastUpdateBy(inboundHead.getCreatedBy());
         UpdateWrapper updateWrapper = new UpdateWrapper();
         updateWrapper.eq("d_sequence_num", wmsPdaInboundOrderDetail.getDSequenceNum());
-        wmsSglItemMapper.update(wmsSglItem, updateWrapper);
-
         //现有量更新，一笔增一笔减, 由于单张钢板入库，每次增减数量为1 原有货位 -1 目标货位  + 1
         //更新过后的钢板
         WmsSglItem sglItem = wmsSglItemMapper.selectOne(updateWrapper);
         //更新现有量
         QueryWrapper quantityWrapper = new QueryWrapper();
+        quantityWrapper.eq("plant_id", sglItem.getPlantId());
+        quantityWrapper.eq("warehouse_id", sglItem.getWarehouseId());
         quantityWrapper.eq("item_id", sglItem.getItemId());
         quantityWrapper.eq("lot_number", sglItem.getLotNumber());
-        quantityWrapper.eq("locator_id", wmsPdaInboundOrderDetail.getAdvLocatorId());
-        wmsItemOnhandQuantityMapper.delete(quantityWrapper);
+        quantityWrapper.eq("locator_id", sglItem.getLocatorId());
+        WmsItemOnhandQuantity quantity = wmsItemOnhandQuantityMapper.selectOne(quantityWrapper);
+        if (quantity != null) {
+            //不为null说明此条记录已存在
+            if (quantity.getLoctOnhand() == 1) {
+                //此条记录即将为0， 所以删除
+                wmsItemOnhandQuantityMapper.delete(quantityWrapper);
+            } else {
+                //此条记录现有量 -1
+                quantity.setLoctOnhand(quantity.getLoctOnhand() - 1);
+                wmsItemOnhandQuantityMapper.update(quantity, quantityWrapper);
+            }
+        }
+        //现有量更新后
+        wmsSglItem.setLocatorId(wmsPdaInboundOrderDetail.getExcuLocatorId());
+        wmsSglItem.setLayerNumber(maxLayerNumber + 1);
+        wmsSglItem.setLastUpdateBy(inboundHead.getCreatedBy());
+        wmsSglItemMapper.update(wmsSglItem, updateWrapper);
 
+
+
+        //这是目标位置
         WmsItemOnhandQuantity wmsItemOnhandQuantity = new WmsItemOnhandQuantity();
-        wmsItemOnhandQuantity.setLocatorId(sglItem.getLocatorId());
+        wmsItemOnhandQuantity.setLocatorId(wmsTargetLocator.getLocatorId());
         wmsItemOnhandQuantity.setLoctOnhand(1);
-        wmsItemOnhandQuantity.setWarehouseId(sglItem.getWarehouseId());
+        wmsItemOnhandQuantity.setWarehouseId(wmsTargetLocator.getWarehouseId());
         wmsItemOnhandQuantity.setLotNumber(sglItem.getLotNumber());
         wmsItemOnhandQuantity.setItemId(sglItem.getItemId());
         wmsItemOnhandQuantity.setUomCode(sglItem.getWeightUom());
-        wmsItemOnhandQuantity.setPlantId(sglItem.getPlantId());
-        wmsItemOnhandQuantityMapper.insert(wmsItemOnhandQuantity);
+        wmsItemOnhandQuantity.setPlantId(wmsTargetLocator.getPlantId());
+        abWmsItemOnQuantityService.updateOnHandQuantity(wmsItemOnhandQuantity);
 
         //更新明细信息信息
         wmsPdaInboundOrderDetail.setExcuLotCode(wmsPdaInboundOrderDetail.getShipNumber() + wmsPdaInboundOrderDetail.getSectionNum()); //执行批次，船号+分段号
-        wmsPdaInboundOrderDetail.setExcuQuantity(1);
+        wmsPdaInboundOrderDetail.setExcuQuantity(Integer.parseInt(sglItem.getWeight()));
         wmsInboundOrderDetailMapper.updateById(wmsPdaInboundOrderDetail);
 
         //更新行信息

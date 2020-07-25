@@ -59,6 +59,7 @@ public class WmsLocatorController {
     @ApiImplicitParam(name = "wmsLocator", value = "货位po")
     public Result saveOrUpdateLocator(@RequestBody WmsLocator wmsLocator) {
         if (wmsLocator.getCreationDate() != null) {
+            wmsLocator.setLastUpdateBy(wmsLocator.getCreatedBy());
             wmsLocator.setLastUpdateDate(new Date());
         } else {
             wmsLocator.setCreationDate(new Date());

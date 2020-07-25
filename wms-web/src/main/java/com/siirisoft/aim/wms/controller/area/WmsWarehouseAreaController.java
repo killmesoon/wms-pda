@@ -73,6 +73,7 @@ public class WmsWarehouseAreaController {
             wmsWarehouseArea.setCreationDate(new Date());
         } else {
             wmsWarehouseArea.setLastUpdateDate(new Date());
+            wmsWarehouseArea.setLastUpdateBy(wmsWarehouseArea.getCreatedBy());
         }
         if (iWmsWarehouseAreaService.saveOrUpdate(wmsWarehouseArea)) {
             return Result.success(ResultCode.SUCCESS);

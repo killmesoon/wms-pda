@@ -66,6 +66,7 @@ public class WmsItemController {
             wmsItem.setCreationDate(new Date());
         } else {
             wmsItem.setLastUpdateDate(new Date());
+            wmsItem.setLastUpdateBy(wmsItem.getCreatedBy());
         }
         //插入前校验
 //        String itemCode = wmsItem.getItemCode();

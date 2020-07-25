@@ -13,6 +13,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -49,6 +50,12 @@ public class WmsErpAsnLineController {
     @ApiOperation(value = "更新行信息")
     @ApiImplicitParam(name = "wmsErpAsnLine", value = "行信息po")
     public Result saveOrUpdateWmsErpAsnLine(@RequestBody WmsErpAsnLine wmsErpAsnLine) {
+        if (wmsErpAsnLine.getCreationDate() == null) {
+            wmsErpAsnLine.setCreationDate(new Date());
+        } else {
+            wmsErpAsnLine.setLastUpdateBy(wmsErpAsnLine.getCreatedBy());
+            wmsErpAsnLine.setLastUpdateDate(new Date());
+        }
         Integer maxLineNumber = abWmsAsnOrderService.getMaxLineNumber(wmsErpAsnLine);
         wmsErpAsnLine.setLineNum(maxLineNumber + 10 + "");
         if (iWmsErpAsnLineService.saveOrUpdate(wmsErpAsnLine)) {

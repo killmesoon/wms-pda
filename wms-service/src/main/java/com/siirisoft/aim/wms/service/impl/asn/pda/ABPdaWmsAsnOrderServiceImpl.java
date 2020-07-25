@@ -11,6 +11,7 @@ import com.siirisoft.aim.wms.service.asn.IWmsErpAsnDetailService;
 import com.siirisoft.aim.wms.service.asn.IWmsErpAsnHeadService;
 import com.siirisoft.aim.wms.service.asn.IWmsErpAsnLineService;
 import com.siirisoft.aim.wms.service.asn.pda.ABPdaWmsAsnOrderService;
+import com.siirisoft.aim.wms.service.quantity.ABWmsItemOnQuantityService;
 import com.siirisoft.aim.wms.service.quantity.IWmsItemOnhandQuantityService;
 import com.siirisoft.aim.wms.service.sqlitem.IWmsSglItemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,9 @@ public class ABPdaWmsAsnOrderServiceImpl implements ABPdaWmsAsnOrderService {
 
     @Autowired
     private IWmsErpAsnHeadService iWmsErpAsnHeadService;
+
+    @Autowired
+    private ABWmsItemOnQuantityService abWmsItemOnQuantityService;
 
 
     @Override
@@ -133,13 +137,13 @@ public class ABPdaWmsAsnOrderServiceImpl implements ABPdaWmsAsnOrderService {
             wmsItemOnhandQuantity.setUomCode(asn.getPrimaryUom());
             wmsItemOnhandQuantity.setMergeFlag(true);
             wmsItemOnhandQuantity.setUomCode(asn.getWeightUom()); //增加重量单位
-            quantityFlag = iWmsItemOnhandQuantityService.save(wmsItemOnhandQuantity);
+            quantityFlag = abWmsItemOnQuantityService.updateOnHandQuantity(wmsItemOnhandQuantity);
             if (quantityFlag) {
                 //现有量增加后 更新行信息的接收数量
                 WmsErpAsnLine line = iWmsErpAsnLineService.getById(asn.getLineId());
                 int receivedNumber = 1;
                 if (line.getReceiveQty() != null) {
-                    receivedNumber = line.getReceiveQty() + 1;
+                    receivedNumber = Integer.parseInt(line.getReceiveQty() + asn.getWeight());
                 }
 
                 line.setReceiveQty(receivedNumber);
